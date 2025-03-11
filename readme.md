@@ -84,6 +84,22 @@ La página web será desplegada en mi NAS y contará con enlaces al repositorio 
 - El usuario puede solicitar la descarga de su biblioteca en formato CSV
 
 ### Estructura del proyecto
-
-
-### Diseño visual del proyecto
+```
+/
+├── css
+├── html
+├── img
+│   ├── avatares de usuarios
+│   ├── portadas de películas
+│   └── portadas series
+│   └── iconos del navegador
+├── js
+├── php
+│   ├── usuarios
+│   ├── películas
+│   └── series
+├── sql
+├── vendor
+├── index.html
+└── 404.html
+```
