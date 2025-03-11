@@ -82,6 +82,7 @@ La página web será desplegada en mi NAS y contará con enlaces al repositorio 
 - Usuario administrador que tendrá privilegios absolutos sobre la aplicación.
 - Conectarse a una base de datos tipo 'Filmaffinity' o derivadas para obtener los datos de las películas.
 - El usuario puede solicitar la descarga de su biblioteca en formato CSV
+- Navegar por películas que tienen secuelas
 
 ### Estructura del proyecto
 ```
