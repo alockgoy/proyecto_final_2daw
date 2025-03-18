@@ -76,6 +76,7 @@ La página web será desplegada en mi NAS y contará con enlaces al repositorio 
 - Modificar las películas existentes en la biblioteca del usuario
 - Eliminar películas existentes en la biblioteca del usuario
 - Las mismas operaciones con películas pero con las series
+- Posibilidad de que un usuario reporte que ha olvidado su clave de acceso y recibir una nueva (se le genera automáticamente si existe el usuario y se le manda por correo electrónico)
 
 ### Funciones que me gustaría añadir más adelante
 - Archivo log (se tratará de un csv que guardará todos los movimientos realizados en la página, con la idea de realizar depuraciones).
