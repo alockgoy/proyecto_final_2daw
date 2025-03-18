@@ -89,6 +89,7 @@ La página web será desplegada en mi NAS y contará con enlaces al repositorio 
 /
 ├── css
 ├── html
+        vistas
 ├── img
 │   ├── avatares de usuarios
 │   ├── portadas de películas
@@ -97,8 +98,14 @@ La página web será desplegada en mi NAS y contará con enlaces al repositorio 
 ├── js
 ├── php
 │   ├── usuarios
+            modelo
+            controlador
 │   ├── películas
+            modelo
+            controlador
 │   └── series
+            modelo
+            controlador
 ├── sql
 ├── vendor
 ├── index.html
