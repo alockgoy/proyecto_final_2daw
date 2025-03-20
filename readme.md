@@ -87,28 +87,39 @@ La página web será desplegada en mi NAS y contará con enlaces al repositorio 
 
 ### Estructura del proyecto
 ```
+```
 /
-├── css
-├── html
-        vistas
-├── img
-│   ├── avatares de usuarios
-│   ├── portadas de películas
-│   └── portadas series
-│   └── iconos del navegador
-├── js
-├── php
-│   ├── usuarios
-            modelo
-            controlador
-│   ├── películas
-            modelo
-            controlador
-│   └── series
-            modelo
-            controlador
-├── sql
-├── vendor
+├── css/
+├── html/
+│   └── vistas/
+├── img/
+│   ├── avatares_usuarios/
+│   ├── portadas_peliculas/
+│   ├── portadas_series/
+│   └── iconos_navegador/
+├── js/
+├── php/
+│   ├── usuarios/
+│   │   ├── modelo/
+│   │   └── controlador/
+│   ├── peliculas/
+│   │   ├── modelo/
+│   │   └── controlador/
+│   └── series/
+│       ├── modelo/
+│       └── controlador/
+├── sql/
+├── vendor/
 ├── index.html
 └── 404.html
 ```
+```
+
+### Atribuciones por iconos
+- <a href="https://www.flaticon.es/iconos-gratis/perfiles-de-usuario" title="perfiles de usuario iconos">Perfiles de usuario iconos creados por yaicon - Flaticon</a>
+
+- <a href="https://www.flaticon.es/iconos-gratis/film-fotografico" title="film fotográfico iconos">Film fotográfico iconos creados por Iconic Panda - Flaticon</a>
+
+- <a href="https://www.flaticon.es/iconos-gratis/serie" title="serie iconos">Serie iconos creados por shmai - Flaticon</a>
+
+- <a href="https://www.flaticon.es/iconos-gratis/usuario-seguro" title="usuario seguro iconos">Usuario seguro iconos creados por Muhammad Atif - Flaticon</a>
