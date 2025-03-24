@@ -71,7 +71,7 @@ CREATE TABLE Users_Series(
     id_serie INT,
     PRIMARY KEY (id_user, id_serie),
     FOREIGN KEY (id_user) REFERENCES Users(id_user) ON DELETE CASCADE,
-    FOREIGN KEY (id_serie) REFERENCES Movies(id_serie) ON DELETE CASCADE
+    FOREIGN KEY (id_serie) REFERENCES Series(id_serie) ON DELETE CASCADE
 );
 
 /* Crear un usuario específico para esta base de datos y asignarle todos los permisos */
