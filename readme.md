@@ -9,6 +9,8 @@ También planeo que exista (ya sea a la entrega del proyecto o a posterior) un '
 
 La página web será desplegada en mi NAS y contará con enlaces al repositorio de Github para poder visualizar el código.
 
+Un usuario no registrado (o registrado) podrá reportar errores de la aplicación.
+
 ## ¿Qué puede hacer un usuario?
 - Puede crearse una cuenta.
     - (el id se generará de forma automática en la base de datos)
