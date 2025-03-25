@@ -15,6 +15,12 @@ class Movie {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Obtener una película por ID concreto, necesario para editar
+    public function getMovieById($id) {
+        $stmt = $this->pdo->prepare("SELECT * FROM Movies WHERE id_movie = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     // Crear una película
     public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating) {
