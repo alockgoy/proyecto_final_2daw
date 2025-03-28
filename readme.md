@@ -89,7 +89,6 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
 
 ### Estructura del proyecto
 ```
-```
 /
 ├── css/
 ├── html/
@@ -114,7 +113,6 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
 ├── vendor/
 ├── index.html
 └── 404.html
-```
 ```
 
 ### Atribuciones por iconos
