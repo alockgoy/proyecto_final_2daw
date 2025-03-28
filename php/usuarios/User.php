@@ -18,7 +18,7 @@ class User
     }
 
     // Obtener un usuario por ID concreto
-    public function getMovieById($id)
+    public function getUserById($id)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM Users WHERE id_user = ?");
         $stmt->execute([$id]);
