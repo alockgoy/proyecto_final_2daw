@@ -30,6 +30,7 @@ $movies = $controller->index();
     <div>
         <h2>Listado de Películas</h2>
         
+        <!-- Comprobar que hay al menos una pelícuña -->
         <?php if (empty($movies)): ?>
             <p>No hay películas disponibles.</p>
         <?php else: ?>
@@ -38,7 +39,7 @@ $movies = $controller->index();
                     <div>
                         <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['name']); ?>" width="200">
                         <div><?php echo htmlspecialchars($movie['name']); ?></div>
-                        <a href="#">Ver detalles</a>
+                        <a target="_blank" href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>">Ver detalles</a>
                     </div>
                 <?php endforeach; ?>
             </div>
