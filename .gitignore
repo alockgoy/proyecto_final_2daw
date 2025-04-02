@@ -2,3 +2,5 @@ readme-not-good.md
 config.php
 img/portadas_peliculas/*
 !img/portadas_peliculas/*.txt
+img/portadas_series/*
+!img/portadas_series/*.txt
