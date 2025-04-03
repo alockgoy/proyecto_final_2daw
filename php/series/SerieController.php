@@ -81,14 +81,79 @@ class SerieController
     }
 
     // Editar una serie
-    public function editSerie($id)
-    {
-        $serie = $this->serieModel->getSerieById($id);
+    public function updateSerie($id) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $this->serieModel->updateSerie($id, $_POST["name"], $_POST["poster"], $_POST["gender"], $_POST["languages"], $_POST["seasons"], $_POST["complete"], $_POST["year"], $_POST["quality"], $_POST["backup"], $_POST["size"], $_POST["server"], $_POST["rating"]);
-            header("Location: series.php");
+            $posterPath = null;
+            
+            // Obtener la serie actual para saber la ruta de la imagen actual
+            $currentSerie = $this->serieModel->getSerieById($id);
+            
+            if (!$currentSerie) {
+                throw new Exception("La serie no existe");
+            }
+            
+            // Usar la ruta de la imagen actual si no se está subiendo una nueva
+            $posterPath = $currentSerie['poster'];
+            
+            // Procesar la imagen si ha sido subida
+            if (isset($_FILES['poster']) && $_FILES['poster']['error'] == 0) {
+                $targetDir = __DIR__ . "/../../img/portadas_series/";
+                $fileName = basename($_FILES["poster"]["name"]);
+                $targetFilePath = $targetDir . $fileName;
+                
+                // Verificar que el tamaño del archivo no exceda 5 MB
+                if ($_FILES["poster"]["size"] > 5 * 1024 * 1024) {
+                    throw new Exception("El archivo de imagen no puede pesar más de 5 MB.");
+                }
+                
+                // Verificar que sea una imagen válida
+                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
+                
+                if (in_array(strtolower($fileType), $allowTypes)) {
+                    // Subir el archivo
+                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
+                        // Borrar el archivo anterior si existe y es diferente
+                        if ($currentSerie['poster'] && $currentSerie['poster'] != "img/portadas_series/" . $fileName) {
+                            $oldPosterPath = __DIR__ . "/../../" . $currentSerie['poster'];
+                            if (file_exists($oldPosterPath)) {
+                                unlink($oldPosterPath);
+                            }
+                        }
+                        
+                        $posterPath = "img/portadas_series/" . $fileName;
+                    } else {
+                        throw new Exception("Error al subir el archivo de imagen.");
+                    }
+                } else {
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
+                }
+            }
+            
+            // Actualizar la serie en la base de datos
+            $result = $this->serieModel->updateSerie(
+                $id,
+                $_POST["name"],
+                $posterPath,
+                $_POST["gender"],
+                $_POST["languages"],
+                $_POST["seasons"],
+                $_POST["complete"],
+                $_POST["year"],
+                $_POST["quality"],
+                $_POST["backup"] ?? null,
+                $_POST["size"],
+                $_POST["server"],
+                $_POST["rating"] ?? null
+            );
+            
+            if (!$result) {
+                throw new Exception("No se pudo actualizar la serie");
+            }
+            
+            return true;
         }
-        include __DIR__ . '/../views/edit_serie.php';
+        return false;
     }
 
     // Eliminar una serie

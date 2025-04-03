@@ -18,7 +18,7 @@
 
         // Obtener una serie por un ID concreto
         public function getSerieById($id) {
-            $stmt = $this->pdo->prepare("SELECT * FROM Movies WHERE id_serie = ?");
+            $stmt = $this->pdo->prepare("SELECT * FROM Series WHERE id_serie = ?");
             $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
