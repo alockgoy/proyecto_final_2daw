@@ -21,7 +21,7 @@ try {
     $result = $controller->deleteSerie($id);
     
     // Redirigir a la lista de series
-    header('Location: movies.php?deleted=true');
+    header('Location: series.php');
     exit;
 } catch (Exception $e) {
     die('Error: ' . $e->getMessage());
