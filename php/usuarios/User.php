@@ -25,12 +25,30 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Crear un usuario
-    public function createUser($username, $profile, $email, $salt, $password, $two_factor)
+    // Verificar si existe un usuario con el mismo nombre o email
+    public function checkUserExists($username, $email)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO Users (username, profile, email, salt, password, two_factor) 
-                                         VALUES (?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$username, $profile, $email, $salt, $password, $two_factor]);
+        $stmt = $this->pdo->prepare("SELECT id_user FROM Users WHERE username = ? OR email = ?");
+        $stmt->execute([$username, $email]);
+        return $stmt->rowCount() > 0;
+    }
+
+    // Crear un usuario
+    public function createUser($username, $email, $salt, $password, $profile, $two_factor, $rol)
+    {
+        try {
+            // Comprobar si el usuario ya existe
+            if ($this->checkUserExists($username, $email)) {
+                return false;
+            }
+            
+            $stmt = $this->pdo->prepare("INSERT INTO Users (username, email, salt, password, profile, two_factor, rol) 
+                                        VALUES (?, ?, ?, ?, ?, ?, ?)");
+            return $stmt->execute([$username, $email, $salt, $password, $profile, $two_factor, $rol]);
+        } catch (PDOException $e) {
+            error_log("Error en createUser: " . $e->getMessage());
+            return false;
+        }
     }
 
     // Eliminar un usuario
