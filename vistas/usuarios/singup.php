@@ -3,11 +3,17 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Abrir una sesión
+session_start();
+
+// Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 
+// Variable para almacenar los errores
 $error = "";
 
+// Comprobar que se ha pulsado el botón de enviar
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Validación básica
@@ -29,6 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Inicializar el controlador y procesar el registro
         $controller = new UserController();
         if ($controller->addUser()) {
+            // Guardar la información de la sesión
+            $_SESSION['username'] = $_POST['username'];
+
             header("Location: ../peliculas/movies.php");
             exit();
         } else {
