@@ -3,15 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../php/peliculas/MovieController.php';
-require_once '../../php/peliculas/Movie.php';
-
-$movieId = $controller->getLastInsertedId();
-$userController = new UserController();
-$userId = $userController->getUserIdByUsername($_SESSION['username']);
-$controller->associateMovieWithUser($movieId, $userId);
-$controller = new MovieController();
-
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -23,9 +14,36 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+require_once '../../php/peliculas/MovieController.php';
+require_once '../../php/peliculas/Movie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
+$controller = new MovieController();
+$userController = new UserController();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        $controller->addMovie();
+        // Añadir la película
+        if ($controller->addMovie()) {
+            // Obtener el ID de la última película insertada
+            $movieId = $controller->getLastInsertedId();
+            
+            // Obtener el ID del usuario actual
+            $userId = $userController->getUserIdByUsername($_SESSION['username']);
+
+            // Asociar la película con el usuario
+            $result = $controller->associateMovieWithUser($movieId, $userId);
+            
+            if ($result) {
+                header("Location: movies.php");
+                exit();
+            } else {
+                throw new Exception("Error al asociar la película con el usuario.");
+            }
+        } else {
+            throw new Exception("Error al añadir la película.");
+        }
     } catch (Exception $e) {
         echo("Error al añadir la película: " . $e->getMessage());
     }

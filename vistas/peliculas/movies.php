@@ -44,10 +44,10 @@ $movies = $movieController->getMoviesByUserId($userId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas - Biblioteca Multimedia</title>
+    <title>Películas</title>
 </head>
 <body>
-    <h1>Biblioteca de Películas</h1>
+    <h1>Biblioteca de <?php echo($_SESSION['username']); ?></h1>
     
     <div>
         <a href="add_movie.php">Añadir Nueva Película</a>

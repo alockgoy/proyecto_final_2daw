@@ -61,7 +61,7 @@ class User
 
     // Actualizar un usuario
     public function updateUser($id_user, $username, $profile, $email, $salt, $password, $two_factor) {
-        $stmt = $this->pdo->prepare("UPDATE Users SET usernamename=?, profile=?, email=?, salt=?, password=?, two_factor=? WHERE id_user=?");
+        $stmt = $this->pdo->prepare("UPDATE Users SET username=?, profile=?, email=?, salt=?, password=?, two_factor=? WHERE id_user=?");
         return $stmt->execute([$username, $profile, $email, $salt, $password, $two_factor, $id_user]);
     }
 

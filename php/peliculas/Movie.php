@@ -59,5 +59,10 @@ class Movie {
         $stmt = $this->pdo->prepare("INSERT INTO Users_Movies (id_user, id_movie) VALUES (?, ?)");
         return $stmt->execute([$userId, $movieId]);
     }
+
+    // Obtener el id de la última película añadida
+    public function getLastInsertedId() {
+        return $this->pdo->lastInsertId();
+    }
 }
 ?>

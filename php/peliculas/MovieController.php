@@ -58,7 +58,7 @@ class MovieController
             }
 
             // Crear la película con la ruta de la imagen
-            $this->movieModel->createMovie(
+            $result = $this->movieModel->createMovie(
                 $_POST["name"],
                 $_POST["synopsis"],
                 $posterPath, // Ruta guardada de la imagen
@@ -73,10 +73,9 @@ class MovieController
                 $_POST["rating"] ?? null
             );
 
-            header("Location: movies.php");
-            exit();
+            return $result;
         }
-        // include __DIR__ . '/../views/add_movie.php';
+        return false;
     }
 
     // Editar una película
@@ -192,6 +191,11 @@ class MovieController
     // Asociar películas con usuarios
     public function associateMovieWithUser($movieId, $userId) {
         return $this->movieModel->associateMovieWithUser($movieId, $userId);
+    }
+
+    // Obtener el ID de la última película añadida
+    public function getLastInsertedId() {
+        return $this->movieModel->getLastInsertedId();
     }
 }
 ?>
