@@ -6,6 +6,17 @@ error_reporting(E_ALL);
 require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 
+// Comprobar que existe una sesión
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si no existe una sesión, redirigir al index
+if (!isset($_SESSION['username'])) {
+    header("Location: ../../index.html");
+    exit();
+}
+
 // Crear instancia del controlador
 $controller = new MovieController();
 

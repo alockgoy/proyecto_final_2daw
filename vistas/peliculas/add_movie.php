@@ -7,6 +7,17 @@ require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 $controller = new MovieController();
 
+// Comprobar que existe una sesión
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si no existe una sesión, redirigir al index
+if (!isset($_SESSION['username'])) {
+    header("Location: ../../index.html");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $controller->addMovie();
