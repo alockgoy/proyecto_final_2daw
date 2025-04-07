@@ -5,6 +5,11 @@ error_reporting(E_ALL);
 
 require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
+
+$movieId = $controller->getLastInsertedId();
+$userController = new UserController();
+$userId = $userController->getUserIdByUsername($_SESSION['username']);
+$controller->associateMovieWithUser($movieId, $userId);
 $controller = new MovieController();
 
 // Comprobar que existe una sesión

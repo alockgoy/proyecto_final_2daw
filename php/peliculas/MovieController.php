@@ -183,5 +183,15 @@ class MovieController
     {
         return $this->movieModel->getMovieById($id);
     }
+
+    // Obtener las películas vinculadas al usuario
+    public function getMoviesByUserId($userId) {
+        return $this->movieModel->getMoviesByUserId($userId);
+    }
+
+    // Asociar películas con usuarios
+    public function associateMovieWithUser($movieId, $userId) {
+        return $this->movieModel->associateMovieWithUser($movieId, $userId);
+    }
 }
 ?>

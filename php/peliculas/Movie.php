@@ -40,5 +40,24 @@ class Movie {
         $stmt = $this->pdo->prepare("DELETE FROM Movies WHERE id_movie = ?");
         return $stmt->execute([$id]);
     }
+
+    // Obtener las películas vinculadas al usuario
+    public function getMoviesByUserId($userId) {
+        $stmt = $this->pdo->prepare("
+            SELECT m.* 
+            FROM Movies m
+            JOIN Users_Movies um ON m.id_movie = um.id_movie
+            WHERE um.id_user = ?
+            ORDER BY m.name ASC
+        ");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Asociar películas con usuarios
+    public function associateMovieWithUser($movieId, $userId) {
+        $stmt = $this->pdo->prepare("INSERT INTO Users_Movies (id_user, id_movie) VALUES (?, ?)");
+        return $stmt->execute([$userId, $movieId]);
+    }
 }
 ?>

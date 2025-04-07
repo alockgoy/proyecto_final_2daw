@@ -108,5 +108,10 @@
             $this->userModel->deleteUser($id);
             header("Location: singup.php");
         }
+
+        // Obtener el ID de un usuario que ha iniciado la sesión
+        public function getUserIdByUsername($username) {
+            return $this->userModel->getUserIdByUsername($username);
+        }
     }
 ?>

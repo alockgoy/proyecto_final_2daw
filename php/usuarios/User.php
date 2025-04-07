@@ -64,5 +64,13 @@ class User
         $stmt = $this->pdo->prepare("UPDATE Users SET usernamename=?, profile=?, email=?, salt=?, password=?, two_factor=? WHERE id_user=?");
         return $stmt->execute([$username, $profile, $email, $salt, $password, $two_factor, $id_user]);
     }
+
+    // Obtener el ID de un usuario que ha iniciado la sesión
+    public function getUserIdByUsername($username) {
+        $stmt = $this->pdo->prepare("SELECT id_user FROM Users WHERE username = ?");
+        $stmt->execute([$username]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['id_user'] : null;
+    }
 }
 ?>
