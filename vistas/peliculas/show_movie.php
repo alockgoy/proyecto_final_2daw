@@ -5,6 +5,8 @@ error_reporting(E_ALL);
 
 require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -20,6 +22,9 @@ if (!isset($_SESSION['username'])) {
 // Crear instancia del controlador
 $controller = new MovieController();
 
+// Llamar al controlador de usuarios
+$userController = new UserController();
+
 // Verificar que se ha proporcionado un ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die('Error: No se ha especificado una película.');
@@ -27,6 +32,16 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = $_GET['id'];
 $movie = $controller->getMovie($id);
+
+// Verificar que la película pertenece al usuario actual
+$userId = $userController->getUserIdByUsername($_SESSION['username']);
+$isOwner = $controller->checkMovieBelongsToUser($id, $userId);
+
+// Si intenta borrar una película que no le "pertenece", redirigir
+if (!$isOwner) {
+    header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    exit();
+}
 
 // Si la película no existe, mostrar error
 if (!$movie) {
