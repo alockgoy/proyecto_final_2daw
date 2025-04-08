@@ -72,5 +72,35 @@ class User
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['id_user'] : null;
     }
+
+    // Iniciar sesión
+    public function login($username, $password) {
+        try {
+            // Primero, obtener el usuario por su nombre
+            $stmt = $this->pdo->prepare("SELECT * FROM Users WHERE username = ?");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$user) {
+                return false; // Usuario no encontrado
+            }
+            
+            // Verificar la contraseña usando la salt almacenada
+            $hashedPassword = hash('sha256', $password . $user['salt']);
+            
+            if ($hashedPassword === $user['password']) {
+                // Si la contraseña es correcta, vaciar los datos
+                unset($user['password']);
+                unset($user['salt']);
+                return $user;
+            }
+            
+            // Contraseña incorrecta
+            return false; 
+        } catch (PDOException $e) {
+            error_log("Error en iniciando sesión: " . $e->getMessage());
+            return false;
+        }
+    }
 }
 ?>

@@ -113,5 +113,10 @@
         public function getUserIdByUsername($username) {
             return $this->userModel->getUserIdByUsername($username);
         }
+
+        // Iniciar sesión
+        public function login($username, $password) {
+            return $this->userModel->login($username, $password);
+        }
     }
 ?>
