@@ -197,5 +197,10 @@ class MovieController
     public function getLastInsertedId() {
         return $this->movieModel->getLastInsertedId();
     }
+
+    // Comprobar que una película está vinculada con un usuario
+    public function checkMovieBelongsToUser($movieId, $userId) {
+        return $this->movieModel->checkMovieBelongsToUser($movieId, $userId);
+    }
 }
 ?>

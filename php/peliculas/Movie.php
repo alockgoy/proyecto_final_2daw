@@ -64,5 +64,20 @@ class Movie {
     public function getLastInsertedId() {
         return $this->pdo->lastInsertId();
     }
+
+    // Comprobar que una película está vinculada con un usuario
+    public function checkMovieBelongsToUser($movieId, $userId) {
+        try {
+            $stmt = $this->pdo->prepare("
+            SELECT * FROM Users_Movies 
+            WHERE id_movie = ? AND id_user = ?
+            ");
+            $stmt->execute([$movieId, $userId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Error al borrar la película: " . $e->getMessage());
+            return false;
+        }
+    }
 }
 ?>
