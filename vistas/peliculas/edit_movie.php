@@ -5,6 +5,8 @@ error_reporting(E_ALL);
 
 require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -31,9 +33,22 @@ $error = "";
 // Obtener los datos actuales de la película
 $movie = $controller->getMovie($id);
 
+// Llamar al controlador de usuarios
+$userController = new UserController();
+
 // Si la película no existe, mostrar error
 if (!$movie) {
     die('Error: La película solicitada no existe.');
+}
+
+// Verificar que la película pertenece al usuario actual
+$userId = $userController->getUserIdByUsername($_SESSION['username']);
+$isOwner = $controller->checkMovieBelongsToUser($id, $userId);
+
+// Si intenta borrar una película que no le "pertenece", redirigir
+if (!$isOwner) {
+    header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    exit();
 }
 
 // Procesar el formulario cuando se envía
