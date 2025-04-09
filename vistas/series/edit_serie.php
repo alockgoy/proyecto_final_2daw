@@ -5,6 +5,19 @@ error_reporting(E_ALL);
 
 require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
+// Comprobar que existe una sesión
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si no existe una sesión, redirigir al index
+if (!isset($_SESSION['username'])) {
+    header("Location: ../../index.html");
+    exit();
+}
 
 // Crear instancia del controlador
 $controller = new SerieController();
@@ -19,9 +32,22 @@ $id = $_GET['id'];
 // Obtener los datos actuales de la serie
 $serie = $controller->getSerie($id);
 
+// Llamar al controlador de usuarios
+$userController = new UserController();
+
 // Si la serie no existe, mostrar error
 if (!$serie) {
     die('Error: La serie solicitada no existe.');
+}
+
+// Verificar que la serie pertenece al usuario actual
+$userId = $userController->getUserIdByUsername($_SESSION['username']);
+$isOwner = $controller->checkSerieBelongsToUser($id, $userId);
+
+// Si intenta borrar una película que no le "pertenece", redirigir
+if (!$isOwner) {
+    header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    exit();
 }
 
 // Procesar el formulario cuando se envía

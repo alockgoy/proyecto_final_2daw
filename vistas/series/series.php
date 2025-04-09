@@ -5,12 +5,38 @@ error_reporting(E_ALL);
 
 require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
+// Comprobar que existe una sesión
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si no existe una sesión, redirigir al index
+if (!isset($_SESSION['username'])) {
+    header("Location: ../../index.html");
+    exit();
+}
+
+// Crear instancia del controlador de usuarios
+$userController = new UserController();
+
+// Obtener ID del usuario por su nombre de usuario
+$userId = $userController->getUserIdByUsername($_SESSION['username']);
+
+if (!$userId) {
+    // Si no se encuentra el usuario, cerrar la sesión y volver al index
+    session_destroy();
+    header("Location: ../../index.html");
+    exit();
+}
 
 // Crear instancia del controlador
 $controller = new SerieController();
 
-// Obtener todas las series
-$series = $controller->index();
+// Obtener las series vinculadas al usuario actual
+$series = $controller->getSeriesByUserId($userId);
 ?>
 
 <!DOCTYPE html>

@@ -22,7 +22,7 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
     - ¿desea autenticación en 2 pasos? (s/n)
 
 - Puede iniciar sesión con su cuenta.
-    - nombre de usuario o correo electrónico*
+    - nombre de usuario*
     - contraseña
     - código de la verificación en 2 pasos (si la tiene activada)
 

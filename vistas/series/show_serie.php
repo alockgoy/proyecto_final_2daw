@@ -5,9 +5,25 @@ error_reporting(E_ALL);
 
 require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
+// Comprobar que existe una sesión
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si no existe una sesión, redirigir al index
+if (!isset($_SESSION['username'])) {
+    header("Location: ../../index.html");
+    exit();
+}
 
 // Crear instancia del controlador
 $controller = new SerieController();
+
+// Llamar al controlador de usuarios
+$userController = new UserController();
 
 // Verificar que se ha proporcionado un ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -16,6 +32,16 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = $_GET['id'];
 $serie = $controller->getSerie($id);
+
+// Verificar que la serie pertenece al usuario actual
+$userId = $userController->getUserIdByUsername($_SESSION['username']);
+$isOwner = $controller->checkSerieBelongsToUser($id, $userId);
+
+// Si intenta ver una serie que no le "pertenece", redirigir
+if (!$isOwner) {
+    header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    exit();
+}
 
 // Si la serie no existe, mostrar error
 if (!$serie) { 

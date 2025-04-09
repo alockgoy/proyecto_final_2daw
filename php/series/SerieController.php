@@ -162,6 +162,26 @@ class SerieController
         $this->serieModel->deleteSerie($id);
         header("Location: series.php");
     }
+
+    // Obtener las series vinculadas al usuario
+    public function getSeriesByUserId($userId) {
+        return $this->serieModel->getSeriesByUserId($userId);
+    }
+
+    // Comprobar que una serie está vinculada con un usuario
+    public function checkSerieBelongsToUser($serieId, $userId) {
+        return $this->serieModel->checkSerieBelongsToUser($serieId, $userId);
+    }
+
+    // Obtener el ID de la última serie añadida
+    public function getLastInsertedId() {
+        return $this->serieModel->getLastInsertedId();
+    }
+
+    // Asociar series con usuarios
+    public function associateSerieWithUser($serieId, $userId) {
+        return $this->serieModel->associateSerieWithUser($serieId, $userId);
+    }
 }
 
 ?>

@@ -37,7 +37,7 @@ $movie = $controller->getMovie($id);
 $userId = $userController->getUserIdByUsername($_SESSION['username']);
 $isOwner = $controller->checkMovieBelongsToUser($id, $userId);
 
-// Si intenta borrar una película que no le "pertenece", redirigir
+// Si intenta ver una película que no le "pertenece", redirigir
 if (!$isOwner) {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();

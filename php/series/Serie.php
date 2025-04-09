@@ -1,44 +1,91 @@
 <?php
-    //traer el archivo de configuración de la base de datos
-    require_once __DIR__ . '/../config.php';
+//traer el archivo de configuración de la base de datos
+require_once __DIR__ . '/../config.php';
 
-    class Serie{
-        private $pdo;
+class Serie
+{
+    private $pdo;
 
-        // Constructor
-        public function __construct($pdo){
-            $this->pdo = $pdo;
-        }
+    // Constructor
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
 
-        // Obtener todas las series
-        public function getAllSeries(){
-            $stmt = $this->pdo->query("SELECT * FROM Series");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
+    // Obtener todas las series
+    public function getAllSeries()
+    {
+        $stmt = $this->pdo->query("SELECT * FROM Series");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        // Obtener una serie por un ID concreto
-        public function getSerieById($id) {
-            $stmt = $this->pdo->prepare("SELECT * FROM Series WHERE id_serie = ?");
-            $stmt->execute([$id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
+    // Obtener una serie por un ID concreto
+    public function getSerieById($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM Series WHERE id_serie = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-        // Añadir una serie
-        public function createSerie($name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size){
-            $stmt = $this->pdo->prepare("INSERT INTO Series (name, poster, gender, languages, seasons, complete, year, quality, backup, rating, server, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size]);
-        }
+    // Añadir una serie
+    public function createSerie($name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO Series (name, poster, gender, languages, seasons, complete, year, quality, backup, rating, server, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size]);
+    }
 
-        // Eliminar una serie
-        public function deleteSerie($id) {
-            $stmt = $this->pdo->prepare("DELETE FROM Series WHERE id_serie = ?");
-            return $stmt->execute([$id]);
-        }
+    // Eliminar una serie
+    public function deleteSerie($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM Series WHERE id_serie = ?");
+        return $stmt->execute([$id]);
+    }
 
-        // Actualizar una serie
-        public function updateSerie($id, $name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size) {
-            $stmt = $this->pdo->prepare("UPDATE Series SET name=?, poster=?, gender=?, languages=?, seasons=?, complete=?, year=?, quality=?, backup=?, rating=?, server=?, size=? WHERE id_serie=?");
-            return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size, $id]);
+    // Actualizar una serie
+    public function updateSerie($id, $name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size)
+    {
+        $stmt = $this->pdo->prepare("UPDATE Series SET name=?, poster=?, gender=?, languages=?, seasons=?, complete=?, year=?, quality=?, backup=?, rating=?, server=?, size=? WHERE id_serie=?");
+        return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size, $id]);
+    }
+
+    // Obtener las series vinculadas al usuario
+    public function getSeriesByUserId($userId)
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT s.* 
+            FROM Series s
+            JOIN Users_Series us ON s.id_serie = us.id_serie
+            WHERE us.id_user = ?
+            ORDER BY s.name ASC
+        ");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Comprobar que una serie está vinculada con un usuario
+    public function checkSerieBelongsToUser($serieId, $userId) {
+        try {
+            $stmt = $this->pdo->prepare("
+            SELECT * FROM Users_Series 
+            WHERE id_serie = ? AND id_user = ?
+            ");
+            $stmt->execute([$serieId, $userId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Error al borrar la serie: " . $e->getMessage());
+            return false;
         }
     }
+
+    // Obtener el id de la última serie añadida
+    public function getLastInsertedId() {
+        return $this->pdo->lastInsertId();
+    }
+
+    // Asociar series con usuarios
+    public function associateSerieWithUser($serieId, $userId) {
+        $stmt = $this->pdo->prepare("INSERT INTO Users_Series (id_user, id_serie) VALUES (?, ?)");
+        return $stmt->execute([$userId, $serieId]);
+    }
+}
 ?>

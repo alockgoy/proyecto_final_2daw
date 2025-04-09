@@ -3,18 +3,49 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Comprobar que existe una sesión
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si no existe una sesión, redirigir al index
+if (!isset($_SESSION['username'])) {
+    header("Location: ../../index.html");
+    exit();
+}
+
 require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
 $controller = new SerieController();
-$error = "";
+$userController = new UserController();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        $controller->addSerie();
-        header("Location: series.php?added=true");
-        exit();
+        // Añadir la serie
+        if ($controller->addSerie()) {
+            // Obtener el ID de la última serie insertada
+            $serieId = $controller->getLastInsertedId();
+            
+            // Obtener el ID del usuario actual
+            $userId = $userController->getUserIdByUsername($_SESSION['username']);
+
+            // Asociar la serie con el usuario
+            $result = $controller->associateSerieWithUser($serieId, $userId);
+            
+            if ($result) {
+                header("Location: series.php");
+                exit();
+            } else {
+                throw new Exception("Error al asociar la serie con el usuario.");
+            }
+        } else {
+            throw new Exception("Error al añadir la serie.");
+        }
     } catch (Exception $e) {
-        $error = "Error al añadir la serie: " . $e->getMessage();
+        echo("Error al añadir la serie: " . $e->getMessage());
     }
 }
 ?>
