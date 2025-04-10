@@ -102,5 +102,66 @@ class User
             return false;
         }
     }
+    
+    // Obtener el nombre de usuario que ha iniciado sesión
+    public function getUserByUsername($username) {
+        $stmt = $this->pdo->prepare("SELECT * FROM Users WHERE username = ?");
+        $stmt->execute([$username]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Actualizar el nombre de usuario
+    public function updateUsername($userId, $newUsername) {
+        // Verificar que el nuevo nombre de usuario no está repetido
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM Users WHERE username = ? AND id_user != ?");
+        $stmt->execute([$newUsername, $userId]);
+        if ($stmt->fetchColumn() > 0) {
+            return false; // El nombre de usuario ya existe
+        }
+        
+        $stmt = $this->pdo->prepare("UPDATE Users SET username = ? WHERE id_user = ?");
+        return $stmt->execute([$newUsername, $userId]);
+    }
+
+    // Actualizar el correo electrónico
+    public function updateEmail($userId, $newEmail) {
+        // Verificar que el nuevo correo electrónico no está repetido
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM Users WHERE email = ? AND id_user != ?");
+        $stmt->execute([$newEmail, $userId]);
+        if ($stmt->fetchColumn() > 0) {
+            return false; // El correo electrónico ya existe
+        }
+        
+        $stmt = $this->pdo->prepare("UPDATE Users SET email = ? WHERE id_user = ?");
+        return $stmt->execute([$newEmail, $userId]);
+    }
+
+    // Actualizar la contraseña
+    public function updatePassword($userId, $currentPassword, $newPassword) {
+        // Obtener la información actual del usuario
+        $stmt = $this->pdo->prepare("SELECT salt, password FROM Users WHERE id_user = ?");
+        $stmt->execute([$userId]);
+        $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Verificar la contraseña actual
+        $hashedCurrentPassword = hash('sha256', $currentPassword . $userData['salt']);
+        if ($hashedCurrentPassword !== $userData['password']) {
+            return false; // Contraseña actual incorrecta
+        }
+        
+        // Generar un nueva salt y hash para la nueva contraseña
+        $newSalt = rand(-1000000, 1000000);
+        $hashedNewPassword = hash('sha256', $newPassword . $newSalt);
+        
+        // Actualizar la contraseña
+        $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE id_user = ?");
+        return $stmt->execute([$hashedNewPassword, $newSalt, $userId]);
+    }
+
+    // Actualizar el estado de la verificación en 2 pasos
+    public function update2FAStatus($userId, $status) {
+        $stmt = $this->pdo->prepare("UPDATE Users SET two_factor = ? WHERE id_user = ?");
+        return $stmt->execute([$status, $userId]);
+    }
 }
 ?>

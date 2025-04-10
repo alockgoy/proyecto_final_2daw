@@ -118,5 +118,30 @@
         public function login($username, $password) {
             return $this->userModel->login($username, $password);
         }
+
+        // Obtener el nombre de usuario que ha iniciado sesión
+        public function getUserByUsername($username) {
+            return $this->userModel->getUserByUsername($username);
+        }
+
+        // Actualizar el nombre de usuario
+        public function updateUsername($userId, $newUsername) {
+            return $this->userModel->updateUsername($userId, $newUsername);
+        }
+
+        // Actualizar el correo electrónico
+        public function updateEmail($userId, $newEmail) {
+            return $this->userModel->updateEmail($userId, $newEmail);
+        }
+
+        // Actualizar la contraseña
+        public function updatePassword($userId, $currentPassword, $newPassword) {
+            return $this->userModel->updatePassword($userId, $currentPassword, $newPassword);
+        }
+
+        // Actualizar el estado de la autenticación en 2 pasos
+        public function update2FAStatus($userId, $status) {
+            return $this->userModel->update2FAStatus($userId, $status);
+        }
     }
 ?>
