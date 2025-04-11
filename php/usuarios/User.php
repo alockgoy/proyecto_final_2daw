@@ -163,5 +163,19 @@ class User
         $stmt = $this->pdo->prepare("UPDATE Users SET two_factor = ? WHERE id_user = ?");
         return $stmt->execute([$status, $userId]);
     }
+
+    // Obtener el perfil del usuario
+    public function getUserProfilePicture($username) {
+        try {
+            $stmt = $this->pdo->prepare("SELECT profile FROM Users WHERE username = ?");
+            $stmt->execute([$username]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result && !empty($result['profile']) ? $result['profile'] : null;
+        } catch (PDOException $e) {
+            error_log("Error al obtener imagen de perfil: " . $e->getMessage());
+            return null;
+        }
+    }
 }
 ?>

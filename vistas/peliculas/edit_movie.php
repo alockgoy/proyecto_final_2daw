@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="POST" enctype="multipart/form-data">
         <div>
             <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($movie['name']); ?>" required>
+            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($movie['name']); ?>" required />
         </div>
         
         <div>
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div>
             <label for="director">Director:</label>
-            <input type="text" id="director" name="director" value="<?php echo htmlspecialchars($movie['director']); ?>" required>
+            <input type="text" id="director" name="director" value="<?php echo htmlspecialchars($movie['director']); ?>" required />
         </div>
         
         <div>
@@ -115,17 +115,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div>
             <label for="languages">Idiomas:</label>
-            <input type="text" id="languages" name="languages" value="<?php echo htmlspecialchars($movie['languages']); ?>" required>
+            <input type="text" id="languages" name="languages" value="<?php echo htmlspecialchars($movie['languages']); ?>" required />
         </div>
         
         <div>
             <label for="size">Tamaño (MB):</label>
-            <input type="number" id="size" name="size" step="0.01" value="<?php echo htmlspecialchars($movie['size']); ?>" required>
+            <input type="number" id="size" name="size" step="0.01" value="<?php echo htmlspecialchars($movie['size']); ?>" required />
         </div>
         
         <div>
             <label for="year">Año:</label>
-            <input type="number" id="year" name="year" value="<?php echo htmlspecialchars($movie['year']); ?>" required>
+            <input type="number" id="year" name="year" value="<?php echo htmlspecialchars($movie['year']); ?>" required />
         </div>
         
         <div>
@@ -162,12 +162,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div>
             <label>Póster actual:</label>
-            <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>" alt="Póster actual" width="200">
+            <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>" alt="Póster actual" width="200" />
         </div>
         
         <div>
             <label for="poster">Cambiar póster (opcional):</label>
-            <input type="file" id="poster" name="poster" accept="image/*">
+            <input type="file" id="poster" name="poster" accept="image/*" />
         </div>
         
         <div>

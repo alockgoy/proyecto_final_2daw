@@ -62,10 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
     <?php endif; ?>
     <form method="POST" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Nombre" required><br>
-        <textarea name="synopsis" placeholder="Sinopsis"></textarea><br>
-        <input type="file" name="poster" accept="image/*" required><br>
-        <input type="text" name="director" placeholder="Director" required><br>
+        <input type="text" name="name" placeholder="Nombre" required /> <br/>
+        <textarea name="synopsis" placeholder="Sinopsis"></textarea> <br/>
+        <input type="file" name="poster" accept="image/*" required /> <br/>
+        <input type="text" name="director" placeholder="Director" required /> <br/>
         <select name="gender" required>
             <option value="">Selecciona un género</option>
             <option value="acción/aventura">Acción/Aventura</option>
@@ -87,9 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="vaqueros">Vaqueros</option>
             <option value="misterio">Misterio</option>
         </select><br>
-        <input type="text" name="languages" placeholder="Idiomas" required><br>
-        <input type="number" name="size" placeholder="Tamaño (MB)" step="0.01" required><br>
-        <input type="number" name="year" placeholder="Año" required><br>
+        <input type="text" name="languages" placeholder="Idiomas" required /> <br/>
+        <input type="number" name="size" placeholder="Tamaño (MB)" step="0.01" required /> <br/>
+        <input type="number" name="year" placeholder="Año" required /> <br/>
         <select name="quality" required>
             <option value="">Selecciona la calidad</option>
             <option value="4K">4K</option>
@@ -99,13 +99,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="420p">420p</option>
             <option value="otro">Otro</option>
         </select><br>
-        <input type="text" name="backup" placeholder="Backup (URL)"><br>
+        <input type="text" name="backup" placeholder="Backup (URL)" /> <br/>
         <select name="server" required>
             <option value="">¿En servidor?</option>
             <option value="si">Sí</option>
             <option value="no">No</option>
         </select><br>
-        <input type="number" name="rating" placeholder="Calificación (1-10)" min="1" max="10"><br>
+        <input type="number" name="rating" placeholder="Calificación (1-10)" min="1" max="10" /> <br/>
         <button type="submit">Guardar</button>
     </form>
     <a href="movies.php">Volver</a>

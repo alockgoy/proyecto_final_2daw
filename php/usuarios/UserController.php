@@ -143,5 +143,11 @@
         public function update2FAStatus($userId, $status) {
             return $this->userModel->update2FAStatus($userId, $status);
         }
+
+        // Obtener el perfil del usuario
+        public function getUserProfilePicture($username) {
+            $profilePath = $this->userModel->getUserProfilePicture($username);
+            return $profilePath ? $profilePath : 'img/avatares_usuarios/default.png';
+        }
     }
 ?>
