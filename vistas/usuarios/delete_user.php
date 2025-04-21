@@ -34,19 +34,22 @@ $userController = new UserController();
 
 try {
     // Obtener el ID del usuario actual
-    $userId = $userController->getUserIdByUsername($_SESSION['username']);
+    $userId = $_GET['id'];
     
     // Verificar que el ID del usuario coincide con el usuario que ha iniciado sesión
     $isUser = $userController->getUserIdByUsername($username);
     
     // Si se intenta borrar un usuario que no ha iniciado sesión, redirigir
-    if (!$isUser) {
+    if ($userId != $isUser) {
         header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         exit();
     }
     
     // Eliminar el usuario si todas las verificaciones son correctas
     $userController->deleteUser($userId);
+
+    // Cerrar la sesión
+    session_destroy();
     
     // Redirigir a la lista de películas
     header('Location: movies.php?deleted=true');
