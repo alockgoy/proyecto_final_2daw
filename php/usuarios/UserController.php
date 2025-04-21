@@ -106,7 +106,8 @@
         // Eliminar un usuario
         public function deleteUser($id) {
             $this->userModel->deleteUser($id);
-            header("Location: singup.php");
+            header("Location: ../../index.html");
+            exit();
         }
 
         // Obtener el ID de un usuario que ha iniciado la sesión
