@@ -2,47 +2,55 @@
 //traer el archivo de configuración de la base de datos
 require_once __DIR__ . '/../config.php';
 
-class Movie {
+class Movie
+{
     private $pdo;
 
-    public function __construct($pdo) {
+    public function __construct($pdo)
+    {
         $this->pdo = $pdo;
     }
 
     // Obtener todas las películas
-    public function getAllMovies() {
+    public function getAllMovies()
+    {
         $stmt = $this->pdo->query("SELECT * FROM Movies");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Obtener una película por ID concreto, necesario para editar
-    public function getMovieById($id) {
+    public function getMovieById($id)
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM Movies WHERE id_movie = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Crear una película
-    public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating) {
+    public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating)
+    {
         $stmt = $this->pdo->prepare("INSERT INTO Movies (name, synopsis, poster, director, gender, languages, size, year, quality, backup, server, rating) 
                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating]);
     }
 
     // Actualizar una película
-    public function updateMovie($id, $name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating) {
+    public function updateMovie($id, $name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating)
+    {
         $stmt = $this->pdo->prepare("UPDATE Movies SET name=?, synopsis=?, poster=?, director=?, gender=?, languages=?, size=?, year=?, quality=?, backup=?, server=?, rating=? WHERE id_movie=?");
         return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating, $id]);
     }
 
     // Eliminar una película
-    public function deleteMovie($id) {
+    public function deleteMovie($id)
+    {
         $stmt = $this->pdo->prepare("DELETE FROM Movies WHERE id_movie = ?");
         return $stmt->execute([$id]);
     }
 
     // Obtener las películas vinculadas al usuario
-    public function getMoviesByUserId($userId) {
+    public function getMoviesByUserId($userId)
+    {
         $stmt = $this->pdo->prepare("
             SELECT m.* 
             FROM Movies m
@@ -55,18 +63,21 @@ class Movie {
     }
 
     // Asociar películas con usuarios
-    public function associateMovieWithUser($movieId, $userId) {
+    public function associateMovieWithUser($movieId, $userId)
+    {
         $stmt = $this->pdo->prepare("INSERT INTO Users_Movies (id_user, id_movie) VALUES (?, ?)");
         return $stmt->execute([$userId, $movieId]);
     }
 
     // Obtener el id de la última película añadida
-    public function getLastInsertedId() {
+    public function getLastInsertedId()
+    {
         return $this->pdo->lastInsertId();
     }
 
     // Comprobar que una película está vinculada con un usuario
-    public function checkMovieBelongsToUser($movieId, $userId) {
+    public function checkMovieBelongsToUser($movieId, $userId)
+    {
         try {
             $stmt = $this->pdo->prepare("
             SELECT * FROM Users_Movies 
@@ -78,6 +89,28 @@ class Movie {
             error_log("Error al borrar la película: " . $e->getMessage());
             return false;
         }
+    }
+
+    // Obtener películas que no tienen usuarios asociados (rezagadas en la tabla movies)
+    public function getMoviesWithoutUser()
+    {
+        $stmt = $this->pdo->query("
+            SELECT m.* 
+            FROM Movies m
+            LEFT JOIN Users_Movies um ON m.id_movie = um.id_movie
+            WHERE um.id_movie IS NULL
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Borrar películas que no tienen usuario asociado
+    public function deleteMoviesWithoutUsers()
+    {
+        $stmt = $this->pdo->prepare("
+        DELETE FROM Movies 
+        WHERE id_movie NOT IN (SELECT id_movie FROM Users_Movies)
+    ");
+        return $stmt->execute();
     }
 }
 ?>

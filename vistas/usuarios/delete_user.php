@@ -8,6 +8,14 @@ error_reporting(E_ALL);
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 
+// Traer los archivos de películas
+require_once '../../php/peliculas/MovieController.php';
+require_once '../../php/peliculas/Movie.php';
+
+// Traer los archivos de series
+require_once '../../php/series/SerieController.php';
+require_once '../../php/series/Serie.php';
+
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -31,6 +39,7 @@ $username = $_SESSION['username'];
 
 // Crear instancias de los controladores
 $userController = new UserController();
+$movieController = new MovieController();
 
 try {
     // Obtener el ID del usuario actual
@@ -48,13 +57,17 @@ try {
     // Eliminar el usuario si todas las verificaciones son correctas
     $userController->deleteUser($userId);
 
+    // Eliminar toda la multimedia que no tenga usuario asociado
+    $movieController->deleteMoviesWithoutUsers();
+
     // Cerrar la sesión
     session_destroy();
     
     // Redirigir a la lista de películas
-    header('Location: movies.php?deleted=true');
+    header('Location: ../../index.html');
     exit;
 } catch (Exception $e) {
+    $pdo->rollBack();
     die('Error: ' . $e->getMessage());
 }
 

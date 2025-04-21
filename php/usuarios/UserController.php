@@ -17,6 +17,12 @@
             //include __DIR__ . '/../vistas/users.php';
         }
 
+        // Método getPdo
+        public function getPdo() {
+            global $pdo;
+            return $pdo;
+        }
+
         // Añadir un usuario
         public function addUser() {
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -107,7 +113,6 @@
         public function deleteUser($id) {
             $this->userModel->deleteUser($id);
             header("Location: ../../index.html");
-            exit();
         }
 
         // Obtener el ID de un usuario que ha iniciado la sesión

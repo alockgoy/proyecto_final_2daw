@@ -83,32 +83,32 @@ class MovieController
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $posterPath = null;
-            
+
             // Obtener la película actual para saber la ruta de la imagen actual
             $currentMovie = $this->movieModel->getMovieById($id);
-            
+
             if (!$currentMovie) {
                 throw new Exception("La película no existe");
             }
-            
+
             // Usar la ruta de la imagen actual si no se está subiendo una nueva
             $posterPath = $currentMovie['poster'];
-            
+
             // Procesar la imagen si ha sido subida
             if (isset($_FILES['poster']) && $_FILES['poster']['error'] == 0) {
                 $targetDir = __DIR__ . "/../../img/portadas_peliculas/";
                 $fileName = basename($_FILES["poster"]["name"]);
                 $targetFilePath = $targetDir . $fileName;
-                
+
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
-                
+
                 // Verificar que el tamaño del archivo no exceda 5 MB
                 if ($_FILES["poster"]["size"] > 5 * 1024 * 1024) {
                     throw new Exception("El archivo de imagen no puede pesar más de 5 MB.");
                 }
-                
+
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
                     if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
@@ -119,7 +119,7 @@ class MovieController
                                 unlink($oldPosterPath);
                             }
                         }
-                        
+
                         $posterPath = "img/portadas_peliculas/" . $fileName;
                     } else {
                         throw new Exception("Error al subir el archivo de imagen.");
@@ -128,7 +128,7 @@ class MovieController
                     throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
                 }
             }
-            
+
             // Actualizar la película en la base de datos
             $result = $this->movieModel->updateMovie(
                 $id,
@@ -145,11 +145,11 @@ class MovieController
                 $_POST["server"],
                 $_POST["rating"] ?? null
             );
-            
+
             if (!$result) {
                 throw new Exception("No se pudo actualizar la película");
             }
-            
+
             return true;
         }
         return false;
@@ -184,23 +184,56 @@ class MovieController
     }
 
     // Obtener las películas vinculadas al usuario
-    public function getMoviesByUserId($userId) {
+    public function getMoviesByUserId($userId)
+    {
         return $this->movieModel->getMoviesByUserId($userId);
     }
 
     // Asociar películas con usuarios
-    public function associateMovieWithUser($movieId, $userId) {
+    public function associateMovieWithUser($movieId, $userId)
+    {
         return $this->movieModel->associateMovieWithUser($movieId, $userId);
     }
 
     // Obtener el ID de la última película añadida
-    public function getLastInsertedId() {
+    public function getLastInsertedId()
+    {
         return $this->movieModel->getLastInsertedId();
     }
 
     // Comprobar que una película está vinculada con un usuario
-    public function checkMovieBelongsToUser($movieId, $userId) {
+    public function checkMovieBelongsToUser($movieId, $userId)
+    {
         return $this->movieModel->checkMovieBelongsToUser($movieId, $userId);
+    }
+
+    // Borrar películas que no tienen usuario asociado
+    public function deleteMoviesWithoutUsers(){
+        // Obtener películas sin usuario
+        $movies = $this->movieModel->getMoviesWithoutUser();
+
+        // Eliminar pósters antes de eliminar los registros
+        foreach ($movies as $movie) {
+            if (!empty($movie['poster'])) {
+                $posterPath = __DIR__ . '/../../' . $movie['poster'];
+
+                if (file_exists($posterPath)) {
+                    if (unlink($posterPath)) {
+                        error_log("Póster eliminado exitosamente");
+                    } else {
+                        error_log("Error al eliminar póster");
+                    }
+                } else {
+                    error_log("El archivo del póster no existe");
+                }
+            }
+        }
+
+        // Después de eliminar todos los pósters, eliminar los registros de la base de datos
+        $result = $this->movieModel->deleteMoviesWithoutUsers();
+
+        error_log("Resultado de eliminar películas: " . ($result ? "Éxito" : "Fallo"));
+        return $result;
     }
 }
 ?>
