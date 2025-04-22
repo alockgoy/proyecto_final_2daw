@@ -107,6 +107,22 @@ if (isset($_POST['update_2fa'])) {
         }
     }
 }
+
+// Procesar cambio de foto de perfil
+if (isset($_POST["update_pic"])) {
+    $result = $userController->updateProfileImage($userData['id_user'], $_FILES['profile_pic'] ?? null);
+    
+    if ($result['success']) {
+        $message = $result['message'];
+        $userData['profile'] = $result['profile'];
+        
+        // Opcional: refrescar la página para mostrar la nueva imagen
+        header("Location: my_profile.php?updated=profile");
+        exit();
+    } else {
+        $error = $result['message'];
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -129,7 +145,7 @@ if (isset($_POST['update_2fa'])) {
             <img src="<?php echo !empty($userData['profile']) ? '../../' . $userData['profile'] : '../../uploads/profiles/default.png'; ?>"
                 alt="Foto de perfil" class="profile-pic" />
 
-            <form method="POST" action="update_profile_pic.php" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="profile_pic">Cambiar foto de perfil:</label>
                     <input type="file" id="profile_pic" name="profile_pic" accept="image/*" />

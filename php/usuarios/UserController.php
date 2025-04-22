@@ -112,7 +112,6 @@ class UserController
             $this->userModel->updateUser($id, $_POST["username"], $_POST["profile"], $_POST["email"], $_POST["salt"], $_POST["password"], $_POST["two_factor"]);
             header("Location: movies.php");
         }
-        //include __DIR__ . '/../views/edit_movie.php';
     }
 
 
@@ -191,6 +190,87 @@ class UserController
     {
         $profilePath = $this->userModel->getUserProfilePicture($username);
         return $profilePath ? $profilePath : 'img/avatares_usuarios/default.png';
+    }
+
+    // Actualizar la foto de perfil de un usuario
+    public function updateProfileImage($userId, $file)
+    {
+        $result = ['success' => false, 'message' => ''];
+
+        try {
+            // Validaciones de archivo
+            $maxSize = 2 * 1024 * 1024; // 2MB
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+
+            // Verificar si se ha enviado un archivo
+            if (!isset($file) || $file['error'] !== 0) {
+                throw new Exception("No se ha seleccionado ningún archivo o ha ocurrido un error en la subida.");
+            }
+
+            // Verificar tamaño del archivo
+            if ($file['size'] > $maxSize) {
+                throw new Exception("El archivo es demasiado grande. El tamaño máximo permitido es 2MB.");
+            }
+
+            // Verificar tipo de archivo
+            if (!in_array($file['type'], $allowedTypes)) {
+                throw new Exception("Tipo de archivo no permitido. Solo se aceptan imágenes.");
+            }
+
+            // Verificar extensión
+            $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!in_array($fileExtension, $allowedExtensions)) {
+                throw new Exception("Extensión de archivo no permitida. Solo se aceptan .jpg, .jpeg, .png o .webp.");
+            }
+
+            // Obtener información actual del usuario para la imagen anterior
+            $userData = $this->userModel->getUserById($userId);
+
+            // Crear directorio si no existe
+            $targetDir = __DIR__ . "/../../img/avatares_usuarios/";
+            if (!is_dir($targetDir)) {
+                if (!mkdir($targetDir, 0755, true)) {
+                    throw new Exception("No se pudo crear el directorio para guardar las imágenes");
+                }
+            }
+
+            // Generar nombre único para el archivo
+            $fileName = time() . '_' . basename($file["name"]);
+            $targetFilePath = $targetDir . $fileName;
+
+            // Eliminar foto anterior si existe
+            if ($userData && !empty($userData['profile'])) {
+                $oldProfilePath = __DIR__ . '/../../' . $userData['profile'];
+                if (file_exists($oldProfilePath)) {
+                    if (!unlink($oldProfilePath)) {
+                        error_log("Error al eliminar el archivo anterior: " . $oldProfilePath);
+                    }
+                }
+            }
+
+            // Mover el archivo subido
+            if (!move_uploaded_file($file['tmp_name'], $targetFilePath)) {
+                throw new Exception("Error al subir la imagen. Por favor, inténtalo de nuevo.");
+            }
+
+            // Actualizar la ruta en la base de datos
+            $profilePath = "img/avatares_usuarios/" . $fileName;
+            $updateResult = $this->userModel->updateProfilePicture($userId, $profilePath);
+
+            if (!$updateResult) {
+                throw new Exception("Error al actualizar la foto de perfil en la base de datos.");
+            }
+
+            $result['success'] = true;
+            $result['message'] = "Foto de perfil actualizada correctamente.";
+            $result['profile'] = $profilePath;
+
+        } catch (Exception $e) {
+            $result['message'] = $e->getMessage();
+        }
+
+        return $result;
     }
 }
 ?>

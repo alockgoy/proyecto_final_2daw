@@ -177,5 +177,11 @@ class User
             return null;
         }
     }
+
+    // Actualizar la foto de perfil de un usuario
+    public function updateProfilePicture($userId, $profilePath) {
+        $stmt = $this->pdo->prepare("UPDATE Users SET profile = ? WHERE id_user = ?");
+        return $stmt->execute([$profilePath, $userId]);
+    }
 }
 ?>
