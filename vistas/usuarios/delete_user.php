@@ -40,6 +40,7 @@ $username = $_SESSION['username'];
 // Crear instancias de los controladores
 $userController = new UserController();
 $movieController = new MovieController();
+$serieController = new SerieController();
 
 try {
     // Obtener el ID del usuario actual
@@ -59,6 +60,7 @@ try {
 
     // Eliminar toda la multimedia que no tenga usuario asociado
     $movieController->deleteMoviesWithoutUsers();
+    $serieController->deleteSeriesWithoutUsers();
 
     // Cerrar la sesión
     session_destroy();

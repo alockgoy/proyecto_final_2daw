@@ -87,5 +87,27 @@ class Serie
         $stmt = $this->pdo->prepare("INSERT INTO Users_Series (id_user, id_serie) VALUES (?, ?)");
         return $stmt->execute([$userId, $serieId]);
     }
+
+    // Obtener series que no tienen usuarios asociados (rezagadas en la tabla Series)
+    public function getSeriesWithoutUser()
+    {
+        $stmt = $this->pdo->query("
+            SELECT s.* 
+            FROM Series s
+            LEFT JOIN Users_Series us ON s.id_serie = us.id_serie
+            WHERE us.id_serie IS NULL
+        ");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Borrar series que no tienen usuario asociado
+    public function deleteSeriesWithoutUsers()
+    {
+        $stmt = $this->pdo->prepare("
+        DELETE FROM Series 
+        WHERE id_serie NOT IN (SELECT id_serie FROM Users_Series)
+    ");
+        return $stmt->execute();
+    }
 }
 ?>

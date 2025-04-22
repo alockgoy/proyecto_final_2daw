@@ -182,6 +182,35 @@ class SerieController
     public function associateSerieWithUser($serieId, $userId) {
         return $this->serieModel->associateSerieWithUser($serieId, $userId);
     }
+
+    // Borrar series que no tienen usuario asociado
+    public function deleteSeriesWithoutUsers(){
+        // Obtener series sin usuario
+        $series = $this->serieModel->getSeriesWithoutUser();
+
+        // Eliminar pósters antes de eliminar los registros
+        foreach ($series as $serie) {
+            if (!empty($serie['poster'])) {
+                $posterPath = __DIR__ . '/../../' . $serie['poster'];
+
+                if (file_exists($posterPath)) {
+                    if (unlink($posterPath)) {
+                        error_log("Póster eliminado exitosamente");
+                    } else {
+                        error_log("Error al eliminar póster");
+                    }
+                } else {
+                    error_log("El archivo del póster no existe");
+                }
+            }
+        }
+
+        // Después de eliminar todos los pósters, eliminar los registros de la base de datos
+        $result = $this->serieModel->deleteSeriesWithoutUsers();
+
+        error_log("Resultado de eliminar series: " . ($result ? "Éxito" : "Fallo"));
+        return $result;
+    }
 }
 
 ?>
