@@ -48,7 +48,7 @@ $movies = $movieController->getMoviesByUserId($userId);
     <title>Películas</title>
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../../css/movies.css" rel="stylesheet" />
+    <link href="../../css/movies.css" type="text/css" rel="stylesheet" />
     <link rel="shortcut icon" href="../../img/iconos_navegador/pelicula.png" type="image/x-icon">
 </head>
 

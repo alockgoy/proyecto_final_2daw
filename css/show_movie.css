@@ -1,0 +1,14 @@
+body {
+    padding-bottom: 70px;
+    /* Altura del footer + un poco más */
+}
+
+.footer-container {
+    height: 50px;
+    /* Altura ajustada para los botones */
+}
+
+.rating-stars {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
