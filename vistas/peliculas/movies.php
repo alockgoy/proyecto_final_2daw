@@ -87,8 +87,8 @@ $movies = $movieController->getMoviesByUserId($userId);
     </header>
 
     <main>
-        <div class="container">
-            <div class="row mt-3">
+        <div class="container-fluid px-4 mb-5 mt-2">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-4 justify-content-center">
                 <!-- Comprobar que hay al menos una película -->
                 <?php if (empty($movies)): ?>
                     <div class="col-12 text-center mt-5">
@@ -98,7 +98,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                 <?php else: ?>
                     <!-- Mostrar películas en tarjetas -->
                     <?php foreach ($movies as $movie): ?>
-                        <div class="col-lg-4 col-md-6 col-12 mb-4">
+                        <div class="col">
                             <div class="card">
                                 <div class="card-img-container">
                                     <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['name']); ?>" />

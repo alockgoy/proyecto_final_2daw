@@ -1,9 +1,10 @@
 /* Estilos personalizados para la página de películas */
 .card {
     height: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    flex: 1 0 auto;
 }
 
 .card:hover {
@@ -35,4 +36,19 @@
 .lead {
     font-size: 1.5rem;
     color: #6c757d;
+}
+
+.container-fluid {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.row {
+    margin-right: -0.5rem;
+    margin-left: -0.5rem;
+}
+
+.col {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
 }
