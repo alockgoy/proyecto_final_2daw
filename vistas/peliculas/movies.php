@@ -79,7 +79,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                         </li>
                     </ul>
                     <span class="navbar-text text-light">
-                        Biblioteca de <?php echo htmlspecialchars($_SESSION['username']); ?>
+                        Películas de <?php echo htmlspecialchars($_SESSION['username']); ?>
                     </span>
                 </div>
             </div>

@@ -41,37 +41,108 @@ $series = $controller->getSeriesByUserId($userId);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Series</title>
+    <!--Enlace al CSS de bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../css/series.css" type="text/css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../../img/iconos_navegador/serie.png" type="image/x-icon">
 </head>
+
 <body>
-    <div>
-        <a href="add_serie.php">Añadir Nueva Serie</a>
-    </div>
-    
-    <div>
-        <h2>Listado de Series</h2>
-        
-        <?php if (empty($series)): ?>
-            <p>No hay series disponibles.</p>
-        <?php else: ?>
-            <div>
-                <?php foreach ($series as $serie): ?>
-                    <div>
-                        <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>" alt="<?php echo htmlspecialchars($serie['name']); ?>" width="200">
-                        <div><?php echo htmlspecialchars($serie['name']); ?></div>
-                        <a target="_blank" href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>">Ver detalles</a>
-                    </div>
-                <?php endforeach; ?>
+    <header>
+        <!--Barra de navegación-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid px-2">
+                <!-- Foto de perfil del usuario -->
+                <a class="navbar-brand" href="">
+                    <img src="../../<?php echo htmlspecialchars($userController->getUserProfilePicture($_SESSION['username'])); ?>" alt="Perfil de Usuario" width="50">
+                </a>
+
+                <!--Botón para colapsar la barra en pantallas pequeñas-->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!--Elementos de la barra de navegación-->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./add_serie.php">Añadir una serie</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="../peliculas/movies.php">Ir a películas</a>
+                        </li>
+                    </ul>
+                    <span class="navbar-text text-light">
+                        Series de <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    </span>
+                </div>
             </div>
-        <?php endif; ?>
-    </div>
-    
-    <div>
-        <a href="../../index.html">Volver al inicio</a> | 
-        <a href="../peliculas/movies.php">Ver películas</a>
-    </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container-fluid px-4 mb-5 mt-2">
+            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-4 justify-content-center">
+                <!-- Comprobar que hay al menos una serie -->
+                <?php if (empty($series)): ?>
+                    <div class="col-12 text-center mt-5">
+                        <p class="lead">No hay series disponibles.</p>
+                        <a href="add_serie.php" class="btn btn-primary mt-3">Añadir Nueva Serie</a>
+                    </div>
+                <?php else: ?>
+                    <!-- Mostrar series en tarjetas -->
+                    <?php foreach ($series as $serie): ?>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-img-container">
+                                    <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>" alt="<?php echo htmlspecialchars($serie['name']); ?>" />
+                                </div>
+                                <div class="card-body text-center">
+                                    <h5 class="card-title"><?php echo htmlspecialchars($serie['name']); ?></h5>
+                                    <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>" class="btn btn-primary mt-auto" target="_blank">Detalles</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-5 fixed-bottom">
+        <!--Barra de navegación-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid px-2">
+                <!--Botón para colapsar la barra en pantallas pequeñas-->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFooter">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!--Elementos de la barra de navegación-->
+                <div class="collapse navbar-collapse" id="navbarFooter">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../usuarios/my_profile.php">Mi perfil</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="../usuarios/logout.php">Cerrar sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </footer>
+
+    <!-- Enlace al archivo JavaScript de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
