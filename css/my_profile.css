@@ -1,0 +1,208 @@
+body {
+    background: rgb(122, 116, 124);
+    color: #7e7a7a; /* Colores grises para la página */
+}
+
+.container {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8;
+}
+
+.profile-button {
+    background: rgb(23, 17, 26);
+    box-shadow: none;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.profile-button:hover {
+    background: #d46a13;
+}
+
+.profile-button:focus {
+    background: #d46a13;
+    box-shadow: none;
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none;
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer;
+}
+
+.labels {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #682773;
+    margin-bottom: 20px;
+}
+
+h1 {
+    text-align: center;
+    padding: 15px 0;
+    font-weight: bold;
+    color: white;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="file"] {
+    padding: 10px 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #BA68C8;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #BA68C8;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.atribuciones {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 0.9em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.atribuciones h4 {
+    color: #682773;
+    font-size: 18px;
+}
+
+.atribuciones ul {
+    padding-left: 20px;
+}
+
+.atribuciones a {
+    color: #000000;
+    text-decoration: unde;
+}
+
+.atribuciones a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin: 15px 5px;
+}
+
+.btn-primary {
+    background-color: #193af5;
+    border-color: #193af5;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #093a72;
+    border-color: #093a72;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.main-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

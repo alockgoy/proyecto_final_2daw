@@ -66,7 +66,7 @@ if (isset($_POST['update_email'])) {
             echo ("Correo electrónico actualizado correctamente.");
             $userData['email'] = $newEmail;
         } else {
-            echo ("No se pudo actualizar el correo electrónico.");
+            echo ("No se pudo actualizar el correo electrónico. Puede ser que ya esté en uso.");
         }
     }
 }
@@ -111,11 +111,11 @@ if (isset($_POST['update_2fa'])) {
 // Procesar cambio de foto de perfil
 if (isset($_POST["update_pic"])) {
     $result = $userController->updateProfileImage($userData['id_user'], $_FILES['profile_pic'] ?? null);
-    
+
     if ($result['success']) {
         $message = $result['message'];
         $userData['profile'] = $result['profile'];
-        
+
         // Opcional: refrescar la página para mostrar la nueva imagen
         header("Location: my_profile.php?updated=profile");
         exit();
@@ -131,127 +131,174 @@ if (isset($_POST["update_pic"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="../../css/my_profile.css" type="text/css" rel="stylesheet" />
     <title>Mi Perfil</title>
 </head>
 
 <body>
     <div class="container">
-        <h1>Mi Perfil</h1>
+        <div class="main-container">
+            <div class="row">
+                <!-- Columna izquierda para la foto de perfil -->
+                <div class="col-md-3 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img src="<?php echo !empty($userData['profile']) ? '../../' . $userData['profile'] : '../../img/avatares_usuarios/default.jpg'; ?>"
+                    alt="Foto de perfil" class="profile-pic rounded-circle mt-5" />
 
-        <!-- Foto de perfil -->
-        <div class="profile-section">
-            <h2>Foto de perfil</h2>
-            <img src="<?php echo !empty($userData['profile']) ? '../../' . $userData['profile'] : '../../uploads/profiles/default.png'; ?>"
-                alt="Foto de perfil" class="profile-pic" />
-
-            <form method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="profile_pic">Cambiar foto de perfil:</label>
-                    <input type="file" id="profile_pic" name="profile_pic" accept="image/*" />
+                        <form method="POST" enctype="multipart/form-data" class="mt-3">
+                            <div class="form-group">
+                                <label for="profile_pic" class="labels">Cambiar foto de perfil:</label>
+                                <input type="file" id="profile_pic" name="profile_pic" accept="image/*"
+                                    class="form-control" />
+                            </div>
+                            <button type="submit" name="update_pic" class="profile-button mt-2">Actualizar foto</button>
+                        </form>
+                    </div>
                 </div>
-                <button type="submit" name="update_pic">Actualizar foto</button>
-            </form>
+
+                <!-- Columna central para las configuraciones principales -->
+                <div class="col-md-5 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Configuración del Perfil</h4>
+                        </div>
+
+                        <!-- Nombre de usuario -->
+                        <div class="profile-section">
+                            <h5>Nombre de usuario</h5>
+                            <p>Nombre de usuario actual: <strong><?php echo htmlspecialchars($username); ?></strong></p>
+
+                            <form method="POST">
+                                <div class="form-group">
+                                    <label for="new_username" class="labels">Nuevo nombre de usuario:</label>
+                                    <input type="text" id="new_username" name="new_username" class="form-control"
+                                        required />
+                                </div>
+                                <button type="submit" name="update_username" class="profile-button">Cambiar nombre de
+                                    usuario</button>
+                            </form>
+                        </div>
+
+                        <!-- Correo electrónico -->
+                        <div class="profile-section">
+                            <h5>Correo electrónico</h5>
+                            <p>Correo actual: <strong><?php echo htmlspecialchars($userData['email']); ?></strong></p>
+
+                            <form method="POST">
+                                <div class="form-group">
+                                    <label for="new_email" class="labels">Nuevo correo electrónico:</label>
+                                    <input type="email" id="new_email" name="new_email" class="form-control" required>
+                                </div>
+                                <button type="submit" name="update_email" class="profile-button">Cambiar correo
+                                    electrónico</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha para configuraciones adicionales -->
+                <div class="col-md-4">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Seguridad</h4>
+                        </div>
+
+                        <!-- Cambiar contraseña -->
+                        <div class="profile-section">
+                            <h5>Cambiar contraseña</h5>
+
+                            <form method="POST">
+                                <div class="form-group">
+                                    <label for="current_password" class="labels">Contraseña actual:</label>
+                                    <input type="password" id="current_password" name="current_password"
+                                        class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="new_password" class="labels">Nueva contraseña:</label>
+                                    <input type="password" id="new_password" name="new_password" class="form-control"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirm_password" class="labels">Confirmar nueva contraseña:</label>
+                                    <input type="password" id="confirm_password" name="confirm_password"
+                                        class="form-control" required>
+                                </div>
+
+                                <button type="submit" name="update_password" class="profile-button">Cambiar
+                                    contraseña</button>
+                            </form>
+                        </div>
+
+                        <!-- Verificación en 2 pasos -->
+                        <div class="profile-section">
+                            <h5>Verificación en 2 pasos</h5>
+                            <p>Estado actual:
+                                <strong><?php echo $userData['two_factor'] ? 'Activado' : 'Desactivado'; ?></strong></p>
+
+                            <form method="POST">
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="switch me-3">
+                                        <input type="checkbox" name="two_factor" <?php echo $userData['two_factor'] ? 'checked' : ''; ?>>
+                                        <span class="slider"></span>
+                                    </label>
+                                    <p class="mb-0">Activar/Desactivar verificación en 2 pasos</p>
+                                </div>
+
+                                <button type="submit" name="update_2fa" class="profile-button">Guardar
+                                    configuración</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enlaces y botones de acción -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <a href="../peliculas/movies.php" class="btn btn-primary" style="text-decoration: none;">
+                        <i class="fas fa-arrow-left"></i> Volver a la biblioteca
+                    </a>
+
+                    <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')"
+                        style="text-decoration: none;">
+                        <i class="fas fa-trash-alt"></i> Borrar cuenta
+                    </a>
+                </div>
+            </div>
+
+            <!-- Atribuciones por iconos -->
+            <div class="atribuciones mt-4">
+                <h4>Atribuciones</h4>
+
+                <ul>
+                    <li><a href="https://www.flaticon.es/iconos-gratis/perfiles-de-usuario"
+                            title="perfiles de usuario iconos">Perfiles de usuario iconos creados por yaicon -
+                            Flaticon</a>
+                    </li>
+                    <li><a href="https://www.flaticon.es/iconos-gratis/film-fotografico"
+                            title="film fotográfico iconos">Film fotográfico iconos creados por Iconic Panda -
+                            Flaticon</a>
+                    </li>
+                    <li><a href="https://www.flaticon.es/iconos-gratis/serie" title="serie iconos">Serie iconos creados
+                            por
+                            shmai - Flaticon</a></li>
+                    <li><a href="https://www.flaticon.es/iconos-gratis/usuario-seguro"
+                            title="usuario seguro iconos">Usuario
+                            seguro iconos creados por Muhammad Atif - Flaticon</a></li>
+                </ul>
+            </div>
         </div>
-
-        <!-- Nombre de usuario -->
-        <div class="profile-section">
-            <h2>Nombre de usuario</h2>
-            <p>Nombre de usuario actual: <strong><?php echo htmlspecialchars($username); ?></strong></p>
-
-            <form method="POST">
-                <div class="form-group">
-                    <label for="new_username">Nuevo nombre de usuario:</label>
-                    <input type="text" id="new_username" name="new_username" required />
-                </div>
-                <button type="submit" name="update_username">Cambiar nombre de usuario</button>
-            </form>
-        </div>
-
-        <!-- Correo electrónico -->
-        <div class="profile-section">
-            <h2>Correo electrónico</h2>
-            <p>Correo actual: <strong><?php echo htmlspecialchars($userData['email']); ?></strong></p>
-
-            <form method="POST">
-                <div class="form-group">
-                    <label for="new_email">Nuevo correo electrónico:</label>
-                    <input type="email" id="new_email" name="new_email" required>
-                </div>
-                <button type="submit" name="update_email">Cambiar correo electrónico</button>
-            </form>
-        </div>
-
-        <!-- Cambiar contraseña -->
-        <div class="profile-section">
-            <h2>Cambiar contraseña</h2>
-
-            <form method="POST">
-                <div class="form-group">
-                    <label for="current_password">Contraseña actual:</label>
-                    <input type="password" id="current_password" name="current_password" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="new_password">Nueva contraseña:</label>
-                    <input type="password" id="new_password" name="new_password" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm_password">Confirmar nueva contraseña:</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
-                </div>
-
-                <button type="submit" name="update_password">Cambiar contraseña</button>
-            </form>
-        </div>
-
-        <!-- Verificación en 2 pasos -->
-        <div class="profile-section">
-            <h2>Verificación en 2 pasos</h2>
-            <p>Estado actual: <strong><?php echo $userData['two_factor'] ? 'Activado' : 'Desactivado'; ?></strong></p>
-
-            <form method="POST">
-                <div class="form-group">
-                    <label class="switch">
-                        <input type="checkbox" name="two_factor" <?php echo $userData['two_factor'] ? 'checked' : ''; ?>>
-                        <span class="slider"></span>
-                    </label>
-                    <p>Activar/Desactivar verificación en 2 pasos</p>
-                </div>
-
-                <button type="submit" name="update_2fa">Guardar configuración</button>
-            </form>
-        </div>
-
-        <!-- Atribuciones por iconos -->
-        <div class="atribuciones">
-            <h4>Atribuciones</h4>
-            
-            <ul>
-                <li><a href="https://www.flaticon.es/iconos-gratis/perfiles-de-usuario"
-                        title="perfiles de usuario iconos">Perfiles de usuario iconos creados por yaicon - Flaticon</a>
-                </li>
-                <li><a href="https://www.flaticon.es/iconos-gratis/film-fotografico"
-                        title="film fotográfico iconos">Film fotográfico iconos creados por Iconic Panda - Flaticon</a>
-                </li>
-                <li><a href="https://www.flaticon.es/iconos-gratis/serie" title="serie iconos">Serie iconos creados por
-                        shmai - Flaticon</a></li>
-                <li><a href="https://www.flaticon.es/iconos-gratis/usuario-seguro" title="usuario seguro iconos">Usuario
-                        seguro iconos creados por Muhammad Atif - Flaticon</a></li>
-            </ul>
-        </div>
-
-        <p>
-            <a href="../peliculas/movies.php">Volver a la biblioteca</a>
-        </p>
-
-        <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')">
-            Borrar cuenta
-        </a> 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

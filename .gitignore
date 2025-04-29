@@ -6,3 +6,4 @@ img/portadas_series/*
 !img/portadas_series/*.txt
 img/avatares_usuarios/*
 !img/avatares_usuarios/*.txt
+!img/avatares_usuarios/default.jpg
