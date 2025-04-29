@@ -105,7 +105,7 @@ $series = $controller->getSeriesByUserId($userId);
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"><?php echo htmlspecialchars($serie['name']); ?></h5>
-                                    <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>" class="btn btn-primary mt-auto" target="_blank">Detalles</a>
+                                    <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>" class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
                             </div>
                         </div>

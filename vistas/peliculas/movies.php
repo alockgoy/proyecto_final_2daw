@@ -56,7 +56,7 @@ $movies = $movieController->getMoviesByUserId($userId);
     <header>
         <!--Barra de navegación-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
+            <div class="container-fluid px-2">
                 <!-- Foto de perfil del usuario -->
                 <a class="navbar-brand" href="">
                     <img src="../../<?php echo htmlspecialchars($userController->getUserProfilePicture($_SESSION['username'])); ?>" alt="Perfil de Usuario" width="50">
@@ -105,7 +105,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"><?php echo htmlspecialchars($movie['name']); ?></h5>
-                                    <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>" class="btn btn-primary mt-auto" target="_blank">Detalles</a>
+                                    <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>" class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
                             </div>
                         </div>
@@ -118,7 +118,7 @@ $movies = $movieController->getMoviesByUserId($userId);
     <footer class="mt-5 fixed-bottom">
         <!--Barra de navegación-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
+            <div class="container-fluid px-2">
                 <!--Botón para colapsar la barra en pantallas pequeñas-->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFooter">
                     <span class="navbar-toggler-icon"></span>
