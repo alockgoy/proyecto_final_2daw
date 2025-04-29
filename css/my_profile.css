@@ -191,6 +191,18 @@ input:checked + .slider:before {
     border-color: #bd2130 !important;
 }
 
+.btn-warning {
+    background-color: #ff9800;
+    border-color: #ff9800;
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #e68a00;
+    border-color: #e68a00;
+    color: white;
+}
+
 .profile-header {
     display: flex;
     flex-direction: column;

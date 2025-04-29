@@ -264,10 +264,20 @@ if (isset($_POST["update_pic"])) {
                         <i class="fas fa-arrow-left"></i> Volver a la biblioteca
                     </a>
 
+                    <br/>
+                    <br/>
+
                     <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>"
                         onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')"
                         style="text-decoration: none;">
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
+                    </a>
+
+                    <br />
+                    <br />
+
+                    <a class="btn btn-warning" href="./logout.php" style="text-decoration: none;">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                     </a>
                 </div>
             </div>
