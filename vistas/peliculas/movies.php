@@ -25,6 +25,9 @@ $userController = new UserController();
 // Obtener ID del usuario por su nombre de usuario
 $userId = $userController->getUserIdByUsername($_SESSION['username']);
 
+// Obtener la ruta de la foto de perfil del usuario
+$profilePicture = $userController->getUserProfilePicture($_SESSION['username']);
+
 if (!$userId) {
     // Si no se encuentra el usuario, cerrar la sesión y volver al index
     session_destroy();
@@ -58,8 +61,9 @@ $movies = $movieController->getMoviesByUserId($userId);
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid px-2">
                 <!-- Foto de perfil del usuario -->
-                <a class="navbar-brand" href="">
-                    <img src="../../<?php echo htmlspecialchars($userController->getUserProfilePicture($_SESSION['username'])); ?>" alt="Perfil de Usuario" width="50">
+                <a class="navbar-brand" href="../usuarios/my_profile.php">
+                    <img src="<?php echo !empty($profilePicture) ? '../../' . htmlspecialchars($profilePicture) : '../../img/avatares_usuarios/default.jpg'; ?>"
+                        width="50" height="50" class="rounded-circle" alt="Foto de perfil">
                 </a>
 
                 <!--Botón para colapsar la barra en pantallas pequeñas-->
@@ -88,7 +92,8 @@ $movies = $movieController->getMoviesByUserId($userId);
 
     <main>
         <div class="container-fluid px-4 mb-5 mt-2">
-            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-4 justify-content-center">
+            <div
+                class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-4 justify-content-center">
                 <!-- Comprobar que hay al menos una película -->
                 <?php if (empty($movies)): ?>
                     <div class="col-12 text-center mt-5">
@@ -101,11 +106,13 @@ $movies = $movieController->getMoviesByUserId($userId);
                         <div class="col">
                             <div class="card">
                                 <div class="card-img-container">
-                                    <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['name']); ?>" />
+                                    <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>"
+                                        alt="<?php echo htmlspecialchars($movie['name']); ?>" />
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"><?php echo htmlspecialchars($movie['name']); ?></h5>
-                                    <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>" class="btn btn-primary mt-auto">Detalles</a>
+                                    <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>"
+                                        class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
                             </div>
                         </div>

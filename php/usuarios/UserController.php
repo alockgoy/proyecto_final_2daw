@@ -188,8 +188,7 @@ class UserController
     // Obtener el perfil del usuario
     public function getUserProfilePicture($username)
     {
-        $profilePath = $this->userModel->getUserProfilePicture($username);
-        return $profilePath ? $profilePath : 'img/avatares_usuarios/default.png';
+        return $this->userModel->getUserProfilePicture($username);
     }
 
     // Actualizar la foto de perfil de un usuario

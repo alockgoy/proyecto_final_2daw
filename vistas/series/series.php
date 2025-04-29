@@ -25,6 +25,9 @@ $userController = new UserController();
 // Obtener ID del usuario por su nombre de usuario
 $userId = $userController->getUserIdByUsername($_SESSION['username']);
 
+// Obtener la ruta de la foto de perfil del usuario
+$profilePicture = $userController->getUserProfilePicture($_SESSION['username']);
+
 if (!$userId) {
     // Si no se encuentra el usuario, cerrar la sesión y volver al index
     session_destroy();
@@ -58,8 +61,9 @@ $series = $controller->getSeriesByUserId($userId);
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid px-2">
                 <!-- Foto de perfil del usuario -->
-                <a class="navbar-brand" href="">
-                    <img src="../../<?php echo htmlspecialchars($userController->getUserProfilePicture($_SESSION['username'])); ?>" alt="Perfil de Usuario" width="50">
+                <a class="navbar-brand" href="../usuarios/my_profile.php">
+                    <img src="<?php echo !empty($profilePicture) ? '../../' . htmlspecialchars($profilePicture) : '../../img/avatares_usuarios/default.jpg'; ?>"
+                        width="50" height="50" class="rounded-circle" alt="Foto de perfil">
                 </a>
 
                 <!--Botón para colapsar la barra en pantallas pequeñas-->
