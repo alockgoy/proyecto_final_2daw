@@ -51,47 +51,123 @@ if (!$serie) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../css/show_serie.css" type="text/css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../../img/iconos_navegador/pelicula.png" type="image/x-icon">
+    <!-- Título de la serie seleccionada -->
     <title><?php echo htmlspecialchars($serie['name']); ?></title>
 </head>
+
 <body>
-    <h1><?php echo htmlspecialchars($serie['name']); ?></h1>
-    
-    <!-- Póster de la serie -->
-    <div>
-        <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>" alt="<?php echo htmlspecialchars($serie['name']); ?>" width="300">
+
+    <div class="container mt-4">
+        <div class="row">
+
+            <!-- Poster de la serie -->
+            <aside class="col-md-4">
+                <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>"
+                    alt="<?php echo htmlspecialchars($serie['name']); ?>" class="img-fluid rounded shadow">
+            </aside>
+
+            <!-- Campos con los detalles -->
+            <main class="col-md-8">
+
+                <!-- Título de la serie -->
+                <h2><?php echo htmlspecialchars($serie['name']); ?></h2>
+
+                <!-- Resto de detalles -->
+                <ul class="list-group mb-4">
+
+                    <!-- Género -->
+                    <li class="list-group-item"><strong>Género:</strong>
+                        <?php echo htmlspecialchars($serie['gender']); ?></li>
+
+                    <!-- Año -->
+                    <li class="list-group-item"><strong>Año:</strong> <?php echo htmlspecialchars($serie['year']); ?>
+                    </li>
+
+                    <!-- Idioma(s) -->
+                    <li class="list-group-item"><strong>Idioma(s):</strong>
+                        <?php echo htmlspecialchars($serie['languages']); ?></li>
+
+                    <!-- Temporadas -->
+                    <li class="list-group-item"><strong>Temporadas:</strong>
+                        <?php echo htmlspecialchars($serie['seasons']); ?></li>
+
+                    <!-- ¿Completa? -->
+                    <li class="list-group-item"><strong>Completa:</strong>
+                        <?php echo $serie['complete'] == 'si' ? 'Sí' : 'No'; ?></li>
+
+                    <!-- Calidad -->
+                    <li class="list-group-item"><strong>Calidad:</strong>
+                        <?php echo htmlspecialchars($serie['quality']); ?></li>
+
+                    <!-- Tamaño en MB -->
+                    <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($serie['size']); ?>
+                        MB</li>
+
+                    <!-- Puntuación -->
+                    <?php if (!empty($serie['rating'])): ?>
+                        <li class="list-group-item">
+                            <strong>Valoración:</strong>
+                            <span>
+                                <?php echo htmlspecialchars($serie['rating']); ?>/10
+                            </span>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <!-- ¿Copia de seguridad? -->
+                    <?php if (!empty($serie['backup'])): ?>
+                        <li class="list-group-item"><strong>Backup:</strong>
+                            <?php echo htmlspecialchars($serie['backup']); ?></li>
+                    <?php endif; ?>
+
+                    <!-- ¿Está en un servidor multimedia? -->
+                    <li class="list-group-item"><strong>En servidor:</strong>
+                        <?php echo $serie['server'] == 'si' ? 'Sí' : 'No'; ?></li>
+                </ul>
+
+                <!-- Sinopsis -->
+                <?php if (isset($serie['synopsis']) && !empty($serie['synopsis'])): ?>
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h3 class="card-title h5 mb-0">Sinopsis</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><?php echo htmlspecialchars($serie['synopsis']); ?></p>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Botón para ir a la pantalla de edición -->
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                    <a href="edit_serie.php?id=<?php echo $serie['id_serie']; ?>" class="btn btn-warning me-md-2">
+                        <i class="bi bi-pencil-square"></i> Editar
+                    </a>
+                </div>
+            </main>
+        </div>
     </div>
-    
-    <!-- Detalles de la serie -->
-    <div>
-        <h2>Detalles de la serie</h2>
-        <p><strong>Nombre:</strong> <?php echo htmlspecialchars($serie['name']); ?></p>
-        <p><strong>Género:</strong> <?php echo htmlspecialchars($serie['gender']); ?></p>
-        <p><strong>Idiomas:</strong> <?php echo htmlspecialchars($serie['languages']); ?></p>
-        <p><strong>Temporadas:</strong> <?php echo htmlspecialchars($serie['seasons']); ?></p>
-        <p><strong>Completa:</strong> <?php echo $serie['complete'] == 'si' ? 'Sí' : 'No'; ?></p>
-        <p><strong>Año:</strong> <?php echo htmlspecialchars($serie['year']); ?></p>
-        <p><strong>Calidad:</strong> <?php echo htmlspecialchars($serie['quality']); ?></p>
-        <p><strong>Tamaño:</strong> <?php echo htmlspecialchars($serie['size']); ?> MB</p>
-        <p><strong>En servidor:</strong> <?php echo $serie['server'] == 'si' ? 'Sí' : 'No'; ?></p>
-        
-        <?php if (!empty($serie['rating'])): ?>
-            <p><strong>Calificación:</strong> <?php echo htmlspecialchars($serie['rating']); ?>/10</p>
-        <?php endif; ?>
-        
-        <?php if (!empty($serie['backup'])): ?>
-            <p><strong>Backup: </strong><?php echo htmlspecialchars($serie['backup']); ?></p>
-        <?php endif; ?>
-    </div>
-    
-    <!-- Enlaces de acción -->
-    <div>
-        <h3>Acciones</h3>
-        <a href="edit_serie.php?id=<?php echo $serie['id_serie']; ?>">Editar</a> |
-        <a href="delete_serie.php?id=<?php echo $serie['id_serie']; ?>" onclick="return confirm('¿Estás seguro de que deseas eliminar esta serie?')">Eliminar</a> |
-        <a href="series.php">Volver al listado</a>
-    </div>
+
+    <!-- Botones de borrar serie y volver atrás -->
+    <footer class="bg-dark text-white text-center py-3 fixed-bottom">
+        <div class="container footer-container d-flex justify-content-center align-items-center">
+            <a href="delete_serie.php?id=<?php echo $serie['id_serie']; ?>"
+                onclick="return confirm('¿Estás seguro de que deseas eliminar esta serie?')"
+                class="btn btn-danger me-2">Borrar Serie</a>
+            <a href="series.php" class="btn btn-secondary">Volver Atrás</a>
+        </div>
+    </footer>
+
+    <!-- Enlace al archivo JavaScript de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Iconos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
 </body>
+
 </html>
