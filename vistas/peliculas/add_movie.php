@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2 class="text-center mb-0"><i class="fas fa-film me-2"></i>Añadir Película</h2>
             </div>
             <div class="card-body">
-                <form method="POST" enctype="multipart/form-data" class="needs-validation">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="row g-3">
                         <!-- Nombre de la película -->
                         <div class="col-md-6 form-group">

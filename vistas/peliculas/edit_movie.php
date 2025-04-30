@@ -69,111 +69,237 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../../css/edit_movie.css" type="text/css" rel="stylesheet" />
+    <!-- Enlace al CSS de bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <title>Editar Película - <?php echo htmlspecialchars($movie['name']); ?></title>
 </head>
-<body>
-    <h1>Editar Película: <?php echo htmlspecialchars($movie['name']); ?></h1>
-    
-    <?php if (!empty($error)): ?>
-        <p><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
-    
-    <form method="POST" enctype="multipart/form-data">
-        <div>
-            <label for="name">Nombre:</label>
-            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($movie['name']); ?>" required />
+
+<body class="bg-light">
+    <div class="container form-container py-4">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center mb-0"><i class="fas fa-edit me-2"></i>Editar Película:
+                    <?php echo htmlspecialchars($movie['name']); ?></h2>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row g-3">
+                        <!-- Nombre de la película -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-film"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="<?php echo htmlspecialchars($movie['name']); ?>" placeholder="Nombre" required/>
+                                    <label for="name">Nombre de la película</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Año -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="number" class="form-control" id="year" name="year"
+                                        value="<?php echo htmlspecialchars($movie['year']); ?>" placeholder="Año"
+                                        required />
+                                    <label for="year">Año</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Director -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="text" class="form-control" id="director" name="director"
+                                        value="<?php echo htmlspecialchars($movie['director']); ?>"
+                                        placeholder="Director" required />
+                                    <label for="director">Director</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Género -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <?php
+                                        $genders = [
+                                            'acción/aventura',
+                                            'animación',
+                                            'anime',
+                                            'ciencia ficción',
+                                            'cortometraje',
+                                            'comedia',
+                                            'deportes',
+                                            'documental',
+                                            'drama',
+                                            'familiar',
+                                            'fantasía',
+                                            'guerra',
+                                            'terror',
+                                            'musical',
+                                            'suspense',
+                                            'romance',
+                                            'vaqueros',
+                                            'misterio'
+                                        ];
+                                        foreach ($genders as $gender) {
+                                            $selected = ($movie['gender'] == $gender) ? 'selected' : '';
+                                            echo "<option value=\"" . htmlspecialchars($gender) . "\" $selected>" .
+                                                ucfirst(htmlspecialchars($gender)) . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                    <label for="gender">Género</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Idiomas -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-language"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="text" class="form-control" id="languages" name="languages"
+                                        value="<?php echo htmlspecialchars($movie['languages']); ?>"
+                                        placeholder="Idiomas" required />
+                                    <label for="languages">Idiomas (ej: Español, Inglés)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calidad -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-photo-video"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <select class="form-select" id="quality" name="quality" required>
+                                        <?php
+                                        $qualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+                                        foreach ($qualities as $quality) {
+                                            $selected = ($movie['quality'] == $quality) ? 'selected' : '';
+                                            echo "<option value=\"" . htmlspecialchars($quality) . "\" $selected>" .
+                                                htmlspecialchars($quality) . "</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                    <label for="quality">Calidad</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tamaño -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-hdd"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="number" class="form-control" id="size" name="size"
+                                        value="<?php echo htmlspecialchars($movie['size']); ?>" placeholder="Tamaño"
+                                        step="1" required />
+                                    <label for="size">Tamaño (GB)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calificación -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-star"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="number" class="form-control" id="rating" name="rating"
+                                        value="<?php echo htmlspecialchars($movie['rating'] ?? ''); ?>"
+                                        placeholder="Calificación" min="1" max="10" />
+                                    <label for="rating">Calificación (1-10)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- En servidor -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-server"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <select class="form-select" id="server" name="server" required>
+                                        <option value="si" <?php echo ($movie['server'] == 'si') ? 'selected' : ''; ?>>Sí
+                                        </option>
+                                        <option value="no" <?php echo ($movie['server'] == 'no') ? 'selected' : ''; ?>>No
+                                        </option>
+                                    </select>
+                                    <label for="server">¿En servidor?</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Backup -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-link"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="text" class="form-control" id="backup" name="backup"
+                                        value="<?php echo htmlspecialchars($movie['backup'] ?? ''); ?>"
+                                        placeholder="¿Dónde está la copia de seguridad?" />
+                                    <label for="backup">Backup</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Póster actual -->
+                        <div class="col-12 form-group">
+                            <label class="form-label mb-2"><i class="fas fa-image me-2"></i>Póster actual:</label>
+                            <div class="mb-3">
+                                <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>"
+                                    alt="Póster de <?php echo htmlspecialchars($movie['name']); ?>"
+                                    class="poster-preview img-fluid" height="400" width="200" />
+                            </div>
+                            <label for="poster" class="form-label">Cambiar póster (opcional):</label>
+                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*">
+                        </div>
+
+                        <!-- Sinopsis -->
+                        <div class="col-12 form-group">
+                            <label for="synopsis" class="form-label"><i
+                                    class="fas fa-align-left me-2"></i>Sinopsis</label>
+                            <textarea class="form-control" id="synopsis" name="synopsis" rows="4"
+                                placeholder="Escribe una breve sinopsis de la película..."><?php echo htmlspecialchars($movie['synopsis']); ?></textarea>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="col-12 d-flex justify-content-between mt-4">
+                            <a href="show_movie.php?id=<?php echo $id; ?>" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Actualizar Película
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        
-        <div>
-            <label for="synopsis">Sinopsis:</label>
-            <textarea id="synopsis" name="synopsis"><?php echo htmlspecialchars($movie['synopsis']); ?></textarea>
-        </div>
-        
-        <div>
-            <label for="director">Director:</label>
-            <input type="text" id="director" name="director" value="<?php echo htmlspecialchars($movie['director']); ?>" required />
-        </div>
-        
-        <div>
-            <label for="gender">Género:</label>
-            <select id="gender" name="gender" required>
-                <?php
-                $genders = ['acción/aventura', 'animación', 'anime', 'ciencia ficción', 'cortometraje', 
-                           'comedia', 'deportes', 'documental', 'drama', 'familiar', 'fantasía', 
-                           'guerra', 'terror', 'musical', 'suspense', 'romance', 'vaqueros', 'misterio'];
-                foreach ($genders as $gender) {
-                    $selected = ($movie['gender'] == $gender) ? 'selected' : '';
-                    echo "<option value=\"" . htmlspecialchars($gender) . "\" $selected>" . 
-                         ucfirst(htmlspecialchars($gender)) . "</option>";
-                }
-                ?>
-            </select>
-        </div>
-        
-        <div>
-            <label for="languages">Idiomas:</label>
-            <input type="text" id="languages" name="languages" value="<?php echo htmlspecialchars($movie['languages']); ?>" required />
-        </div>
-        
-        <div>
-            <label for="size">Tamaño (MB):</label>
-            <input type="number" id="size" name="size" step="0.01" value="<?php echo htmlspecialchars($movie['size']); ?>" required />
-        </div>
-        
-        <div>
-            <label for="year">Año:</label>
-            <input type="number" id="year" name="year" value="<?php echo htmlspecialchars($movie['year']); ?>" required />
-        </div>
-        
-        <div>
-            <label for="quality">Calidad:</label>
-            <select id="quality" name="quality" required>
-                <?php
-                $qualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
-                foreach ($qualities as $quality) {
-                    $selected = ($movie['quality'] == $quality) ? 'selected' : '';
-                    echo "<option value=\"" . htmlspecialchars($quality) . "\" $selected>" . 
-                         htmlspecialchars($quality) . "</option>";
-                }
-                ?>
-            </select>
-        </div>
-        
-        <div>
-            <label for="backup">Backup (URL):</label>
-            <input type="text" id="backup" name="backup" value="<?php echo htmlspecialchars($movie['backup'] ?? ''); ?>">
-        </div>
-        
-        <div>
-            <label for="server">¿En servidor?:</label>
-            <select id="server" name="server" required>
-                <option value="si" <?php echo ($movie['server'] == 'si') ? 'selected' : ''; ?>>Sí</option>
-                <option value="no" <?php echo ($movie['server'] == 'no') ? 'selected' : ''; ?>>No</option>
-            </select>
-        </div>
-        
-        <div>
-            <label for="rating">Calificación (1-10):</label>
-            <input type="number" id="rating" name="rating" min="1" max="10" value="<?php echo htmlspecialchars($movie['rating'] ?? ''); ?>">
-        </div>
-        
-        <div>
-            <label>Póster actual:</label>
-            <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>" alt="Póster actual" width="200" />
-        </div>
-        
-        <div>
-            <label for="poster">Cambiar póster (opcional):</label>
-            <input type="file" id="poster" name="poster" accept="image/*" />
-        </div>
-        
-        <div>
-            <button type="submit">Actualizar Película</button>
-            <a href="show_movie.php?id=<?php echo $id; ?>">Cancelar</a>
-        </div>
-    </form>
+    </div>
+
+    <!-- Enlace al Javascript de bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
 </body>
+
 </html>

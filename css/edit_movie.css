@@ -1,0 +1,50 @@
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 1rem;
+}
+
+.btn-primary {
+    background-color: #3a6cf4;
+    border-color: #3a6cf4;
+}
+
+.btn-primary:hover {
+    background-color: #2855d1;
+    border-color: #2855d1;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.form-floating label {
+    color: #6c757d;
+}
+
+.input-group-text {
+    background-color: #f8f9fa;
+}
+
+.poster-preview {
+    max-width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
