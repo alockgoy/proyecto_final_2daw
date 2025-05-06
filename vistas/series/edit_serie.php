@@ -301,7 +301,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- Botones -->
                         <div class="col-12 d-flex justify-content-between mt-4">
                             <a href="show_serie.php?id=<?php echo $id; ?>" class="btn btn-secondary">
-                                <i class="fas fa-times me-2"></i>Volver atrá<samp></samp>
+                                <i class="fas fa-times me-2"></i>Volver atrás<samp></samp>
                             </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-2"></i>Actualizar Serie
