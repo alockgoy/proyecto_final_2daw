@@ -52,6 +52,9 @@ $movies = $movieController->getMoviesByUserId($userId);
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../../css/movies.css" type="text/css" rel="stylesheet" />
+
+    <!--Para iconos-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <link rel="shortcut icon" href="../../img/iconos_navegador/pelicula.png" type="image/x-icon">
 </head>
 
@@ -81,6 +84,17 @@ $movies = $movieController->getMoviesByUserId($userId);
                         <li class="nav-item">
                             <a class="nav-link" href="../series/series.php">Ir a series</a>
                         </li>
+
+                        <!--Barra de búsqueda-->
+                        <li class="nav-item ms-3">
+                            <div class="input-group">
+                                <input type="search" id="buscador" placeholder="Busca una película..."
+                                    class="form-control" />
+                                <button type="button" class="btn btn-light" data-mdb-ripple-init>
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </li>
                     </ul>
                     <span class="navbar-text text-light">
                         Películas de <?php echo htmlspecialchars($_SESSION['username']); ?>
@@ -104,7 +118,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                     <!-- Mostrar películas en tarjetas -->
                     <?php foreach ($movies as $movie): ?>
                         <div class="col">
-                            <div class="card">
+                            <div class="card pelicula">
                                 <div class="card-img-container">
                                     <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>"
                                         alt="<?php echo htmlspecialchars($movie['name']); ?>" />
@@ -150,6 +164,9 @@ $movies = $movieController->getMoviesByUserId($userId);
 
     <!-- Enlace al archivo JavaScript de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace al archivo JavaScript del buscador -->
+    <script src="../../js/search_movies.js"></script>
 </body>
 
 </html>
