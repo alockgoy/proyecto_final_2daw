@@ -54,15 +54,20 @@ if (!$isOwner) {
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Intentar actualizar la película
-    try {
-        $controller->updateMovie($id);
+    // Comprobar que la puntuación no es inferior a 1 / mayor a 10
+    if (isset($_POST['rating']) && ($_POST['rating'] < 1 || $_POST['rating'] > 10)) {
+        $error = "La calificación debe estar entre 1 y 10.";
+    } else {
+        // Intentar actualizar la película
+        try {
+            $controller->updateMovie($id);
 
-        // Redirigir a la vista concreta
-        header("Location: show_movie.php?id=$id");
-        exit;
-    } catch (Exception $e) {
-        $error = "Error al actualizar la película: " . $e->getMessage();
+            // Redirigir a la vista concreta
+            header("Location: show_movie.php?id=$id");
+            exit;
+        } catch (Exception $e) {
+            $error = "Error al actualizar la película: " . $e->getMessage();
+        }
     }
 }
 ?>
@@ -86,7 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center mb-0"><i class="fas fa-edit me-2"></i>Editar Película:
-                    <?php echo htmlspecialchars($movie['name']); ?></h2>
+                    <?php echo htmlspecialchars($movie['name']); ?>
+                </h2>
             </div>
             <div class="card-body">
                 <?php if (!empty($error)): ?>
@@ -103,7 +109,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-film"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="<?php echo htmlspecialchars($movie['name']); ?>" placeholder="Nombre" required/>
+                                        value="<?php echo htmlspecialchars($movie['name']); ?>" placeholder="Nombre"
+                                        required />
                                     <label for="name">Nombre de la película</label>
                                 </div>
                             </div>
