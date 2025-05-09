@@ -27,41 +27,30 @@ $userController = new UserController();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Comprobar que no hay campos vacíos (los obligatorios)
-    if (empty($_POST['name']) || empty($_POST['year']) || empty($_POST['director']) || 
-        empty($_POST['gender']) || empty($_POST['languages']) || empty($_POST['quality']) || 
-        empty($_POST['size']) || empty($_POST['server']) || !isset($_FILES['poster']) ||
-        $_FILES['poster']['error'] !== 0) {
-        $error = "Has dejado vacío algún campo obligatorio.";
-    } // Comprobar que el valor de la puntuación no es menor a 1 / mayor a 10
-    elseif (isset($_POST['rating']) && ($_POST['rating'] < 1 || $_POST['rating'] > 10)) {
-        $error = "La calificación debe estar entre 1 y 10.";
-    } else {
-        try {
-            // Añadir la película
-            if ($controller->addMovie()) {
-                // Obtener el ID de la última película insertada
-                $movieId = $controller->getLastInsertedId();
-
-                // Obtener el ID del usuario actual
-                $userId = $userController->getUserIdByUsername($_SESSION['username']);
-
-                // Asociar la película con el usuario
-                $result = $controller->associateMovieWithUser($movieId, $userId);
-
-                if ($result) {
-                    header("Location: movies.php");
-                    exit();
-                } else {
-                    echo ("Error al asociar la película con el usuario.");
-                }
+    try {
+        // Añadir la película con la validación incorporada
+        if ($controller->addMovie()) {
+            // Obtener el ID de la última película insertada
+            $movieId = $controller->getLastInsertedId();
+            
+            // Obtener el ID del usuario actual
+            $userId = $userController->getUserIdByUsername($_SESSION['username']);
+            
+            // Asociar la película con el usuario
+            $result = $controller->associateMovieWithUser($movieId, $userId);
+            
+            if ($result) {
+                header("Location: movies.php");
+                exit();
             } else {
-                echo ("Error al añadir la película.");
+                $error = "Error al asociar la película con el usuario.";
             }
-        } catch (Exception $e) {
-            $error = ("Error al añadir la película: " . $e->getMessage());
+        } else {
+            // Obtener el error de validación del controlador
+            $error = $controller->lastError ?: "Error al añadir la película.";
         }
+    } catch (Exception $e) {
+        $error = "Error al añadir la película: " . $e->getMessage();
     }
 }
 ?>

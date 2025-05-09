@@ -5,6 +5,7 @@ require_once __DIR__ . '/../config.php';
 class MovieController
 {
     private $movieModel;
+    public $lastError = ""; //Almacenar el último mensaje de error
 
     // Constructor
     public function __construct()
@@ -24,6 +25,15 @@ class MovieController
     // Añadir una película
     public function addMovie()
     {
+
+        // Validar datos
+        $validation = $this->validateMovieData($_POST, $_FILES);
+
+        if (!$validation['valid']) {
+            $this->lastError = $validation['message'];
+            return false;
+        }
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $posterPath = '';
 
@@ -37,21 +47,17 @@ class MovieController
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
 
-                // Verificar que el tamaño del archivo no exceda 5 MB
-                if ($_FILES["poster"]["size"] > 5 * 1024 * 1024) {
-                    echo ("El archivo de imagen no puede pesar más de 5 MB.");
-                } else {
-                    if (in_array(strtolower($fileType), $allowTypes)) {
-                        // Subir el archivo
-                        if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
-                            $posterPath = "img/portadas_peliculas/" . $fileName;
-                        } else {
-                            throw new Exception("Error al subir el archivo de imagen.");
-                        }
+                if (in_array(strtolower($fileType), $allowTypes)) {
+                    // Subir el archivo
+                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
+                        $posterPath = "img/portadas_peliculas/" . $fileName;
                     } else {
-                        throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
+                        throw new Exception("Error al subir el archivo de imagen.");
                     }
+                } else {
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
                 }
+
 
             } else {
                 throw new Exception("Debes seleccionar una imagen para el póster.");
@@ -208,7 +214,8 @@ class MovieController
     }
 
     // Borrar películas que no tienen usuario asociado
-    public function deleteMoviesWithoutUsers(){
+    public function deleteMoviesWithoutUsers()
+    {
         // Obtener películas sin usuario
         $movies = $this->movieModel->getMoviesWithoutUser();
 
@@ -233,6 +240,84 @@ class MovieController
         $result = $this->movieModel->deleteMoviesWithoutUsers();
 
         error_log("Resultado de eliminar películas: " . ($result ? "Éxito" : "Fallo"));
+        return $result;
+    }
+
+    // Función para comprobar que los "value" de los formularios no han sido alterados
+    public function validateMovieData($data, $files)
+    {
+        $result = ['valid' => true, 'message' => ''];
+
+        // Campos obligatorios
+        $requiredFields = ['name', 'year', 'director', 'gender', 'languages', 'quality', 'size', 'server'];
+
+        // Comprobar campos obligatorios
+        foreach ($requiredFields as $field) {
+            if (empty($data[$field])) {
+                return ['valid' => false, 'message' => "Te has dejado vacío un campo obligatorio."];
+            }
+        }
+
+        // Comprobar archivo
+        if (!isset($files['poster']) || $files['poster']['error'] !== 0) {
+            return ['valid' => false, 'message' => 'El póster de la película es obligatorio'];
+        }
+
+        // Comprobar que el poster no pesa más de 3 MB
+        if ($_FILES['poster']['size'] > 3 * 1024 * 1024) { // 3MB en bytes
+            return ['valid' => false, 'message' => 'El póster de la película no puede pesar más de 3 MB'];
+        }
+
+        // Comprobar puntuación
+        if (isset($data['rating']) && !empty($data['rating'])) {
+            if ($data['rating'] < 1 || $data['rating'] > 10) {
+                return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
+            }
+        }
+
+        // Comprobar opciones de los géneros
+        $validGenders = [
+            'acción/aventura',
+            'animación',
+            'anime',
+            'ciencia ficción',
+            'cortometraje',
+            'comedia',
+            'deportes',
+            'documental',
+            'drama',
+            'familiar',
+            'fantasía',
+            'guerra',
+            'terror',
+            'musical',
+            'suspense',
+            'romance',
+            'vaqueros',
+            'misterio'
+        ];
+
+        // Verificar que no se ha cambiado el valor de un género
+        if (!in_array($data['gender'], $validGenders)) {
+            return ['valid' => false, 'message' => 'El género seleccionado no es válido'];
+        }
+
+        // Comprobar opciones de las calidades
+        $validQualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+
+        // Verificar que no se ha cambiado el valor de una calidad
+        if (!in_array($data['quality'], $validQualities)) {
+            return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
+        }
+
+        // Comprobar opciones de servidor
+        $validServerOptions = ['si', 'no'];
+
+        // Verificar que no se ha cambiado el valor
+        if (!in_array($data['server'], $validServerOptions)) {
+            return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
+        }
+
         return $result;
     }
 }
