@@ -34,6 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         empty($_POST['size']) || empty($_POST['server']) || !isset($_FILES['poster']) ||
         $_FILES['poster']['error'] !== 0) {
         $error = "Has dejado vacío algún campo obligatorio.";
+    } // Comprobar que el valor de la puntuación no es menor a 1 / mayor a 10
+    elseif (isset($_POST['rating']) && ($_POST['rating'] < 1 || $_POST['rating'] > 10)) {
+        $error = "La calificación debe estar entre 1 y 10.";
     } else {
         try {
             // Añadir la película
