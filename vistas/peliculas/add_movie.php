@@ -14,6 +14,7 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+// Traer los archivos necesarios
 require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 require_once '../../php/usuarios/UserController.php';
@@ -22,30 +23,42 @@ require_once '../../php/usuarios/User.php';
 $controller = new MovieController();
 $userController = new UserController();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    try {
-        // Añadir la película
-        if ($controller->addMovie()) {
-            // Obtener el ID de la última película insertada
-            $movieId = $controller->getLastInsertedId();
-                        
-            // Obtener el ID del usuario actual
-            $userId = $userController->getUserIdByUsername($_SESSION['username']);
+// Variable del mensaje de error si algo salió mal
+$error = "";
 
-            // Asociar la película con el usuario
-            $result = $controller->associateMovieWithUser($movieId, $userId);
-            
-            if ($result) {
-                header("Location: movies.php");
-                exit();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Comprobar que no hay campos vacíos (los obligatorios)
+    if (empty($_POST['name']) || empty($_POST['year']) || empty($_POST['director']) || 
+        empty($_POST['gender']) || empty($_POST['languages']) || empty($_POST['quality']) || 
+        empty($_POST['size']) || empty($_POST['server']) || !isset($_FILES['poster']) ||
+        $_FILES['poster']['error'] !== 0) {
+        $error = "Has dejado vacío algún campo obligatorio.";
+    } else {
+        try {
+            // Añadir la película
+            if ($controller->addMovie()) {
+                // Obtener el ID de la última película insertada
+                $movieId = $controller->getLastInsertedId();
+
+                // Obtener el ID del usuario actual
+                $userId = $userController->getUserIdByUsername($_SESSION['username']);
+
+                // Asociar la película con el usuario
+                $result = $controller->associateMovieWithUser($movieId, $userId);
+
+                if ($result) {
+                    header("Location: movies.php");
+                    exit();
+                } else {
+                    echo ("Error al asociar la película con el usuario.");
+                }
             } else {
-                echo("Error al asociar la película con el usuario.");
+                echo ("Error al añadir la película.");
             }
-        } else {
-            echo("Error al añadir la película.");
+        } catch (Exception $e) {
+            $error = ("Error al añadir la película: " . $e->getMessage());
         }
-    } catch (Exception $e) {
-        echo("Error al añadir la película: " . $e->getMessage());
     }
 }
 ?>
@@ -72,6 +85,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h2 class="text-center mb-0"><i class="fas fa-film me-2"></i>Añadir Película</h2>
             </div>
             <div class="card-body">
+
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
                 <form method="POST" enctype="multipart/form-data">
                     <div class="row g-3">
                         <!-- Nombre de la película -->
@@ -81,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
                                         required />
-                                    <label for="name">Nombre de la película</label>
+                                    <label for="name">Nombre de la película *</label>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="year" name="year" placeholder="Año"
                                         required />
-                                    <label for="year">Año</label>
+                                    <label for="year">Año *</label>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="director" name="director"
                                         placeholder="Director" required />
-                                    <label for="director">Director</label>
+                                    <label for="director">Director *</label>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="gender" name="gender" required>
-                                        <option value="" selected disabled>Selecciona un género</option>
+                                        <option value="" selected disabled>Selecciona un género *</option>
                                         <option value="acción/aventura">Acción/Aventura</option>
                                         <option value="animación">Animación</option>
                                         <option value="anime">Anime</option>
@@ -148,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="languages" name="languages"
                                         placeholder="Idiomas" required />
-                                    <label for="languages">Idiomas (ej: Español, Inglés)</label>
+                                    <label for="languages">Idiomas * (ej: Español, Inglés)</label>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <option value="420p">420p</option>
                                         <option value="otro">Otro</option>
                                     </select>
-                                    <label for="quality">Calidad</label>
+                                    <label for="quality">Calidad *</label>
                                 </div>
                             </div>
                         </div>
@@ -177,8 +197,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-hdd"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <input type="number" class="form-control" id="size" name="size" placeholder="Tamaño" required />
-                                    <label for="size">Tamaño (GB)</label>
+                                    <input type="number" class="form-control" id="size" name="size" step="0.1" placeholder="Tamaño"
+                                        required />
+                                    <label for="size">Tamaño * (GB)</label>
                                 </div>
                             </div>
                         </div>
@@ -205,7 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <option value="si">Sí</option>
                                         <option value="no">No</option>
                                     </select>
-                                    <label for="server">¿En servidor?</label>
+                                    <label for="server">¿En servidor? *</label>
                                 </div>
                             </div>
                         </div>
@@ -224,10 +245,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         <!-- Poster -->
                         <div class="col-12 form-group">
-                            <label for="poster" class="form-label"><i class="fas fa-image me-2"></i>Poster</label>
-                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*" required />
+                            <label for="poster" class="form-label"><i class="fas fa-image me-2"></i>Poster *</label>
+                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*"
+                                required />
                             <div class="invalid-feedback">
-                                Por favor, selecciona una imagen para el poster.
+                                Por favor, selecciona una imagen para el poster. *
                             </div>
                         </div>
 
