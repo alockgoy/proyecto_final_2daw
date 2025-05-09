@@ -40,8 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = $controller->associateMovieWithUser($movieId, $userId);
             
             if ($result) {
-                header("Location: movies.php");
-                exit();
+                $success = "Película añadida correctamente, redirigiendo...";
+                //header("Location: movies.php");
+                //exit();
             } else {
                 $error = "Error al asociar la película con el usuario.";
             }
@@ -81,6 +82,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php if (!empty($error)): ?>
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success)): ?>
+                    <div class="alert alert-success" role="alert" data-redirect="./movies.php">
+                        <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
                     </div>
                 <?php endif; ?>
 
@@ -271,7 +278,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Enlace al Javascript de bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-
+    <!-- Enlace al Javascript de añadir películas -->
+    <script src="../../js/add_movie.js"></script>
 </body>
 
 </html>
