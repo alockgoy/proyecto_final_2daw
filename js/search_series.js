@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("Buscador de películas inicializado");
+    console.log("Buscador de series inicializado");
     
     // Lanzar la escucha cada vez que se pulse una tecla
     document.addEventListener("keyup", function(e) {
@@ -12,14 +12,14 @@ document.addEventListener("DOMContentLoaded", function() {
             
             const textoBusqueda = e.target.value.toLowerCase().trim();
             
-            // Seleccionar todas las películas
-            document.querySelectorAll(".pelicula").forEach(pelicula => {
+            // Seleccionar todas las series
+            document.querySelectorAll(".serie").forEach(serie => {
 
-                // Obtener el título de la película
-                const titulo = pelicula.querySelector(".card-title").textContent.toLowerCase();
+                // Obtener el título de la serie
+                const titulo = serie.querySelector(".card-title").textContent.toLowerCase();
 
                 // Ocultar/mostrar la columna (contenedor padre) en lugar de solo la tarjeta
-                const columna = pelicula.closest(".col");
+                const columna = serie.closest(".col");
                 
                 // Mostrar u ocultar según coincidencia
                 if (titulo.includes(textoBusqueda)) {
