@@ -8,7 +8,7 @@ function redirect(url) {
 
 // Ejecutar al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Archivo js de añadir películas cargado correctamente");
+    console.log("Archivo js de editar cargado correctamente");
     
     // Buscar mensajes de éxito
     const successAlert = document.querySelector('.alert-success');

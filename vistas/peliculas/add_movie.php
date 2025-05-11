@@ -20,6 +20,7 @@ require_once '../../php/peliculas/Movie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 
+// Crear instancia del controlador
 $controller = new MovieController();
 $userController = new UserController();
 
