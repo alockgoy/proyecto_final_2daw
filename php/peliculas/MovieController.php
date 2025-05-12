@@ -273,11 +273,27 @@ class MovieController
         }
 
         // Comprobar puntuación
-        if (isset($data['rating']) && !empty($data['rating'])) {
-            if ($data['rating'] < 1 || $data['rating'] > 10) {
+        if (isset($data['rating']) && $data['rating'] !== '') {
+
+            // Comprobar que sea un número
+            if (!is_numeric($data['rating'])) {
+                return ['valid' => false, 'message' => 'La calificación debe ser un número'];
+            }
+
+            // Convertir a float e int
+            $floatVal = (float) $data['rating'];
+            $intVal = (int) $data['rating'];
+
+            // Comprobar que no tenga decimales
+            if ($floatVal !== $intVal) {
+                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
+            }
+            // Comprobar rango 1–10
+            if ($intVal < 1 || $intVal > 10) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
         }
+
 
         // Comprobar opciones de los géneros
         $validGenders = [
@@ -342,7 +358,21 @@ class MovieController
 
         // Comprobar puntuación si está presente
         if (isset($data['rating']) && !empty($data['rating'])) {
-            if ($data['rating'] < 1 || $data['rating'] > 10) {
+            // Comprobar que sea un número
+            if (!is_numeric($data['rating'])) {
+                return ['valid' => false, 'message' => 'La calificación debe ser un número'];
+            }
+
+            // Convertir a float e int
+            $floatVal = (float) $data['rating'];
+            $intVal = (int) $data['rating'];
+
+            // Comprobar que no tenga decimales
+            if ($floatVal !== $intVal) {
+                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
+            }
+            // Comprobar rango 1–10
+            if ($intVal < 1 || $intVal > 10) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
         }
