@@ -54,21 +54,23 @@ if (!$isOwner) {
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Comprobar que la puntuación no es inferior a 1 / mayor a 10
-    if (isset($_POST['rating']) && ($_POST['rating'] < 1 || $_POST['rating'] > 10)) {
-        $error = "La calificación debe estar entre 1 y 10.";
-    } else {
-        // Intentar actualizar la película
-        try {
-            $controller->updateMovie($id);
+    // Intentar actualizar la película
+    try {
 
-            // Redirigir a la vista concreta
-            header("Location: show_movie.php?id=$id");
-            exit;
-        } catch (Exception $e) {
-            $error = "Error al actualizar la película: " . $e->getMessage();
+        if ($controller->updateMovie($id)) {
+            $success = "Película añadida correctamente, redirigiendo...";
+        } else {
+            // Obtener el error de validación del controlador
+            $error = $controller->lastError ?: "Error al añadir la película.";
         }
+
+        // Redirigir a la vista concreta
+        //header("Location: show_movie.php?id=$id");
+        //exit;
+    } catch (Exception $e) {
+        $error = "Error al actualizar la película: " . $e->getMessage();
     }
+
 }
 ?>
 
@@ -98,6 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php if (!empty($error)): ?>
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success)): ?>
+                    <div class="alert alert-success" role="alert" data-redirect="./movies.php">
+                        <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
                     </div>
                 <?php endif; ?>
 
@@ -306,6 +314,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al Javascript de bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace al Javascript de editar películas -->
+    <script src="../../js/edit_movie.js"></script>
 
 </body>
 

@@ -88,6 +88,15 @@ class MovieController
     public function updateMovie($id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            // Validar datos
+            $validation = $this->validateMovieDataForEdit($_POST, $_FILES);
+
+            if (!$validation['valid']) {
+                $this->lastError = $validation['message'];
+                return false;
+            }
+
             $posterPath = null;
 
             // Obtener la película actual para saber la ruta de la imagen actual
@@ -108,12 +117,7 @@ class MovieController
 
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
-
-                // Verificar que el tamaño del archivo no exceda 5 MB
-                if ($_FILES["poster"]["size"] > 5 * 1024 * 1024) {
-                    throw new Exception("El archivo de imagen no puede pesar más de 5 MB.");
-                }
+                $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
@@ -131,7 +135,7 @@ class MovieController
                         throw new Exception("Error al subir el archivo de imagen.");
                     }
                 } else {
-                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG y WEBP.");
                 }
             }
 
@@ -316,6 +320,82 @@ class MovieController
         // Verificar que no se ha cambiado el valor
         if (!in_array($data['server'], $validServerOptions)) {
             return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
+        }
+
+        return $result;
+    }
+
+    // Lo mismo de antes pero para la edición de películas, que cambia alguna cosa
+    public function validateMovieDataForEdit($data, $files)
+    {
+        $result = ['valid' => true, 'message' => ''];
+
+        // Campos obligatorios
+        $requiredFields = ['name', 'year', 'director', 'gender', 'languages', 'quality', 'size', 'server'];
+
+        // Comprobar campos obligatorios
+        foreach ($requiredFields as $field) {
+            if (empty($data[$field])) {
+                return ['valid' => false, 'message' => "Te has dejado vacío un campo obligatorio."];
+            }
+        }
+
+        // Comprobar puntuación si está presente
+        if (isset($data['rating']) && !empty($data['rating'])) {
+            if ($data['rating'] < 1 || $data['rating'] > 10) {
+                return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
+            }
+        }
+
+        // Comprobar opciones de los géneros
+        $validGenders = [
+            'acción/aventura',
+            'animación',
+            'anime',
+            'ciencia ficción',
+            'cortometraje',
+            'comedia',
+            'deportes',
+            'documental',
+            'drama',
+            'familiar',
+            'fantasía',
+            'guerra',
+            'terror',
+            'musical',
+            'suspense',
+            'romance',
+            'vaqueros',
+            'misterio'
+        ];
+
+        // Verificar que no se ha cambiado el valor de un género
+        if (!in_array($data['gender'], $validGenders)) {
+            return ['valid' => false, 'message' => 'El género seleccionado no es válido'];
+        }
+
+        // Comprobar opciones de las calidades
+        $validQualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+
+        // Verificar que no se ha cambiado el valor de una calidad
+        if (!in_array($data['quality'], $validQualities)) {
+            return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
+        }
+
+        // Comprobar opciones de servidor
+        $validServerOptions = ['si', 'no'];
+
+        // Verificar que no se ha cambiado el valor
+        if (!in_array($data['server'], $validServerOptions)) {
+            return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
+        }
+
+        // Validación de la imagen (opcional en edición)
+        if (isset($files['poster']) && $files['poster']['error'] === 0) {
+            // Comprobar que el poster no pesa más de 3 MB
+            if ($files['poster']['size'] > 3 * 1024 * 1024) { // 3MB en bytes
+                return ['valid' => false, 'message' => 'El póster de la película no puede pesar más de 3 MB'];
+            }
         }
 
         return $result;
