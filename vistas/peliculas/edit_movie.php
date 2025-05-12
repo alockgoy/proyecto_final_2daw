@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         if ($controller->updateMovie($id)) {
-            $success = "Película añadida correctamente, redirigiendo...";
+            $success = "Película modificada correctamente, redirigiendo...";
         } else {
             // Obtener el error de validación del controlador
             $error = $controller->lastError ?: "Error al añadir la película.";
