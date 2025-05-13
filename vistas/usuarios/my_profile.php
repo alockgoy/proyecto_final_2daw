@@ -47,7 +47,7 @@ if (isset($_POST['update_username'])) {
 
         if ($result) {
             $_SESSION['username'] = $newUsername;
-            $success = ("Nombre de usuario actualizado correctamente.");
+            $success = ("Nombre de usuario actualizado correctamente, recargando...");
             //header("Location: my_profile.php");
             //exit();
         } else {
@@ -331,6 +331,9 @@ if (isset($_POST["update_pic"])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
+
+    <!-- Enlace al Javascript de mi perfil -->
+    <script src="../../js/my_profile.js"></script>
 </body>
 
 </html>
