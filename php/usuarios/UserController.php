@@ -271,5 +271,11 @@ class UserController
 
         return $result;
     }
+
+    // Obtener la contraseña
+    public function checkPassword($username, $password)
+    {
+        return $this->userModel->checkPassword($username, $password);
+    }
 }
 ?>

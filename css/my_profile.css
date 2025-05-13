@@ -145,7 +145,7 @@ input:checked + .slider:before {
 }
 
 .atribuciones h4 {
-    color: #682773;
+    color: grey;
     font-size: 18px;
 }
 

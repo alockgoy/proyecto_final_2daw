@@ -32,19 +32,24 @@ if (!$userData) {
 // Procesar cambio de nombre de usuario
 if (isset($_POST['update_username'])) {
     $newUsername = trim($_POST['new_username']);
+    $passwordForUsername = trim($_POST['password_for_username']);
 
     if (empty($newUsername)) {
-        echo ("El nombre de usuario no puede estar vacío.");
-    } else if ($newUsername === $username) {
+        $error = ("El nombre de usuario no puede estar vacío.");
+    } elseif (empty($passwordForUsername)) {
+        $error = ("Debes escribir tu contraseña para realizar cambios.");
+    } elseif (!$userController->checkPassword($username, $passwordForUsername)) {
+        $error = ("Contraseña incorrecta.");
+    } elseif ($newUsername === $username) {
         echo ("El nuevo nombre debe ser diferente al actual.");
     } else {
         $result = $userController->updateUsername($userData['id_user'], $newUsername);
 
         if ($result) {
             $_SESSION['username'] = $newUsername;
-            echo ("Nombre de usuario actualizado correctamente.");
-            header("Location: my_profile.php");
-            exit();
+            $success = ("Nombre de usuario actualizado correctamente.");
+            //header("Location: my_profile.php");
+            //exit();
         } else {
             $error = "No se pudo actualizar el nombre de usuario.";
         }
@@ -133,8 +138,7 @@ if (isset($_POST["update_pic"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Enlace al css de bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHRKUc4W0kG879m7" crossorigin="anonymous" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Enlace al archivo css -->
     <link href="../../css/my_profile.css" type="text/css" rel="stylesheet" />
@@ -149,6 +153,19 @@ if (isset($_POST["update_pic"])) {
     <div class="container">
         <div class="main-container">
             <div class="row">
+
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success)): ?>
+                    <div class="alert alert-success" role="alert" data-redirect="./movies.php">
+                        <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
+                    </div>
+                <?php endif; ?>
+
                 <!-- Columna izquierda para la foto de perfil -->
                 <div class="col-md-3 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
@@ -183,6 +200,10 @@ if (isset($_POST["update_pic"])) {
                                     <label for="new_username" class="labels">Nuevo nombre de usuario:</label>
                                     <input type="text" id="new_username" name="new_username" class="form-control"
                                         required />
+
+                                    <label for="password_for_username" class="labels">Escribe tu contraseña:</label>
+                                    <input type="password" name="password_for_username" id="password_for_username" class="form-control" 
+                                    placeholder="Escribe tu contraseña" required />
                                 </div>
                                 <button type="submit" name="update_username" class="profile-button">Cambiar nombre de
                                     usuario</button>
@@ -271,17 +292,11 @@ if (isset($_POST["update_pic"])) {
                         <i class="fas fa-arrow-left"></i> Volver a la biblioteca
                     </a>
 
-                    <br/>
-                    <br/>
-
                     <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>"
                         onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')"
                         style="text-decoration: none;">
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
                     </a>
-
-                    <br />
-                    <br />
 
                     <a class="btn btn-warning" href="./logout.php" style="text-decoration: none;">
                         <i class="fas fa-sign-out-alt"></i> Cerrar sesión
