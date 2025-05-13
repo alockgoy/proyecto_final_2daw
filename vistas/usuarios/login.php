@@ -34,6 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user) {
             // Guardar información en la sesión
             $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
 
             // Redirigir a la página de películas
             header("Location: ../peliculas/movies.php");

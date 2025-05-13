@@ -3,9 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../php/usuarios/UserController.php';
-require_once '../../php/usuarios/User.php';
-
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -17,11 +14,21 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+// Traer los archivos necesarios
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
 // Crear instancia del controlador
 $userController = new UserController();
 
+if (!isset($_SESSION['email']) && isset($userData['email'])) {
+    // Si no existe en la sesión pero sí en los datos del usuario, recuperarlo
+    $_SESSION['email'] = $userData['email'];
+}
+
 // Obtener datos del usuario actual
 $username = $_SESSION['username'];
+$email = $_SESSION['email'];
 $userData = $userController->getUserByUsername($username);
 
 if (!$userData) {
@@ -59,19 +66,26 @@ if (isset($_POST['update_username'])) {
 // Procesar cambio de correo electrónico
 if (isset($_POST['update_email'])) {
     $newEmail = trim($_POST['new_email']);
+    $passwordForEmail = trim($_POST['password_for_email']);
 
     if (empty($newEmail)) {
-        echo ("El correo electrónico no puede estar vacío.");
-    } else if ($newEmail === $userData['email']) {
-        echo ("El nuevo correo debe ser diferente al actual.");
+        $error = ("El correo electrónico no puede estar vacío.");
+    }elseif (empty($passwordForEmail)) {
+        $error = ("Debes escribir tu contraseña para realizar cambios.");
+    } elseif (!$userController->checkPassword($username, $passwordForEmail)) {
+        $error = ("Contraseña incorrecta.");
+    } elseif ($newEmail === $email) {
+        $error = ("El nuevo correo debe ser diferente al actual.");
     } else {
         $result = $userController->updateEmail($userData['id_user'], $newEmail);
 
         if ($result) {
-            echo ("Correo electrónico actualizado correctamente.");
-            $userData['email'] = $newEmail;
+            $_SESSION['email'] = $newEmail;
+            $success = ("Correo electrónico actualizado correctamente, recargando...");
+            //header("Location: my_profile.php");
+            //exit();
         } else {
-            echo ("No se pudo actualizar el correo electrónico. Puede ser que ya esté en uso.");
+            $error = ("No se pudo actualizar el correo electrónico. Puede ser que ya esté en uso.");
         }
     }
 }
@@ -218,7 +232,11 @@ if (isset($_POST["update_pic"])) {
                             <form method="POST">
                                 <div class="form-group">
                                     <label for="new_email" class="labels">Nuevo correo electrónico:</label>
-                                    <input type="email" id="new_email" name="new_email" class="form-control" required>
+                                    <input type="email" id="new_email" name="new_email" class="form-control" required />
+
+                                    <label for="password_for_email" class="labels">Escribe tu contraseña:</label>
+                                    <input type="password" name="password_for_email" id="password_for_email" class="form-control" 
+                                    placeholder="Escribe tu contraseña" required />
                                 </div>
                                 <button type="submit" name="update_email" class="profile-button">Cambiar correo
                                     electrónico</button>

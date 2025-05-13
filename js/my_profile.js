@@ -1,8 +1,9 @@
 // Función para recargar después de 3 segundos
 function redirect() {
     console.log("Recargando la página actual");
+    console.log("Redirigiendo con GET limpio");
     setTimeout(function () {
-        window.location.reload();
+        window.location.href = window.location.pathname;
     }, 3000);
 }
 
