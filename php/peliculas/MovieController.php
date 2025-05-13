@@ -43,14 +43,21 @@ class MovieController
                 $fileName = basename($_FILES["poster"]["name"]);
                 $targetFilePath = $targetDir . $fileName;
 
+                // Eliminar espacios en blanco en el nombre del archivo del poster
+                $fileName = str_replace(' ', '_', $fileName);
+
+                // Crear un nombre único para el poster
+                $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
+                $rutaPoster = $targetDir . $nombreUnicoArchivo;
+
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
-                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
-                        $posterPath = "img/portadas_peliculas/" . $fileName;
+                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $rutaPoster)) {
+                        $posterPath = "img/portadas_peliculas/" . $nombreUnicoArchivo;
                     } else {
                         throw new Exception("Error al subir el archivo de imagen.");
                     }
@@ -115,22 +122,29 @@ class MovieController
                 $fileName = basename($_FILES["poster"]["name"]);
                 $targetFilePath = $targetDir . $fileName;
 
+                // Eliminar espacios en blanco en el nombre del archivo del poster
+                $fileName = str_replace(' ', '_', $fileName);
+
+                // Crear un nombre único para el poster
+                $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
+                $rutaPoster = $targetDir . $nombreUnicoArchivo;
+
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
-                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
+                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $rutaPoster)) {
                         // Borrar el archivo anterior si existe y es diferente
-                        if ($currentMovie['poster'] && $currentMovie['poster'] != "img/portadas_peliculas/" . $fileName) {
+                        if ($currentMovie['poster']) {
                             $oldPosterPath = __DIR__ . "/../../" . $currentMovie['poster'];
                             if (file_exists($oldPosterPath)) {
                                 unlink($oldPosterPath);
                             }
                         }
 
-                        $posterPath = "img/portadas_peliculas/" . $fileName;
+                        $posterPath = "img/portadas_peliculas/" . $nombreUnicoArchivo;
                     } else {
                         throw new Exception("Error al subir el archivo de imagen.");
                     }
@@ -280,20 +294,22 @@ class MovieController
         // Comprobar puntuación
         if (isset($data['rating']) && $data['rating'] !== '') {
 
+            $rating = trim($data['rating']);
+
             // Comprobar que sea un número
-            if (!is_numeric($data['rating'])) {
+            if (!is_numeric($rating)) {
                 return ['valid' => false, 'message' => 'La calificación debe ser un número'];
             }
 
-            // Convertir a float e int
-            $floatVal = (float) $data['rating'];
-            $intVal = (int) $data['rating'];
-
-            // Comprobar que no tenga decimales
-            if ($floatVal !== $intVal) {
+            // Verificar si contiene un punto decimal
+            if (strpos($rating, '.') !== false) {
                 return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
             }
-            // Comprobar rango 1–10
+
+            // Convertir a entero para la verificación de rango
+            $intVal = (int) $rating;
+
+            // Comprobar rango 1-10
             if ($intVal < 1 || $intVal > 10) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
@@ -371,22 +387,25 @@ class MovieController
             return ['valid' => false, 'message' => 'El año debe ser un número'];
         }
 
-        // Comprobar puntuación si está presente
-        if (isset($data['rating']) && !empty($data['rating'])) {
+        // Comprobar puntuación
+        if (isset($data['rating']) && $data['rating'] !== '') {
+
+            $rating = trim($data['rating']);
+
             // Comprobar que sea un número
-            if (!is_numeric($data['rating'])) {
+            if (!is_numeric($rating)) {
                 return ['valid' => false, 'message' => 'La calificación debe ser un número'];
             }
 
-            // Convertir a float e int
-            $floatVal = (float) $data['rating'];
-            $intVal = (int) $data['rating'];
-
-            // Comprobar que no tenga decimales
-            if ($floatVal !== $intVal) {
+            // Verificar si contiene un punto decimal
+            if (strpos($rating, '.') !== false) {
                 return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
             }
-            // Comprobar rango 1–10
+
+            // Convertir a entero para la verificación de rango
+            $intVal = (int) $rating;
+
+            // Comprobar rango 1-10
             if ($intVal < 1 || $intVal > 10) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }

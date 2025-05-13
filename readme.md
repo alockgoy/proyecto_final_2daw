@@ -46,7 +46,7 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
     - Idioma(s)*
     - Año*
     - Calidad* (4K, 1440p, 1080p, 720p, 420p, otro)
-    - Valoración (de 1 a 5)
+    - Valoración (de 1 a 10)
 
 - Puede eliminar películas.
 - Puede modificar datos de películas.
@@ -59,7 +59,7 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
     - Nº de temporadas*
     - ¿Está finalizada? (s/n)*
     - Año*
-    - Valoración (de 1 a 5)
+    - Valoración (de 1 a 10)
 
 - Puede eliminar series.
 - Puede modificar las series existentes.
