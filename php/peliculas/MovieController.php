@@ -366,6 +366,11 @@ class MovieController
             }
         }
 
+        // Comprobar que el año es un número
+        if (isset($data['year']) && !is_numeric($data['year'])) {
+            return ['valid' => false, 'message' => 'El año debe ser un número'];
+        }
+
         // Comprobar puntuación si está presente
         if (isset($data['rating']) && !empty($data['rating'])) {
             // Comprobar que sea un número
@@ -420,6 +425,11 @@ class MovieController
         // Verificar que no se ha cambiado el valor de una calidad
         if (!in_array($data['quality'], $validQualities)) {
             return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
+        }
+
+        // Comprobar que el tamaño es un número
+        if (isset($data['size']) && !is_numeric($data['size'])) {
+            return ['valid' => false, 'message' => 'El tamaño debe ser un número'];
         }
 
         // Comprobar opciones de servidor
