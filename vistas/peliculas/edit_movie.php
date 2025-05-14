@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $success = "Película modificada correctamente, redirigiendo...";
         } else {
             // Obtener el error de validación del controlador
-            $error = $controller->lastError ?: "Error al añadir la película.";
+            $error = $controller->lastError ?: "Error al modificar la película.";
         }
 
         // Redirigir a la vista concreta

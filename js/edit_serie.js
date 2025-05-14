@@ -8,7 +8,7 @@ function redirect(url) {
 
 // Ejecutar al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Archivo js de editar películas cargado correctamente");
+    console.log("Archivo js de editar series cargado correctamente");
     
     // Buscar mensajes de éxito
     const successAlert = document.querySelector('.alert-success');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Mensaje de éxito encontrado, preparando redirección");
         
         // Obtener la URL de redirección del atributo data-redirect
-        const redirectUrl = successAlert.getAttribute('data-redirect') || './movies.php';
+        const redirectUrl = successAlert.getAttribute('data-redirect') || './series.php';
         
         // Iniciar la redirección automática
         redirect(redirectUrl);

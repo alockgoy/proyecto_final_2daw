@@ -54,17 +54,16 @@ if (!$isOwner) {
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        // Llamar al método del controlador para actualizar la serie
-        $controller->updateSerie($id);
-        
-        // Redirigir a la vista concreta
-        //header("Location: show_serie.php?id=$id");
 
-        // Mostrar el mensaje de éxito (si lo hubo)
-        $success = "La serie \"" . htmlspecialchars($serie['name']) . "\" se ha actualizado correctamente.";
-        $serie = $controller->getSerie($id);
+        if ($controller->updateSerie($id)) {
+            $success = "Serie modificada correctamente, redirigiendo...";
+        } else {
+            // Obtener el error de validación del controlador
+            $error = $controller->lastError ?: "Error al modificar la serie.";
+        }
+
     } catch (Exception $e) {
-        echo("Error al actualizar la serie: " . $e->getMessage());
+         $error = ("Error al actualizar la serie: " . $e->getMessage());
     }
 }
 ?>
@@ -78,8 +77,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="../../css/edit_serie.css" type="text/css" rel="stylesheet" />
     <!-- Enlace al CSS de bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Font Awesome para iconos -->
+    <!-- Para iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="../../img/iconos_navegador/serie.png" type="image/x-icon" />
+    
     <title>Editar Serie - <?php echo htmlspecialchars($serie['name']); ?></title>
 </head>
 
@@ -98,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
 
                 <?php if (!empty($success)): ?>
-                    <div class="alert alert-success" role="alert">
+                    <div class="alert alert-success" role="alert" data-redirect="./series.php">
                         <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
                     </div>
                 <?php endif; ?>
@@ -315,6 +316,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al Javascript de bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace al Javascript de editar películas -->
+    <script src="../../js/edit_movie.js"></script>
 
 </body>
 

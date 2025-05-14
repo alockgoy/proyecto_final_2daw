@@ -106,9 +106,9 @@ if (!$serie) {
                     <li class="list-group-item"><strong>Calidad:</strong>
                         <?php echo htmlspecialchars($serie['quality']); ?></li>
 
-                    <!-- Tamaño en MB -->
+                    <!-- Tamaño en GB -->
                     <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($serie['size']); ?>
-                        MB</li>
+                        GB</li>
 
                     <!-- Puntuación -->
                     <?php if (!empty($serie['rating'])): ?>

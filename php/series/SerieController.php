@@ -95,6 +95,15 @@ class SerieController
     // Editar una serie
     public function updateSerie($id) {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            // Validar datos
+            $validation = $this->validateSerieDataForEdit($_POST, $_FILES);
+
+            if (!$validation['valid']) {
+                $this->lastError = $validation['message'];
+                return false;
+            }
+
             $posterPath = null;
             
             // Obtener la serie actual para saber la ruta de la imagen actual
@@ -112,33 +121,35 @@ class SerieController
                 $targetDir = __DIR__ . "/../../img/portadas_series/";
                 $fileName = basename($_FILES["poster"]["name"]);
                 $targetFilePath = $targetDir . $fileName;
-                
-                // Verificar que el tamaño del archivo no exceda 5 MB
-                if ($_FILES["poster"]["size"] > 5 * 1024 * 1024) {
-                    throw new Exception("El archivo de imagen no puede pesar más de 5 MB.");
-                }
+
+                // Eliminar espacios en blanco en el nombre del archivo del poster
+                $fileName = str_replace(' ', '_', $fileName);
+
+                // Crear un nombre único para el poster
+                $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
+                $rutaPoster = $targetDir . $nombreUnicoArchivo;
                 
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
+                $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
                 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
-                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $targetFilePath)) {
+                    if (move_uploaded_file($_FILES["poster"]["tmp_name"], $rutaPoster)) {
                         // Borrar el archivo anterior si existe y es diferente
-                        if ($currentSerie['poster'] && $currentSerie['poster'] != "img/portadas_series/" . $fileName) {
+                        if ($currentSerie['poster']) {
                             $oldPosterPath = __DIR__ . "/../../" . $currentSerie['poster'];
                             if (file_exists($oldPosterPath)) {
                                 unlink($oldPosterPath);
                             }
                         }
                         
-                        $posterPath = "img/portadas_series/" . $fileName;
+                        $posterPath = "img/portadas_series/" . $nombreUnicoArchivo;
                     } else {
                         throw new Exception("Error al subir el archivo de imagen.");
                     }
                 } else {
-                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG y WEBP.");
                 }
             }
             
@@ -339,6 +350,109 @@ class SerieController
         // Verificar que no se ha cambiado el valor
         if (!in_array($data['server'], $validServerOptions)) {
             return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
+        }
+
+        return $result;
+    }
+
+    // Lo mismo de antes pero para la edición de series, que cambia alguna cosa
+    public function validateSerieDataForEdit($data, $files)
+    {
+        $result = ['valid' => true, 'message' => ''];
+
+        // Campos obligatorios
+        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'quality', 'size', 'server'];
+
+        // Comprobar campos obligatorios
+        foreach ($requiredFields as $field) {
+            if (empty($data[$field])) {
+                return ['valid' => false, 'message' => "Te has dejado vacío un campo obligatorio."];
+            }
+        }
+
+        // Comprobar que el año es un número
+        if (isset($data['year']) && !is_numeric($data['year'])) {
+            return ['valid' => false, 'message' => 'El año debe ser un número'];
+        }
+
+        // Comprobar puntuación
+        if (isset($data['rating']) && $data['rating'] !== '') {
+
+            $rating = trim($data['rating']);
+
+            // Comprobar que sea un número
+            if (!is_numeric($rating)) {
+                return ['valid' => false, 'message' => 'La calificación debe ser un número'];
+            }
+
+            // Verificar si contiene un punto decimal
+            if (strpos($rating, '.') !== false) {
+                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
+            }
+
+            // Convertir a entero para la verificación de rango
+            $intVal = (int) $rating;
+
+            // Comprobar rango 1-10
+            if ($intVal < 1 || $intVal > 10) {
+                return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
+            }
+        }
+
+        // Comprobar opciones de los géneros
+        $validGenders = [
+            'acción/aventura',
+            'animación',
+            'anime',
+            'ciencia ficción',
+            'cortometraje',
+            'comedia',
+            'deportes',
+            'documental',
+            'drama',
+            'familiar',
+            'fantasía',
+            'guerra',
+            'terror',
+            'musical',
+            'suspense',
+            'romance',
+            'vaqueros',
+            'misterio'
+        ];
+
+        // Verificar que no se ha cambiado el valor de un género
+        if (!in_array($data['gender'], $validGenders)) {
+            return ['valid' => false, 'message' => 'El género seleccionado no es válido'];
+        }
+
+        // Comprobar opciones de las calidades
+        $validQualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+
+        // Verificar que no se ha cambiado el valor de una calidad
+        if (!in_array($data['quality'], $validQualities)) {
+            return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
+        }
+
+        // Comprobar que el tamaño es un número
+        if (isset($data['size']) && !is_numeric($data['size'])) {
+            return ['valid' => false, 'message' => 'El tamaño debe ser un número'];
+        }
+
+        // Comprobar opciones de servidor
+        $validServerOptions = ['si', 'no'];
+
+        // Verificar que no se ha cambiado el valor
+        if (!in_array($data['server'], $validServerOptions)) {
+            return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
+        }
+
+        // Validación de la imagen (opcional en edición)
+        if (isset($files['poster']) && $files['poster']['error'] === 0) {
+            // Comprobar que el poster no pesa más de 3 MB
+            if ($files['poster']['size'] > 3 * 1024 * 1024) { // 3MB en bytes
+                return ['valid' => false, 'message' => 'El póster de la película no puede pesar más de 3 MB'];
+            }
         }
 
         return $result;
