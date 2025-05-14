@@ -171,6 +171,21 @@ class SerieController
     // Eliminar una serie
     public function deleteSerie($id)
     {
+
+        // Comprobar que la serie existe antes de eliminarla
+        $serie = $this->serieModel->getSerieById($id);
+        if (!$serie) {
+            throw new Exception("La serie no existe");
+        }
+
+        // Si la serie tiene un póster, eliminarlo del sistema de archivos
+        if (!empty($serie['poster'])) {
+            $posterPath = __DIR__ . '/../../' . $serie['poster'];
+            if (file_exists($posterPath)) {
+                unlink($posterPath);
+            }
+        }
+
         $this->serieModel->deleteSerie($id);
         header("Location: series.php");
     }
