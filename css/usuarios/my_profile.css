@@ -1,6 +1,6 @@
 body {
     background: rgb(122, 116, 124);
-    color: #7e7a7a; /* Colores grises para la página */
+    color: #000000;
 }
 
 .container {
@@ -10,7 +10,7 @@ body {
 
 .form-control:focus {
     box-shadow: none;
-    border-color: #BA68C8;
+    border-color: #878088;
 }
 
 .profile-button {
@@ -33,12 +33,12 @@ body {
 }
 
 .profile-button:active {
-    background: #682773;
+    background: #4c4a4d;
     box-shadow: none;
 }
 
 .back:hover {
-    color: #682773;
+    color: #403f41;
     cursor: pointer;
 }
 
@@ -67,7 +67,7 @@ body {
 }
 
 h1, h2 {
-    color: #682773;
+    color: #3d3d3d;
     margin-bottom: 20px;
 }
 
@@ -124,11 +124,11 @@ input[type="file"] {
 }
 
 input:checked + .slider {
-    background-color: #BA68C8;
+    background-color: #000000;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #BA68C8;
+    box-shadow: 0 0 1px #000000;
 }
 
 input:checked + .slider:before {
@@ -145,7 +145,7 @@ input:checked + .slider:before {
 }
 
 .atribuciones h4 {
-    color: grey;
+    color: rgb(19, 18, 18);
     font-size: 18px;
 }
 

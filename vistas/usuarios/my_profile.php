@@ -70,7 +70,7 @@ if (isset($_POST['update_email'])) {
 
     if (empty($newEmail)) {
         $error = ("El correo electrónico no puede estar vacío.");
-    }elseif (empty($passwordForEmail)) {
+    } elseif (empty($passwordForEmail)) {
         $error = ("Debes escribir tu contraseña para realizar cambios.");
     } elseif (!$userController->checkPassword($username, $passwordForEmail)) {
         $error = ("Contraseña incorrecta.");
@@ -119,10 +119,10 @@ if (isset($_POST['update_2fa'])) {
         $result = $userController->update2FAStatus($userData['id_user'], $new2FAStatus);
 
         if ($result) {
-            echo ("Estado de verificación en 2 pasos actualizado correctamente.");
+            $success = ("Estado de verificación en 2 pasos actualizado correctamente, recargando...");
             $userData['two_factor'] = $new2FAStatus;
         } else {
-            echo ("No se pudo actualizar el estado de verificación en 2 pasos.");
+            $error = ("No se pudo actualizar el estado de verificación en 2 pasos.");
         }
     }
 }
@@ -155,7 +155,7 @@ if (isset($_POST["update_pic"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Enlace al archivo css -->
-    <link href="../../css/my_profile.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/usuarios/my_profile.css" type="text/css" rel="stylesheet" />
     <title>Mi Perfil</title>
 
     <!-- Para iconos -->
@@ -183,8 +183,8 @@ if (isset($_POST["update_pic"])) {
                 <!-- Columna izquierda para la foto de perfil -->
                 <div class="col-md-3 border-right">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img src="<?php echo !empty($userData['profile']) ? '../../' . $userData['profile'] : '../../img/avatares_usuarios/default.jpg'; ?>"
-                    alt="Foto de perfil" class="profile-pic rounded-circle mt-5" />
+                        <img src="<?php echo !empty($userData['profile']) ? '../../' . $userData['profile'] : '../../img/avatares_usuarios/default.jpg'; ?>"
+                            alt="Foto de perfil" class="profile-pic rounded-circle mt-5" />
 
                         <form method="POST" enctype="multipart/form-data" class="mt-3">
                             <div class="form-group">
@@ -216,8 +216,8 @@ if (isset($_POST["update_pic"])) {
                                         required />
 
                                     <label for="password_for_username" class="labels">Escribe tu contraseña:</label>
-                                    <input type="password" name="password_for_username" id="password_for_username" class="form-control" 
-                                    placeholder="Escribe tu contraseña" required />
+                                    <input type="password" name="password_for_username" id="password_for_username"
+                                        class="form-control" placeholder="Escribe tu contraseña" required />
                                 </div>
                                 <button type="submit" name="update_username" class="profile-button">Cambiar nombre de
                                     usuario</button>
@@ -235,8 +235,8 @@ if (isset($_POST["update_pic"])) {
                                     <input type="email" id="new_email" name="new_email" class="form-control" required />
 
                                     <label for="password_for_email" class="labels">Escribe tu contraseña:</label>
-                                    <input type="password" name="password_for_email" id="password_for_email" class="form-control" 
-                                    placeholder="Escribe tu contraseña" required />
+                                    <input type="password" name="password_for_email" id="password_for_email"
+                                        class="form-control" placeholder="Escribe tu contraseña" required />
                                 </div>
                                 <button type="submit" name="update_email" class="profile-button">Cambiar correo
                                     electrónico</button>
@@ -284,19 +284,25 @@ if (isset($_POST["update_pic"])) {
                         <div class="profile-section">
                             <h5>Verificación en 2 pasos</h5>
                             <p>Estado actual:
-                                <strong><?php echo $userData['two_factor'] ? 'Activado' : 'Desactivado'; ?></strong></p>
+                                <strong><?php echo $userData['two_factor'] ? 'Activado' : 'Desactivado'; ?></strong>
+                            </p>
 
-                            <form method="POST">
-                                <div class="form-group d-flex align-items-center">
-                                    <label class="switch me-3">
+                            <form method="POST" class="two-factor-form">
+                                <div class="form-group d-flex flex-column flex-sm-row  align-items-start align-items-sm-center gap-2">
+                                    <label class="switch">
                                         <input type="checkbox" name="two_factor" <?php echo $userData['two_factor'] ? 'checked' : ''; ?>>
                                         <span class="slider"></span>
                                     </label>
-                                    <p class="mb-0">Activar/Desactivar verificación en 2 pasos</p>
+                                    
                                 </div>
+                                    <span class="switch-label">
+                                        <?php echo $userData['two_factor'] ? 'Desactivar' : 'Activar'; ?> verificación
+                                        en 2 pasos
+                                    </span>
 
-                                <button type="submit" name="update_2fa" class="profile-button">Guardar
-                                    configuración</button>
+                                <button type="submit" name="update_2fa" class="profile-button mt-3">
+                                    Guardar configuración
+                                </button>
                             </form>
                         </div>
                     </div>
