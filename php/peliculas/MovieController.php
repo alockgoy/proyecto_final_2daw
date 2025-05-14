@@ -52,7 +52,7 @@ class MovieController
 
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
+                $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
@@ -62,10 +62,8 @@ class MovieController
                         throw new Exception("Error al subir el archivo de imagen.");
                     }
                 } else {
-                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP.");
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG y WEBP.");
                 }
-
-
             } else {
                 throw new Exception("Debes seleccionar una imagen para el póster.");
             }

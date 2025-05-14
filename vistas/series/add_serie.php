@@ -14,17 +14,22 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+// Traer los archivos necesarios
 require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 
+// Crear instancia del controlador
 $controller = new SerieController();
 $userController = new UserController();
 
+// Variable del mensaje de error si algo salió mal
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        // Añadir la serie
+        // Añadir la serie con la validación incorporada
         if ($controller->addSerie()) {
             // Obtener el ID de la última serie insertada
             $serieId = $controller->getLastInsertedId();
@@ -36,16 +41,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = $controller->associateSerieWithUser($serieId, $userId);
 
             if ($result) {
-                header("Location: series.php");
-                exit();
+                $success = "Serie añadida correctamente, redirigiendo...";
+                //header("Location: series.php");
+                //exit();
             } else {
-                throw new Exception("Error al asociar la serie con el usuario.");
+                $error = ("Error al asociar la serie con el usuario.");
             }
         } else {
-            throw new Exception("Error al añadir la serie.");
+            // Obtener el error de validación del controlador
+            $error = $controller->lastError ?: "Error al añadir la película.";
         }
     } catch (Exception $e) {
-        echo ("Error al añadir la serie: " . $e->getMessage());
+        $error = ("Error al añadir la serie: " . $e->getMessage());
     }
 }
 ?>
@@ -75,6 +82,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php if (!empty($error)): ?>
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success)): ?>
+                    <div class="alert alert-success" role="alert" data-redirect="./series.php">
+                        <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
                     </div>
                 <?php endif; ?>
 
@@ -270,6 +283,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al JS de bootstrap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace al Javascript de añadir series -->
+    <script src="../../js/add_serie.js"></script>
 
 </body>
 </html>
