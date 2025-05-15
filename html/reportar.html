@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="../img/iconos_navegador/issue_12124785.png" sizes="any" />
+    <link rel="icon" href="../img/iconos_navegador/issue_12124785.png" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="../img/iconos_navegador/issue_12124785.png" />
+
+    <link rel="stylesheet" type="text/css" href="../css/reportar.css">
+
+    <title>Reportar un error</title>
+</head>
+<body>
+    <header>
+        <h2>
+            Quiero reportar
+        </h2>
+    </header>
+
+    <main>
+        <form action="../php/reportar.php" method="post">
+            <!-- Desplegable para seleccionar el tipo de error-->
+            <label for="errorType">Tipo de error: </label>
+            <select name="errorType">
+                <option value="account">Error con mi cuenta</option>
+                <option value="website">Error con la página</option>
+                <option value="other">Otro...</option>
+            </select>
+
+            <br/>
+
+            <!--Campo para el correo del usuario (un correo al que responder)-->
+            <label for="userEmail">Tu correo electrónico:</label>
+            <input type="email" name="userEmail" placeholder="Escribe tu email" required /><br/><br/>
+
+            <!-- Campo de texto para que el usuario de los detalles-->
+            <p>
+                Por favor, explica el error con todos los detalles posibles y, a ser posible, paso a paso.
+                <strong>
+                    Ten en cuenta, si tu reporte va a ser "pulsé algo y la aplicación dejó de funcionar" 
+                    tu dirección de correo será bloqueada.
+                </strong>
+            </p>
+
+            <br/>
+
+            <textarea name="errorDetails" id="errorDetails" cols="30" rows="10" placeholder="Detalla aquí el error">
+
+            </textarea>
+
+            <br/>
+
+            <!--Botón para enviar el formulario-->
+            <button type="submit">Enviar reporte</button>
+
+            
+
+            <section>
+                <a href="../index.html">Volver atrás</a>
+            </section>
+
+            <br/>
+
+            <p>
+                <strong>
+                    Ten en cuenta, esta operación puede tardar, lamento las molestias.
+                </strong>
+            </p>
+        </form>
+    </main>
+
+    <script src="../js/textarea.js"></script>
+
+    <footer>
+        2025 Creada por <a href="https://github.com/alockgoy/proyecto_final_2daw" target="_blank">@alockgoy</a>.
+    </footer>
+</body>
+</html>

@@ -1,0 +1,128 @@
+/* Reset de estilos predeterminados del navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para el body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9fc;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+/* Estilo para el encabezado */
+header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2c7be5;
+}
+
+/* Estilo para el contenedor del formulario */
+main {
+    width: 100%;
+    max-width: 450px;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: left;
+}
+
+/* Estilo para las etiquetas de los campos */
+label {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: 600;
+}
+
+/* Estilo para los campos de entrada y select */
+input[type="email"], textarea, select {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input[type="email"]:focus, textarea:focus, select:focus {
+    border-color: #2c7be5;
+    box-shadow: 0 0 5px rgba(44, 123, 229, 0.3);
+}
+
+/* Estilo para el botón */
+button {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #2c7be5;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #245bb5;
+}
+
+/* Estilo para el texto explicativo */
+p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+strong {
+    color: #e63946;
+}
+
+/* Estilo para el enlace de "Volver atrás" */
+a {
+    text-decoration: none;
+    color: #2c7be5;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 1rem;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #245bb5;
+    text-decoration: underline;
+}
+
+/* Estilo para el footer */
+footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+footer a {
+    color: #2c7be5;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #245bb5;
+    text-decoration: underline;
+}
