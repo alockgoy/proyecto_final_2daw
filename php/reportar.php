@@ -104,6 +104,7 @@
             $mail->send();
             header("Location: ../index.html");
         } catch (Exception $e) {
+            echo "<a href='../index.html'>Volver atrás</a><br/><br/>";
             echo "<p class='error'>Error al enviar el correo: {$mail->ErrorInfo}</p>";
         }
 
