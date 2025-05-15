@@ -41,9 +41,33 @@
             echo "<a href='../index.html'>Volver atrás</a><br/><br/>";
             die("<p class='error'>El correo introducido no es válido</p>");
         }//comprobar que la opción seleccionada es válida
-        elseif ($tipoError != "other" && $tipoError != "website" && $tipoError != "account") {
+        elseif (!in_array($tipoError, ['account', 'website', 'other'])) {
             echo "<a href='../index.html'>Volver atrás</a><br/><br/>";
             die("<p class='error'>La opción introducida no es correcta.</p>");
+        }
+
+        // Comprobación del archivo adjunto (opcional)
+        $archivoAdjunto = null;
+        $extensionesPermitidas = ['jpg', 'jpeg', 'png', 'webp'];
+        if (isset($_FILES['screenshot']) && $_FILES['screenshot']['error'] === UPLOAD_ERR_OK) {
+            $nombreArchivo = $_FILES['screenshot']['name'];
+            $tipoArchivo = mime_content_type($_FILES['screenshot']['tmp_name']);
+            $extension = strtolower(pathinfo($nombreArchivo, PATHINFO_EXTENSION));
+            $tamanioArchivo = $_FILES['screenshot']['size'];
+
+            // Comprobar la extensión del archivo
+            if (!in_array($extension, $extensionesPermitidas)) {
+                echo "<a href='../index.html'>Volver atrás</a><br/><br/>";
+                die("<p class='error'>Formato de archivo no permitido. Solo se aceptan JPG, JPEG, PNG o WEBP.</p>");
+            }
+
+            // Comprobar el tamaño del archivo (máximo 3 MB)
+            if ($tamanioArchivo > 3 * 1024 * 1024) { // 3 MB en bytes
+                echo "<a href='../index.html'>Volver atrás</a><br/><br/>";
+                die("<p class='error'>El archivo adjunto no puede pesar más de 3 MB.</p>");
+            }
+
+            $archivoAdjunto = $_FILES['screenshot']['tmp_name'];
         }
 
         /* Fin de comprobaciones (por ahora) */
@@ -70,6 +94,11 @@
             $mail->Subject = "Nuevo reporte: $tipoError";
             $mail->Body = "<p><strong>Correo del usuario:</strong> $correoUsuario</p>
                       <p><strong>Detalles del error:</strong> $errorDetallado</p>";
+
+            // Adjuntar archivo si es válido
+            if ($archivoAdjunto) {
+                $mail->addAttachment($archivoAdjunto, $nombreArchivo);
+            }
 
             // Enviar el correo
             $mail->send();
