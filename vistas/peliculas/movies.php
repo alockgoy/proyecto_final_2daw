@@ -95,6 +95,17 @@ $movies = $movieController->getMoviesByUserId($userId);
                                 </button>
                             </div>
                         </li>
+
+                        <!--Barra de búsqueda de directores-->
+                        <li class="nav-item ms-3">
+                            <div class="input-group">
+                                <input type="search" id="buscador_directores" placeholder="Busca por un director..."
+                                    class="form-control" />
+                                <button type="button" class="btn btn-light" data-mdb-ripple-init>
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </li>
                     </ul>
                     <span class="navbar-text text-light">
                         Películas de <?php echo htmlspecialchars($_SESSION['username']); ?>
@@ -125,6 +136,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"><?php echo htmlspecialchars($movie['name']); ?></h5>
+                                    <p class="director"><?php echo htmlspecialchars($movie['director']); ?></p>
                                     <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>"
                                         class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
@@ -167,6 +179,9 @@ $movies = $movieController->getMoviesByUserId($userId);
 
     <!-- Enlace al archivo JavaScript del buscador -->
     <script src="../../js/search_movies.js"></script>
+
+    <!-- Enlace al archivo JavaScript del buscador de directores -->
+    <script src="../../js/search_director.js"></script>
 </body>
 
 </html>
