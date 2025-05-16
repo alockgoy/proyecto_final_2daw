@@ -136,7 +136,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"><?php echo htmlspecialchars($movie['name']); ?></h5>
-                                    <p class="director"><?php echo htmlspecialchars($movie['director']); ?></p>
+                                    <p class="d-none director"><?php echo htmlspecialchars($movie['director']); ?></p>
                                     <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>"
                                         class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
