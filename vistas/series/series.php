@@ -95,6 +95,16 @@ $series = $controller->getSeriesByUserId($userId);
                                 </button>
                             </div>
                         </li>
+
+                        <!--Mostrar solo las series completas-->
+                        <li class="nav-item ms-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" onclick="showCompleteSeries()" id="completeSeries" />
+                                <label class="form-check-label nav-link" for="completeSeries">
+                                    Mostrar series completas
+                                </label>
+                            </div>
+                        </li>
                     </ul>
                     <span class="navbar-text text-light">
                         Series de <?php echo htmlspecialchars($_SESSION['username']); ?>
@@ -106,7 +116,8 @@ $series = $controller->getSeriesByUserId($userId);
 
     <main>
         <div class="container-fluid px-4 mb-5 mt-2">
-            <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-4 justify-content-center">
+            <div
+                class="row row-cols-1 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 g-4 justify-content-center">
                 <!-- Comprobar que hay al menos una serie -->
                 <?php if (empty($series)): ?>
                     <div class="col-12 text-center mt-5">
@@ -119,11 +130,14 @@ $series = $controller->getSeriesByUserId($userId);
                         <div class="col">
                             <div class="card serie">
                                 <div class="card-img-container">
-                                    <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>" alt="<?php echo htmlspecialchars($serie['name']); ?>" />
+                                    <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>"
+                                        alt="<?php echo htmlspecialchars($serie['name']); ?>" />
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title"><?php echo htmlspecialchars($serie['name']); ?></h5>
-                                    <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>" class="btn btn-primary mt-auto">Detalles</a>
+                                    <p class="d-none complete"><?php echo htmlspecialchars($serie['complete']); ?></p>
+                                    <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>"
+                                        class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
                             </div>
                         </div>
@@ -164,6 +178,9 @@ $series = $controller->getSeriesByUserId($userId);
 
     <!-- Enlace al archivo JavaScript del buscador -->
     <script src="../../js/search_series.js"></script>
+
+    <!-- Enlace al archivo JavaScript de solo mostrar series completas -->
+    <script src="../../js/complete_series.js"></script>
 </body>
 
 </html>
