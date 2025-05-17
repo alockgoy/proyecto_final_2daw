@@ -98,7 +98,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                                 <input type="search" id="buscador" placeholder="Busca una película..."
                                     class="form-control" />
                                 <button type="button" class="btn btn-light">
-                                    <i class="fas fa-search"></i>
+                                    <i class="fa-solid fa-film"></i>
                                 </button>
                             </div>
                         </li>
@@ -109,7 +109,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                                 <input type="search" id="buscador_directores" placeholder="Busca por un director..."
                                     class="form-control" />
                                 <button type="button" class="btn btn-light" data-mdb-ripple-init>
-                                    <i class="fas fa-search"></i>
+                                    <i class="fa-solid fa-user-tie"></i>
                                 </button>
                             </div>
                         </li>
