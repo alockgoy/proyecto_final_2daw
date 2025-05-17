@@ -121,6 +121,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="text-center mt-4 pt-3 border-top">
                                 <p class="mb-3">¿No tienes una cuenta? <a href="singup.php" class="fw-bold">Regístrate
                                         aquí</a></p>
+
+                                <!-- Enlace para el archivo de recuperar contraseña -->
+
+                                <p class="mb-3">
+                                    <a href="./recover_password.php" class="text-danger">He olvidado mi contraseña</a>
+                                </p>
                                 <a href="../../index.html" class="btn btn-outline-secondary">Volver al inicio</a>
                             </div>
                         </div>

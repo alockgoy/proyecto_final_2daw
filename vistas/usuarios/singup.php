@@ -158,7 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <!-- Campo de la foto de perfil -->
                                         <div class="mb-4">
                                             <label for="profile" class="form-label fw-bold">
-                                                <i class="fas fa-image me-2"></i>Foto de perfil
+                                                <i class="fas fa-image me-2"></i>Foto de perfil (opcional)
                                             </label>
                                             <input type="file" id="profile" name="profile" class="form-control"
                                                 accept="image/*" />
