@@ -77,14 +77,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card shadow" style="border-radius: 15px;">
                         <div class="card-body p-4 p-md-5">
 
+                            <h2 class="text-center fw-bold mb-5">Iniciar Sesión</h2>
+
                             <!-- Mensaje de error -->
                             <?php if (!empty($error)): ?>
-                                <div class="error-message text-center mb-4">
+                                <div class="alert alert-danger text-center mb-4" role="alert">
                                     <?php echo htmlspecialchars($error); ?>
                                 </div>
                             <?php endif; ?>
-
-                            <h2 class="text-center fw-bold mb-5">Iniciar Sesión</h2>
 
                             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                                 <!-- Campo del nombre de usuario -->
