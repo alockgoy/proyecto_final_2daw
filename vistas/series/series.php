@@ -97,10 +97,10 @@ $series = $controller->getSeriesByUserId($userId);
                         </li>
 
                         <!--Mostrar solo las series completas-->
-                        <li class="nav-item ms-3">
+                        <li class="nav-item">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" onclick="showCompleteSeries()" id="completeSeries" />
-                                <label class="form-check-label nav-link" for="completeSeries">
+                                <input hidden type="checkbox" onchange="showCompleteSeries()" id="completeSeries" />
+                                <label class="form-check-label nav-link" style="cursor: pointer;" for="completeSeries">
                                     Mostrar series completas
                                 </label>
                             </div>
