@@ -165,7 +165,10 @@ $series = $controller->getSeriesByUserId($userId);
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="../usuarios/logout.php">Cerrar sesión</a>
+                            <a class="nav-link" href="../usuarios/logout.php">
+                                <i class="fa-solid fa-right-from-bracket me-1"></i>
+                                Cerrar sesión
+                            </a>
                         </li>
                     </ul>
                 </div>
