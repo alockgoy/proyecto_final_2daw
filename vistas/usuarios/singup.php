@@ -38,17 +38,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_FILES['profile']['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
             $fileType = $_FILES['profile']['type'];
-            
+
             // Verificar el tipo de imagen
             if (!in_array($fileType, $allowedTypes)) {
                 throw new Exception("El archivo debe ser una imagen (JPEG, PNG o WEBP)");
             }
-            
+
             // Comprobar algún otro error
             if ($_FILES['profile']['error'] !== UPLOAD_ERR_OK) {
                 throw new Exception("Error al subir la imagen");
             }
-            
+
             // Comprobar que la imagen no supera los 2 MB de peso
             if ($_FILES['profile']['size'] > 2 * 1024 * 1024) {
                 throw new Exception("La imagen no debe superar los 2MB");
@@ -96,14 +96,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="row justify-content-center">
                                 <div class="col-md-10 col-lg-8">
 
+                                    <h2 class="text-center fw-bold mb-5">Crear cuenta</h2>
+
                                     <!-- Mensaje de error -->
                                     <?php if (!empty($error)): ?>
-                                        <div class="error-message text-center mb-4">
+                                        <div class="alert alert-danger text-center mb-4" role="alert">
                                             <?php echo htmlspecialchars($error); ?>
                                         </div>
                                     <?php endif; ?>
-
-                                    <h2 class="text-center fw-bold mb-5">Crear cuenta</h2>
 
                                     <form method="POST" enctype="multipart/form-data">
 
