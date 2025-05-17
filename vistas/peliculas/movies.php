@@ -85,19 +85,26 @@ $movies = $movieController->getMoviesByUserId($userId);
                             <a class="nav-link" href="../series/series.php">Ir a series</a>
                         </li>
 
+                        <!-- Botón para alternar -->
+                        <li class="nav-item ms-3 d-flex align-items-center">
+                            <button class="btn btn-outline-light btn-sm" id="toggle-search">
+                                Buscar por director
+                            </button>
+                        </li>
+
                         <!--Barra de búsqueda-->
-                        <li class="nav-item ms-3">
+                        <li class="nav-item ms-3" id="search-by-name">
                             <div class="input-group">
                                 <input type="search" id="buscador" placeholder="Busca una película..."
                                     class="form-control" />
-                                <button type="button" class="btn btn-light" data-mdb-ripple-init>
+                                <button type="button" class="btn btn-light">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </li>
 
                         <!--Barra de búsqueda de directores-->
-                        <li class="nav-item ms-3">
+                        <li class="nav-item ms-3 d-none" id="search-by-director">
                             <div class="input-group">
                                 <input type="search" id="buscador_directores" placeholder="Busca por un director..."
                                     class="form-control" />
@@ -182,6 +189,9 @@ $movies = $movieController->getMoviesByUserId($userId);
 
     <!-- Enlace al archivo JavaScript del buscador de directores -->
     <script src="../../js/search_director.js"></script>
+
+    <!-- Enlace al archivo JavaScript de alternar los buscadores -->
+    <script src="../../js/alternate_search-bar.js"></script>
 </body>
 
 </html>
