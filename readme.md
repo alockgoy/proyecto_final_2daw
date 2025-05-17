@@ -123,3 +123,5 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
 - <a href="https://www.flaticon.es/iconos-gratis/serie" title="serie iconos">Serie iconos creados por shmai - Flaticon</a>
 
 - <a href="https://www.flaticon.es/iconos-gratis/usuario-seguro" title="usuario seguro iconos">Usuario seguro iconos creados por Muhammad Atif - Flaticon</a>
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/alockgoy/proyecto_final_2daw)
