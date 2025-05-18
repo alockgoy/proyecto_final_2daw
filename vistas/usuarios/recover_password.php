@@ -71,7 +71,6 @@ if (isset($_POST['email'])) {
 
                     // Enviar el correo
                     $mail->send();
-                    header("Location: ../index.html");
                 } catch (Exception $e) {
                     $error = "Error al enviar la nueva contraseña: {$mail->ErrorInfo}";
                 }
