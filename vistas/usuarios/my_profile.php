@@ -104,9 +104,9 @@ if (isset($_POST['update_password'])) {
         $result = $userController->updatePassword($userData['id_user'], $currentPassword, $newPassword);
 
         if ($result) {
-            echo ("Contraseña actualizada correctamente.");
+            $success = ("Contraseña actualizada correctamente, recargando...");
         } else {
-            echo ("No se pudo actualizar la contraseña.");
+            $error = ("No se pudo actualizar la contraseña.");
         }
     }
 }
