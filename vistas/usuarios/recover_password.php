@@ -1,3 +1,35 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Traer los archivos necesarios
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
+// Crear instancia del controlador
+$userController = new UserController();
+
+// Obtener el correo introducido en el formulario
+if (isset($_POST['email'])) {
+
+    // Validar que el correo cumple con el formato
+    if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+
+        // Comprobar que el correo existe
+        if ($userController->checkEmailExists($_POST['email'])) {
+            $success = "El correo se ha encontrado";
+        } else {
+            $error = "No se encuentra el correo ";
+        }
+    } else {
+        $error = "El correo introducido no es válido";
+    }
+    
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -23,7 +55,8 @@
                         <div class="row g-0">
                             <div class="col-12 col-md-6">
                                 <img class="img-fluid rounded-start w-100 h-100 object-fit-cover" loading="lazy"
-                                    src="https://imgs.search.brave.com/VfhZWPqMygKEFDnd-YAt4L9tfo2Pss3aqakuKamp1yc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzgxLzMzLzY3/LzM2MF9GXzQ4MTMz/Njc5M18yUEF5czcx/N2cxdjBhbXl1aTJ3/WEJzNkc1UTNmcGph/cS5qcGc" alt="Welcome back you've been missed!">
+                                    src="https://imgs.search.brave.com/VfhZWPqMygKEFDnd-YAt4L9tfo2Pss3aqakuKamp1yc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA0LzgxLzMzLzY3/LzM2MF9GXzQ4MTMz/Njc5M18yUEF5czcx/N2cxdjBhbXl1aTJ3/WEJzNkc1UTNmcGph/cS5qcGc"
+                                    alt="Welcome back you've been missed!">
                             </div>
                             <div class="col-12 col-md-6 d-flex align-items-center justify-content-center">
                                 <div class="col-12 col-lg-11 col-xl-10">
@@ -37,6 +70,23 @@
                                                                 alt="BootstrapBrain Logo" width="175" height="57">
                                                         </a>
                                                     </div>
+
+                                                    <!-- Mostrar errores -->
+                                                    <?php if (!empty($error)): ?>
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <i
+                                                                class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                    <!-- Mostrar mensaje de aprobación -->
+                                                    <?php if (!empty($success)): ?>
+                                                        <div class="alert alert-success" role="alert"
+                                                            data-redirect="./movies.php">
+                                                            <i
+                                                                class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
+                                                        </div>
+                                                    <?php endif; ?>
                                                     <h2 class="h4 text-center">Recuperar contraseña</h2>
                                                     <h3 class="fs-6 fw-normal text-secondary text-center m-0">
                                                         Por favor, escribe el correo electrónico de tu cuenta.
@@ -44,7 +94,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <form action="#!">
+                                        <form method="POST">
                                             <div class="row gy-3 overflow-hidden">
                                                 <div class="col-12">
                                                     <div class="form-floating mb-3">
@@ -66,7 +116,8 @@
                                             <div class="col-12">
                                                 <div
                                                     class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-center mt-5">
-                                                    <a href="./login.php" class="link-secondary text-decoration-none">Iniciar sesión</a>
+                                                    <a href="./login.php"
+                                                        class="link-secondary text-decoration-none">Iniciar sesión</a>
                                                     <a href="./singup.php"
                                                         class="link-secondary text-decoration-none">Registrarse</a>
                                                 </div>

@@ -277,5 +277,10 @@ class UserController
     {
         return $this->userModel->checkPassword($username, $password);
     }
+
+    // Comprobar que el correo existe
+    public function checkEmailExists($email){
+        return $this->userModel->checkEmailExists($email);
+    }
 }
 ?>

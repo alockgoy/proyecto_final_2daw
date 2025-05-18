@@ -213,5 +213,15 @@ class User
         $stmt = $this->pdo->prepare("UPDATE Users SET profile = ? WHERE id_user = ?");
         return $stmt->execute([$profilePath, $userId]);
     }
+
+    // Comprobar que un correo existe
+    public function checkEmailExists($email){
+        $stmt = $this->pdo->prepare("SELECT Email FROM Users WHERE email = ?");
+        $stmt->execute([$email]);
+
+        if ($stmt->fetchColumn() > 0) {
+            return $email;
+        }
+    }
 }
 ?>
