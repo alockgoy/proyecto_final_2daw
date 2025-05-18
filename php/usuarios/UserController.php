@@ -279,8 +279,22 @@ class UserController
     }
 
     // Comprobar que el correo existe
-    public function checkEmailExists($email){
+    public function checkEmailExists($email)
+    {
         return $this->userModel->checkEmailExists($email);
+    }
+
+    // Reestablecer la contraseña del usuario
+    public function resetUserPassword($email, $newPassword)
+    {
+        // Generar nuevo salt
+        $newSalt = rand(-1000000, 1000000);
+
+        // Hashear la nueva contraseña
+        $hashedPassword = hash('sha256', $newPassword . $newSalt);
+
+        // Llamar al modelo para actualizar la contraseña
+        return $this->userModel->resetUserPassword($email, $newSalt, $hashedPassword);
     }
 }
 ?>

@@ -223,5 +223,11 @@ class User
             return $email;
         }
     }
+
+    // Reestablecer la contraseña del usuario
+    public function resetUserPassword($email, $salt, $password){
+        $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE email = ?");
+        return $stmt->execute([$password, $salt, $email]);
+    }
 }
 ?>

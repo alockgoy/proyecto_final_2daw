@@ -7,6 +7,13 @@ error_reporting(E_ALL);
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 
+// Traer el archivo autoload del php mailer
+require '../../vendor/autoload.php';
+
+// Usar el php mailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 // Crear instancia del controlador
 $userController = new UserController();
 
@@ -18,14 +25,69 @@ if (isset($_POST['email'])) {
 
         // Comprobar que el correo existe
         if ($userController->checkEmailExists($_POST['email'])) {
-            $success = "El correo se ha encontrado";
+
+            // Intentar actualizar la contraseña
+            try {
+                // Asignar el correo a una variable (para posteriormente mandar el correo)
+                $email = $_POST['email'];
+
+                // Generar una nueva contraseña aleatoria
+                $newPassword = bin2hex(random_bytes(8));
+
+                // Llamar al método para actualizar la contraseña
+                $userController->resetUserPassword($_POST['email'], $newPassword);
+
+                // Enviar el correo con la contraseña actualizada
+                $mail = new PHPMailer(true);
+                try {
+                    // Configurar SMTP
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'correo'; // TU correo de Gmail
+                    $mail->Password = 'clave'; // Contraseña de la aplicación generada
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587;
+
+                    // Configuración del correo
+                    $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
+                    $mail->addAddress($email); // A: el correo de destino
+                    //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
+
+                    // Contenido del correo
+                    $mail->isHTML(true);
+                    $mail->Subject = "Clave nueva generada.";
+                    $mail->Body = "
+                    <p>
+                        ¡Hola $email! Se ha recibido una solicitud para cambiar tu contraseña en la página de biblioteca multimedia. 
+                        ¡No te preocupes!
+                    </p>
+                    <p>
+                        Tu nueva clave es: <strong>$newPassword</strong>
+                    </p>
+                    <p>
+                        Puedes cambiarla siempre que quieras desde el apartado de modificar tu cuenta
+                    </p>";
+
+                    // Enviar el correo
+                    $mail->send();
+                    header("Location: ../index.html");
+                } catch (Exception $e) {
+                    $error = "Error al enviar la nueva contraseña: {$mail->ErrorInfo}";
+                }
+
+                $success = "Contraseña actualizada. Por favor, comprueba tu correo.";
+            } catch (\Throwable $th) {
+                $error = "Error al reestablecer tu contraseña: " + $th;
+            }
+
         } else {
             $error = "No se encuentra el correo ";
         }
     } else {
         $error = "El correo introducido no es válido";
     }
-    
+
 }
 
 ?>
