@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $input_code = implode('', array_map('trim', $_POST['2fa'] ?? []));
 
     // Comprobar que el código introducido coincide con el generado
-    if ($input_code == $six_digit_random_number) {
+    if ($input_code == $_SESSION['six_digit_code']) {
 
         // Eliminar la sesión de la verificación
         unset($_SESSION['two_factor']);
