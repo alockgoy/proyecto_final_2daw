@@ -139,27 +139,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <form method="POST">
                             <div class="row mb-4">
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
-                                    <input type="text" class="form-control text-lg text-center" placeholder="_"
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
                                         aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
-                                    <input type="text" class="form-control text-lg text-center" placeholder="_"
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
                                         aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
-                                    <input type="text" class="form-control text-lg text-center" placeholder="_"
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
                                         aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
-                                    <input type="text" class="form-control text-lg text-center" placeholder="_"
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
                                         aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
-                                    <input type="text" class="form-control text-lg text-center" placeholder="_"
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
                                         aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
-                                    <input type="text" class="form-control text-lg text-center" placeholder="_"
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
                                         aria-label="2fa">
                                 </div>
                             </div>
