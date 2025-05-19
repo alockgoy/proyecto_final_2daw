@@ -35,7 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Comprobar si el usuario tiene habilitada la verificación en 2 pasos
             if ($controller->check2FAStatus($_POST['username'])) {
-                
+                // Guardar un estado de sesión diferente
+                $_SESSION['two_factor'] = $user['email'];
+
+                // Redirigir a otra vista
+                header("Location: ./two_factor.php");
                 exit();
             } else {
                 // Guardar información en la sesión
