@@ -24,6 +24,56 @@ $controller = new UserController();
 // Generar un código aleatorio de 6 dígitos
 if (!isset($_SESSION['six_digit_code'])) {
     $_SESSION['six_digit_code'] = random_int(100000, 999999);
+
+    // Intentar enviar el correo con el código
+    try {
+        // Asignar el correo a una variable (para posteriormente mandar el correo)
+        $email = $_SESSION['two_factor'];
+
+        // Enviar el correo con la contraseña actualizada
+        $mail = new PHPMailer(true);
+        try {
+            // Configurar SMTP
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+            $mail->SMTPAuth = true;
+            $mail->Username = 'correo'; // TU correo de Gmail
+            $mail->Password = 'clave'; // Contraseña de la aplicación generada
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Configurar el charset
+            $mail->CharSet = 'UTF-8';
+
+            // Configuración del correo
+            $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
+            $mail->addAddress($email); // A: el correo de destino
+            //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
+
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = "Código verificación en 2 pasos.";
+            $mail->Body = "
+                    <p>
+                        ¡Hola $email! Se ha recibido una solicitud para iniciar sesión en tu cuenta en Biblioteca multimedia
+                        y tienes la verificación en 2 pasos activada. 
+                    </p>
+                    <p>
+                        Tu código de inicio de sesión: <strong>{$_SESSION['six_digit_code']}</strong>
+                    </p>
+                    <p>
+                        <strong>Ten en cuenta, </strong> dentro de 5 minutos este código caducará.
+                    </p>";
+
+            // Enviar el correo
+            $mail->send();
+        } catch (Exception $e) {
+            $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
+        }
+
+    } catch (\Throwable $th) {
+        $error = "Error al enviar el código de la verificación: " + $th;
+    }
 }
 
 // Traer el archivo autoload del php mailer
@@ -32,56 +82,6 @@ require '../../vendor/autoload.php';
 // Usar el php mailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
-// Intentar enviar el correo con el código
-try {
-    // Asignar el correo a una variable (para posteriormente mandar el correo)
-    $email = $_SESSION['two_factor'];
-
-    // Enviar el correo con la contraseña actualizada
-    $mail = new PHPMailer(true);
-    try {
-        // Configurar SMTP
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
-        $mail->SMTPAuth = true;
-        $mail->Username = 'correo'; // TU correo de Gmail
-        $mail->Password = 'clave'; // Contraseña de la aplicación generada
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
-
-        // Configurar el charset
-        $mail->CharSet = 'UTF-8';
-
-        // Configuración del correo
-        $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
-        $mail->addAddress($email); // A: el correo de destino
-        //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
-
-        // Contenido del correo
-        $mail->isHTML(true);
-        $mail->Subject = "Código verificación en 2 pasos.";
-        $mail->Body = "
-                    <p>
-                        ¡Hola $email! Se ha recibido una solicitud para iniciar sesión en tu cuenta en Biblioteca multimedia
-                        y tienes la verificación en 2 pasos activada. 
-                    </p>
-                    <p>
-                        Tu código de inicio de sesión: <strong>$six_digit_random_number</strong>
-                    </p>
-                    <p>
-                        <strong>Ten en cuenta, </strong> dentro de 5 minutos este código caducará.
-                    </p>";
-
-        // Enviar el correo
-        $mail->send();
-    } catch (Exception $e) {
-        $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
-    }
-
-} catch (\Throwable $th) {
-    $error = "Error al enviar el código de la verificación: " + $th;
-}
 
 // Comprobar que se ha pulsado el botón de envío
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($input_code == $six_digit_random_number) {
 
         // Eliminar la sesión de la verificación
-        unset($_SESSION['two_factor']); 
+        unset($_SESSION['two_factor']);
         unset($_SESSION['six_digit_code']);
 
         // Rellenar los datos de la sesión
