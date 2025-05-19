@@ -160,6 +160,10 @@ class SerieController
                 }
             }
 
+            // Convertir los valores a los tipos correctos
+            $size = (isset($_POST["size"]) && is_numeric($_POST["size"])) ? (float) $_POST["size"] : 0;
+            $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (int) $_POST["rating"] : null;
+
             // Actualizar la serie en la base de datos
             $result = $this->serieModel->updateSerie(
                 $id,
@@ -172,9 +176,9 @@ class SerieController
                 $_POST["year"],
                 $_POST["quality"],
                 $_POST["backup"] ?? null,
-                $_POST["rating"],
+                $rating,
                 $_POST["server"],
-                $_POST["size"] ?? null
+                $size
             );
 
             if (!$result) {
