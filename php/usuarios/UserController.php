@@ -301,5 +301,10 @@ class UserController
     public function check2FAStatus($username){
         return $this->userModel->check2FAStatus($username);
     }
+
+    // Obtener el nombre de usuario en base a su correo
+    public function getUsernameByEmail($email){
+        return $this->userModel->getUsernameByEmail($email);
+    }
 }
 ?>

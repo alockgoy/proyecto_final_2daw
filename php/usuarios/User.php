@@ -238,5 +238,11 @@ class User
 
         return $result == '1';
     }
+
+    // Obtener el nombre de usuario en base a su correo
+    public function getUsernameByEmail($email){
+        $stmt = $this->pdo->prepare("SELECT username FROM Users WHERE email = ?");
+        return $stmt->execute([$email]);
+    }
 }
 ?>

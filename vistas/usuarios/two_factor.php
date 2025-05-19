@@ -14,8 +14,17 @@ if (!isset($_SESSION['two_factor'])) {
     exit();
 }
 
+// Traer los archivos necesarios
+require_once '../../php/usuarios/UserController.php';
+require_once '../../php/usuarios/User.php';
+
+// Crear instancia del controlador
+$controller = new UserController();
+
 // Generar un código aleatorio de 6 dígitos
-$six_digit_random_number = random_int(100000, 999999);
+if (!isset($_SESSION['six_digit_code'])) {
+    $_SESSION['six_digit_code'] = random_int(100000, 999999);
+}
 
 // Traer el archivo autoload del php mailer
 require '../../vendor/autoload.php';
@@ -77,6 +86,25 @@ try {
 // Comprobar que se ha pulsado el botón de envío
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
+    // Obtener los valores introducidos en el formulario
+    $input_code = implode('', array_map('trim', $_POST['2fa'] ?? []));
+
+    // Comprobar que el código introducido coincide con el generado
+    if ($input_code == $six_digit_random_number) {
+
+        // Eliminar la sesión de la verificación
+        unset($_SESSION['two_factor']); 
+        unset($_SESSION['six_digit_code']);
+
+        // Rellenar los datos de la sesión
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['username'] = $controller->getUsernameByEmail($email);
+
+        header('Location: ../peliculas/movies.php');
+        exit();
+    } else {
+        $error = "El código introducido es incorrecto. Por favor, inténtalo de nuevo.";
+    }
 
 } else {
     $error = "Se ha producido un error, comprueba que el código es correcto.";
