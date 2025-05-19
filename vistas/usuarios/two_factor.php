@@ -41,6 +41,9 @@ try {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
+        // Configurar el charset
+        $mail->CharSet = 'UTF-8';
+
         // Configuración del correo
         $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
         $mail->addAddress($email); // A: el correo de destino
@@ -55,7 +58,7 @@ try {
                         y tienes la verificación en 2 pasos activada. 
                     </p>
                     <p>
-                        Tu código de inicio de sesión: <strong>$$six_digit_random_number</strong>
+                        Tu código de inicio de sesión: <strong>$six_digit_random_number</strong>
                     </p>
                     <p>
                         <strong>Ten en cuenta, </strong> dentro de 5 minutos este código caducará.
