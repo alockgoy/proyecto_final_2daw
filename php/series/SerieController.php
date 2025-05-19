@@ -22,7 +22,8 @@ class SerieController
     }
 
     // Añadir una serie
-    public function addSerie() {
+    public function addSerie()
+    {
 
         // Validar datos
         $validation = $this->validateSerieData($_POST, $_FILES);
@@ -34,7 +35,7 @@ class SerieController
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $posterPath = '';
-            
+
             // Procesar la imagen si ha sido subida
             if (isset($_FILES['poster']) && $_FILES['poster']['error'] == 0) {
                 $targetDir = __DIR__ . "/../../img/portadas_series/";
@@ -47,11 +48,11 @@ class SerieController
                 // Crear un nombre único para el poster
                 $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
                 $rutaPoster = $targetDir . $nombreUnicoArchivo;
-                
+
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
-                
+
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
                     if (move_uploaded_file($_FILES["poster"]["tmp_name"], $rutaPoster)) {
@@ -65,7 +66,11 @@ class SerieController
             } else {
                 throw new Exception("Debes seleccionar una imagen para el póster.");
             }
-            
+
+            // Convertir los valores a los tipos correctos
+            $size = (isset($_POST["size"]) && is_numeric($_POST["size"])) ? (float) $_POST["size"] : 0;
+            $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (int) $_POST["rating"] : null;
+
             // Crear la serie con la ruta de la imagen - ajustado a la estructura real de la tabla
             $this->serieModel->createSerie(
                 $_POST["name"],
@@ -77,23 +82,25 @@ class SerieController
                 $_POST["year"],
                 $_POST["quality"],
                 $_POST["backup"] ?? null,
-                $_POST["size"],
+                $rating,
                 $_POST["server"],
-                $_POST["rating"] ?? null
+                $size
             );
-            
+
             return true;
         }
         return false;
     }
 
     // Obtener una serie por ID
-    public function getSerie($id) {
+    public function getSerie($id)
+    {
         return $this->serieModel->getSerieById($id);
     }
 
     // Editar una serie
-    public function updateSerie($id) {
+    public function updateSerie($id)
+    {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Validar datos
@@ -105,17 +112,17 @@ class SerieController
             }
 
             $posterPath = null;
-            
+
             // Obtener la serie actual para saber la ruta de la imagen actual
             $currentSerie = $this->serieModel->getSerieById($id);
-            
+
             if (!$currentSerie) {
                 throw new Exception("La serie no existe");
             }
-            
+
             // Usar la ruta de la imagen actual si no se está subiendo una nueva
             $posterPath = $currentSerie['poster'];
-            
+
             // Procesar la imagen si ha sido subida
             if (isset($_FILES['poster']) && $_FILES['poster']['error'] == 0) {
                 $targetDir = __DIR__ . "/../../img/portadas_series/";
@@ -128,11 +135,11 @@ class SerieController
                 // Crear un nombre único para el poster
                 $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
                 $rutaPoster = $targetDir . $nombreUnicoArchivo;
-                
+
                 // Verificar que sea una imagen válida
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
-                
+
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
                     if (move_uploaded_file($_FILES["poster"]["tmp_name"], $rutaPoster)) {
@@ -143,7 +150,7 @@ class SerieController
                                 unlink($oldPosterPath);
                             }
                         }
-                        
+
                         $posterPath = "img/portadas_series/" . $nombreUnicoArchivo;
                     } else {
                         throw new Exception("Error al subir el archivo de imagen.");
@@ -152,7 +159,7 @@ class SerieController
                     throw new Exception("Solo se permiten archivos JPG, JPEG, PNG y WEBP.");
                 }
             }
-            
+
             // Actualizar la serie en la base de datos
             $result = $this->serieModel->updateSerie(
                 $id,
@@ -165,15 +172,15 @@ class SerieController
                 $_POST["year"],
                 $_POST["quality"],
                 $_POST["backup"] ?? null,
-                $_POST["size"],
+                $_POST["rating"],
                 $_POST["server"],
-                $_POST["rating"] ?? null
+                $_POST["size"] ?? null
             );
-            
+
             if (!$result) {
                 throw new Exception("No se pudo actualizar la serie");
             }
-            
+
             return true;
         }
         return false;
@@ -202,27 +209,32 @@ class SerieController
     }
 
     // Obtener las series vinculadas al usuario
-    public function getSeriesByUserId($userId) {
+    public function getSeriesByUserId($userId)
+    {
         return $this->serieModel->getSeriesByUserId($userId);
     }
 
     // Comprobar que una serie está vinculada con un usuario
-    public function checkSerieBelongsToUser($serieId, $userId) {
+    public function checkSerieBelongsToUser($serieId, $userId)
+    {
         return $this->serieModel->checkSerieBelongsToUser($serieId, $userId);
     }
 
     // Obtener el ID de la última serie añadida
-    public function getLastInsertedId() {
+    public function getLastInsertedId()
+    {
         return $this->serieModel->getLastInsertedId();
     }
 
     // Asociar series con usuarios
-    public function associateSerieWithUser($serieId, $userId) {
+    public function associateSerieWithUser($serieId, $userId)
+    {
         return $this->serieModel->associateSerieWithUser($serieId, $userId);
     }
 
     // Borrar series que no tienen usuario asociado
-    public function deleteSeriesWithoutUsers(){
+    public function deleteSeriesWithoutUsers()
+    {
         // Obtener series sin usuario
         $series = $this->serieModel->getSeriesWithoutUser();
 
