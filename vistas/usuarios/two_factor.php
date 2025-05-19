@@ -28,6 +28,8 @@ require '../../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+$error = "";
+
 // Generar un código aleatorio de 6 dígitos
 if (!isset($_SESSION['six_digit_code'])) {
     $_SESSION['six_digit_code'] = random_int(100000, 999999);
@@ -39,31 +41,31 @@ if (!isset($_SESSION['six_digit_code'])) {
     }
 
     // Intentar enviar el correo con el código
-        try {
-            $email = $_SESSION['two_factor'];
+    try {
+        $email = $_SESSION['two_factor'];
 
-            // Configurar SMTP
-            $mail = new PHPMailer(true);
-            $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
-            $mail->SMTPAuth = true;
-            $mail->Username = 'correo'; // TU correo de Gmail
-            $mail->Password = 'clave'; // Contraseña de la aplicación generada
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+        // Configurar SMTP
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+        $mail->SMTPAuth = true;
+        $mail->Username = 'correo'; // TU correo de Gmail
+        $mail->Password = 'clave'; // Contraseña de la aplicación generada
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-            // Configurar el charset
-            $mail->CharSet = 'UTF-8';
+        // Configurar el charset
+        $mail->CharSet = 'UTF-8';
 
-            // Configuración del correo
-            $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
-            $mail->addAddress($email); // A: el correo de destino
-            //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
+        // Configuración del correo
+        $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
+        $mail->addAddress($email); // A: el correo de destino
+        //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
 
-            // Contenido del correo
-            $mail->isHTML(true);
-            $mail->Subject = "Código verificación en 2 pasos.";
-            $mail->Body = "
+        // Contenido del correo
+        $mail->isHTML(true);
+        $mail->Subject = "Código verificación en 2 pasos.";
+        $mail->Body = "
                     <p>
                         ¡Hola $email! Se ha recibido una solicitud para iniciar sesión en tu cuenta en Biblioteca multimedia
                         y tienes la verificación en 2 pasos activada. 
@@ -75,11 +77,11 @@ if (!isset($_SESSION['six_digit_code'])) {
                         <strong>Ten en cuenta, </strong> dentro de 5 minutos este código caducará.
                     </p>";
 
-            // Enviar el correo
-            $mail->send();
-        } catch (Exception $e) {
-            $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
-        }
+        // Enviar el correo
+        $mail->send();
+    } catch (Exception $e) {
+        $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
+    }
 }
 
 // Comprobar que se ha pulsado el botón de envío
@@ -91,12 +93,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     // Comprobar que el código introducido coincide con el generado
     if ($input_code == $_SESSION['six_digit_code']) {
 
+        // Obtener el email de la sesión
+        $email = $_SESSION['two_factor'];
+
         // Eliminar la sesión de la verificación
         unset($_SESSION['two_factor']);
         unset($_SESSION['six_digit_code']);
 
         // Rellenar los datos de la sesión
-        $_SESSION['email'] = $user['email'];
+        $_SESSION['email'] = $email;
         $_SESSION['username'] = $controller->getUsernameByEmail($email);
 
         header("Location: ../peliculas/movies.php");
@@ -105,8 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $error = "El código introducido es incorrecto. Por favor, inténtalo de nuevo.";
     }
 
-} else {
-    $error = "Se ha producido un error, comprueba que el código es correcto.";
 }
 ?>
 
@@ -123,6 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" type="text/css" href="../../css/usuarios/two_factor.css">
+
+    <!-- Para iconos -->
+    <link rel="shortcut icon" href="../../img/iconos_navegador/usuario.png" type="image/x-icon" />
 </head>
 
 <body>
@@ -136,31 +142,36 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             class="rounded-circle avatar-lg img-thumbnail mb-4" alt="profile-image">
                         <h2 class="text-info">Verificación en 2 pasos</h2>
                         <p class="mb-4">Por favor, introduce el código de 6 dígitos que has recibido por correo:</p>
+                        <?php if (!empty($error)): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                            </div>
+                        <?php endif; ?>
                         <form method="POST">
                             <div class="row mb-4">
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
-                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
-                                        aria-label="2fa">
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center"
+                                        placeholder="_" aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
-                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
-                                        aria-label="2fa">
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center"
+                                        placeholder="_" aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
-                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
-                                        aria-label="2fa">
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center"
+                                        placeholder="_" aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
-                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
-                                        aria-label="2fa">
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center"
+                                        placeholder="_" aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
-                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
-                                        aria-label="2fa">
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center"
+                                        placeholder="_" aria-label="2fa">
                                 </div>
                                 <div class="col-lg-2 col-md-2 col-2 pe-0 pe-md-2">
-                                    <input type="text" name="2fa[]" class="form-control text-lg text-center" placeholder="_"
-                                        aria-label="2fa">
+                                    <input type="text" name="2fa[]" class="form-control text-lg text-center"
+                                        placeholder="_" aria-label="2fa">
                                 </div>
                             </div>
                             <div class="text-center">
