@@ -68,6 +68,9 @@ class MovieController
                 throw new Exception("Debes seleccionar una imagen para el póster.");
             }
 
+            // Parchear la valoración (sí, aquí también)
+            $rating = isset($_POST["rating"]) && $_POST["rating"] !== '' ? (int) $_POST["rating"] : null;
+
             // Crear la película con la ruta de la imagen
             $result = $this->movieModel->createMovie(
                 $_POST["name"],
@@ -81,7 +84,7 @@ class MovieController
                 $_POST["quality"],
                 $_POST["backup"] ?? null,
                 $_POST["server"],
-                $_POST["rating"] ?? null
+                $rating
             );
 
             return $result;
