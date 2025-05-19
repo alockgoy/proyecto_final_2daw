@@ -296,5 +296,10 @@ class UserController
         // Llamar al modelo para actualizar la contraseña
         return $this->userModel->resetUserPassword($email, $newSalt, $hashedPassword);
     }
+
+    // Comprobar si el usuario tiene activada la verificación en 2 pasos
+    public function check2FAStatus($username){
+        return $this->userModel->check2FAStatus($username);
+    }
 }
 ?>

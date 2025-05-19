@@ -229,5 +229,14 @@ class User
         $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE email = ?");
         return $stmt->execute([$password, $salt, $email]);
     }
+
+    // Comprobar si el usuario tiene activada la verificación en 2 pasos
+    public function check2FAStatus($username){
+        $stmt = $this->pdo->prepare("SELECT two_factor FROM Users WHERE username = ?");
+        $stmt->execute([$username]);
+        $result = $stmt->fetchColumn();
+
+        return $result == '1';
+    }
 }
 ?>

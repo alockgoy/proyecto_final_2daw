@@ -32,13 +32,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $controller->login($_POST['username'], $_POST['password']);
 
         if ($user) {
-            // Guardar información en la sesión
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['email'] = $user['email'];
 
-            // Redirigir a la página de películas
-            header("Location: ../peliculas/movies.php");
-            exit();
+            // Comprobar si el usuario tiene habilitada la verificación en 2 pasos
+            if ($controller->check2FAStatus($_POST['username'])) {
+                
+                exit();
+            } else {
+                // Guardar información en la sesión
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['email'] = $user['email'];
+
+                // Redirigir a la página de películas
+                header("Location: ../peliculas/movies.php");
+                exit();
+            }
+
         } else {
             throw new Exception("Nombre de usuario o contraseña incorrectos");
         }
