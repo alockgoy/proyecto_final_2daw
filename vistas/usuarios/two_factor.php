@@ -26,8 +26,8 @@
                     <div class="card-body px-lg-5 py-lg-5 text-center">
                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
                             class="rounded-circle avatar-lg img-thumbnail mb-4" alt="profile-image">
-                        <h2 class="text-info">2FA Security</h2>
-                        <p class="mb-4">Enter 6-digits code from your athenticatior app.</p>
+                        <h2 class="text-info">Verificación en 2 pasos</h2>
+                        <p class="mb-4">Por favor, introduce el código de 6 dígitos que has recibido por correo:</p>
                         <form>
                             <div class="row mb-4">
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <button type="button" class="btn bg-info btn-lg my-4">Continue</button>
+                                <button type="button" class="btn bg-info btn-lg my-4">Continuar</button>
                             </div>
                         </form>
                     </div>
