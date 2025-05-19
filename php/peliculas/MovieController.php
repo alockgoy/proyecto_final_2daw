@@ -154,6 +154,9 @@ class MovieController
                 }
             }
 
+            // Parchear la puntuación (sí, aquí también)
+            $rating = isset($_POST["rating"]) && $_POST["rating"] !== '' ? (int) $_POST["rating"] : null;
+
             // Actualizar la película en la base de datos
             $result = $this->movieModel->updateMovie(
                 $id,
@@ -168,7 +171,7 @@ class MovieController
                 $_POST["quality"],
                 $_POST["backup"] ?? null,
                 $_POST["server"],
-                $_POST["rating"] ?? null
+                $rating
             );
 
             if (!$result) {
