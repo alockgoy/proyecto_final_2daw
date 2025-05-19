@@ -72,7 +72,7 @@ if (!isset($_SESSION['six_digit_code'])) {
         }
 
     } catch (\Throwable $th) {
-        $error = "Error al enviar el código de la verificación: " + $th;
+        $error = ("Error al enviar el código de la verificación: " + $th);
     }
 }
 
