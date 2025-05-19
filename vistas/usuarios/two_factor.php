@@ -21,19 +21,29 @@ require_once '../../php/usuarios/User.php';
 // Crear instancia del controlador
 $controller = new UserController();
 
+// Traer el archivo autoload del php mailer
+require '../../vendor/autoload.php';
+
+// Usar el php mailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 // Generar un código aleatorio de 6 dígitos
 if (!isset($_SESSION['six_digit_code'])) {
     $_SESSION['six_digit_code'] = random_int(100000, 999999);
 
-    // Intentar enviar el correo con el código
-    try {
-        // Asignar el correo a una variable (para posteriormente mandar el correo)
-        $email = $_SESSION['two_factor'];
+    // Validar que el correo existe y es válido
+    if (!isset($_SESSION['two_factor']) || !filter_var($_SESSION['two_factor'], FILTER_VALIDATE_EMAIL)) {
+        $error = "Error: escribe un correo válido.";
+        exit();
+    }
 
-        // Enviar el correo con la contraseña actualizada
-        $mail = new PHPMailer(true);
+    // Intentar enviar el correo con el código
         try {
+            $email = $_SESSION['two_factor'];
+
             // Configurar SMTP
+            $mail = new PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
             $mail->SMTPAuth = true;
@@ -70,18 +80,7 @@ if (!isset($_SESSION['six_digit_code'])) {
         } catch (Exception $e) {
             $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
         }
-
-    } catch (\Throwable $th) {
-        $error = ("Error al enviar el código de la verificación: " + $th);
-    }
 }
-
-// Traer el archivo autoload del php mailer
-require '../../vendor/autoload.php';
-
-// Usar el php mailer
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 // Comprobar que se ha pulsado el botón de envío
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
