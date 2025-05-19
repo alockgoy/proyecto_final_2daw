@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $_SESSION['email'] = $user['email'];
         $_SESSION['username'] = $controller->getUsernameByEmail($email);
 
-        header('Location: ../peliculas/movies.php');
+        header("Location: ../peliculas/movies.php");
         exit();
     } else {
         $error = "El código introducido es incorrecto. Por favor, inténtalo de nuevo.";
