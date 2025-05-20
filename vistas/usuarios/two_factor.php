@@ -34,6 +34,9 @@ $error = "";
 if (!isset($_SESSION['six_digit_code'])) {
     $_SESSION['six_digit_code'] = random_int(100000, 999999);
 
+    // Temporizador de 5 minutos
+    $_SESSION['six_digit_code_expiration'] = time() + (5 * 60);
+
     // Validar que el correo existe y es válido
     if (!isset($_SESSION['two_factor']) || !filter_var($_SESSION['two_factor'], FILTER_VALIDATE_EMAIL)) {
         $error = "Error: escribe un correo válido.";
@@ -90,8 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     // Obtener los valores introducidos en el formulario
     $input_code = implode('', array_map('trim', $_POST['2fa'] ?? []));
 
-    // Comprobar que el código introducido coincide con el generado
-    if ($input_code == $_SESSION['six_digit_code']) {
+    // Comprobar que el código introducido coincide con el generado y que no ha caducado
+    if (time() > $_SESSION['six_digit_code_expiration']) {
+        $error = "El código ha caducado. Por favor, solicita uno nuevo.";
+        unset($_SESSION['six_digit_code']);
+        unset($_SESSION['six_digit_code_expiration']);
+    } elseif ($input_code == $_SESSION['six_digit_code']) {
 
         // Obtener el email de la sesión
         $email = $_SESSION['two_factor'];
@@ -99,6 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         // Eliminar la sesión de la verificación
         unset($_SESSION['two_factor']);
         unset($_SESSION['six_digit_code']);
+        unset($_SESSION['six_digit_code_expiration']);
 
         // Rellenar los datos de la sesión
         $_SESSION['email'] = $email;
