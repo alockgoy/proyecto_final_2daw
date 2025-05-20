@@ -87,6 +87,14 @@ class MovieController
                 $rating
             );
 
+            // Si se ha producido algún error, borrar el poster en caso de haberse subido
+            if (!$result && !empty($posterPath)) {
+                $fullPath = __DIR__ . '/../../' . $posterPath;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+
             return $result;
         }
         return false;
