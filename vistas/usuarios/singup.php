@@ -60,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($controller->addUser()) {
             // Guardar la información de la sesión
             $_SESSION['username'] = $_POST['username'];
+            $_SESSION['email'] = $_POST['email'];
 
             header("Location: ../peliculas/movies.php");
             exit();
