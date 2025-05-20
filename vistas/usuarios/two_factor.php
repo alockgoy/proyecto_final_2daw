@@ -28,47 +28,59 @@ require '../../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$error = "";
+// Comprobar si el código ha caducado
+if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_digit_code_expiration']) {
+    // Eliminar datos de la sesión relacionados con la verificación
+    unset($_SESSION['two_factor']);
+    unset($_SESSION['six_digit_code']);
+    unset($_SESSION['six_digit_code_expiration']);
 
-// Generar un código aleatorio de 6 dígitos
-if (!isset($_SESSION['six_digit_code'])) {
-    $_SESSION['six_digit_code'] = random_int(100000, 999999);
+    // Mensaje de error
+    $error = "El código ha caducado, por favor vuelve a iniciar sesión.";
+} else {
 
-    // Temporizador de 5 minutos
-    $_SESSION['six_digit_code_expiration'] = time() + (5 * 60);
 
-    // Validar que el correo existe y es válido
-    if (!isset($_SESSION['two_factor']) || !filter_var($_SESSION['two_factor'], FILTER_VALIDATE_EMAIL)) {
-        $error = "Error: escribe un correo válido.";
-        exit();
-    }
+    $error = "";
 
-    // Intentar enviar el correo con el código
-    try {
-        $email = $_SESSION['two_factor'];
+    // Generar un código aleatorio de 6 dígitos
+    if (!isset($_SESSION['six_digit_code'])) {
+        $_SESSION['six_digit_code'] = random_int(100000, 999999);
 
-        // Configurar SMTP
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
-        $mail->SMTPAuth = true;
-        $mail->Username = 'correo'; // TU correo de Gmail
-        $mail->Password = 'clave'; // Contraseña de la aplicación generada
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = 587;
+        // Temporizador de 5 minutos
+        $_SESSION['six_digit_code_expiration'] = time() + (5 * 60);
 
-        // Configurar el charset
-        $mail->CharSet = 'UTF-8';
+        // Validar que el correo existe y es válido
+        if (!isset($_SESSION['two_factor']) || !filter_var($_SESSION['two_factor'], FILTER_VALIDATE_EMAIL)) {
+            $error = "Error: escribe un correo válido.";
+            exit();
+        }
 
-        // Configuración del correo
-        $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
-        $mail->addAddress($email); // A: el correo de destino
-        //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
+        // Intentar enviar el correo con el código
+        try {
+            $email = $_SESSION['two_factor'];
 
-        // Contenido del correo
-        $mail->isHTML(true);
-        $mail->Subject = "Código verificación en 2 pasos.";
-        $mail->Body = "
+            // Configurar SMTP
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+            $mail->SMTPAuth = true;
+            $mail->Username = 'correo'; // TU correo de Gmail
+            $mail->Password = 'clave'; // Contraseña de la aplicación generada
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Configurar el charset
+            $mail->CharSet = 'UTF-8';
+
+            // Configuración del correo
+            $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
+            $mail->addAddress($email); // A: el correo de destino
+            //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
+
+            // Contenido del correo
+            $mail->isHTML(true);
+            $mail->Subject = "Código verificación en 2 pasos.";
+            $mail->Body = "
                     <p>
                         ¡Hola $email! Se ha recibido una solicitud para iniciar sesión en tu cuenta en Biblioteca multimedia
                         y tienes la verificación en 2 pasos activada. 
@@ -80,45 +92,43 @@ if (!isset($_SESSION['six_digit_code'])) {
                         <strong>Ten en cuenta, </strong> dentro de 5 minutos este código caducará.
                     </p>";
 
-        // Enviar el correo
-        $mail->send();
-    } catch (Exception $e) {
-        $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
+            // Enviar el correo
+            $mail->send();
+        } catch (Exception $e) {
+            $error = "Error al enviar el código de verificación: {$mail->ErrorInfo}";
+        }
+    }
+
+    // Comprobar que se ha pulsado el botón de envío
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+        // Obtener los valores introducidos en el formulario
+        $input_code = implode('', array_map('trim', $_POST['2fa'] ?? []));
+
+        // Comprobar que el código introducido coincide con el generado
+        if ($input_code == $_SESSION['six_digit_code']) {
+
+            // Obtener el email de la sesión
+            $email = $_SESSION['two_factor'];
+
+            // Eliminar la sesión de la verificación
+            unset($_SESSION['two_factor']);
+            unset($_SESSION['six_digit_code']);
+            unset($_SESSION['six_digit_code_expiration']);
+
+            // Rellenar los datos de la sesión
+            $_SESSION['email'] = $email;
+            $_SESSION['username'] = $controller->getUsernameByEmail($email);
+
+            header("Location: ../peliculas/movies.php");
+            exit();
+        } else {
+            $error = "El código introducido es incorrecto. Por favor, inténtalo de nuevo.";
+        }
     }
 }
 
-// Comprobar que se ha pulsado el botón de envío
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    // Obtener los valores introducidos en el formulario
-    $input_code = implode('', array_map('trim', $_POST['2fa'] ?? []));
-
-    // Comprobar que el código introducido coincide con el generado y que no ha caducado
-    if (time() > $_SESSION['six_digit_code_expiration']) {
-        $error = "El código ha caducado. Por favor, solicita uno nuevo.";
-        unset($_SESSION['six_digit_code']);
-        unset($_SESSION['six_digit_code_expiration']);
-    } elseif ($input_code == $_SESSION['six_digit_code']) {
-
-        // Obtener el email de la sesión
-        $email = $_SESSION['two_factor'];
-
-        // Eliminar la sesión de la verificación
-        unset($_SESSION['two_factor']);
-        unset($_SESSION['six_digit_code']);
-        unset($_SESSION['six_digit_code_expiration']);
-
-        // Rellenar los datos de la sesión
-        $_SESSION['email'] = $email;
-        $_SESSION['username'] = $controller->getUsernameByEmail($email);
-
-        header("Location: ../peliculas/movies.php");
-        exit();
-    } else {
-        $error = "El código introducido es incorrecto. Por favor, inténtalo de nuevo.";
-    }
-
-}
 ?>
 
 <!DOCTYPE html>
