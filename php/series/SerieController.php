@@ -189,6 +189,15 @@ class SerieController
                 $size
             );
 
+            // Lo mismo que en añadir serie
+            if (!$result && $posterPath !== $currentSerie['poster']) {
+                $fullPath = __DIR__ . '/../../' . $posterPath;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+
+
             if (!$result) {
                 throw new Exception("No se pudo actualizar la serie");
             }
