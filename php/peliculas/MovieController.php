@@ -182,6 +182,14 @@ class MovieController
                 $rating
             );
 
+            // Lo mismo que en añadir
+            if (!$result && $posterPath !== $currentMovie['poster']) {
+                $fullPath = __DIR__ . '/../../' . $posterPath;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
+
             if (!$result) {
                 throw new Exception("No se pudo actualizar la película");
             }
