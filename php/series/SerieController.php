@@ -72,7 +72,7 @@ class SerieController
             $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (int) $_POST["rating"] : null;
 
             // Crear la serie con la ruta de la imagen - ajustado a la estructura real de la tabla
-            $this->serieModel->createSerie(
+            $result = $this->serieModel->createSerie(
                 $_POST["name"],
                 $posterPath,
                 $_POST["gender"],
@@ -86,6 +86,14 @@ class SerieController
                 $_POST["server"],
                 $size
             );
+
+            // En caso de error, borrar el póster
+            if (!$result && !empty($posterPath)) {
+                $fullPath = __DIR__ . '/../../' . $posterPath;
+                if (file_exists($fullPath)) {
+                    unlink($fullPath);
+                }
+            }
 
             return true;
         }
