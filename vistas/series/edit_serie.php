@@ -239,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="size" name="size"
                                         value="<?php echo htmlspecialchars($serie['size']); ?>" placeholder="Tamaño"
-                                        step="1" required />
+                                        step="0.1" required />
                                     <label for="size">Tamaño (GB)</label>
                                 </div>
                             </div>

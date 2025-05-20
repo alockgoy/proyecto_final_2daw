@@ -212,7 +212,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-hdd"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="size" name="size" placeholder="Tamaño"
-                                        step="1" required />
+                                        step="0.1" required />
                                     <label for="size">Tamaño (GB)</label>
                                 </div>
                             </div>
