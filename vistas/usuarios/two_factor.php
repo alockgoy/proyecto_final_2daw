@@ -195,6 +195,12 @@ if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_dig
                             <div class="text-center">
                                 <button type="submit" class="btn bg-info btn-lg my-4">Continuar</button>
                             </div>
+
+                            <div class="text-center">
+                                <button type="button" class="btn btn-secondary">
+                                    <a href="./login.php" class="text-white">Volver atrás</a>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
