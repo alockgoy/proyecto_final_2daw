@@ -21,40 +21,48 @@ CREATE TABLE Movies(
     synopsis VARCHAR(600),
     poster VARCHAR(255) NOT NULL,
     director VARCHAR(100) NOT NULL,
-    gender VARCHAR(100) CHECK (gender IN ('acción/aventura', 'animación', 'anime', 
-    'ciencia ficción', 'cortometraje', 'comedia', 'deportes', 'documental', 'drama',
-    'familiar', 'fantasía', 'guerra', 'terror', 'musical', 
-    'suspense', 'romance', 'vaqueros', 'misterio')) NOT NULL,
+    gender VARCHAR(100) NOT NULL CHECK (gender IN (
+        'acción/aventura', 'animación', 'anime', 
+        'ciencia ficción', 'cortometraje', 'comedia', 'deportes', 
+        'documental', 'drama', 'familiar', 'fantasía', 'guerra', 
+        'terror', 'musical', 'suspense', 'romance', 'vaqueros', 'misterio'
+    )),
     languages VARCHAR(100) NOT NULL,
     size FLOAT NOT NULL,
     year INT NOT NULL,
-    quality VARCHAR(50) CHECK (quality IN ('4K', '1440p', '1080p', '720p',
-    '420p', 'otro')) NOT NULL,
+    quality VARCHAR(50) NOT NULL CHECK (quality IN (
+        '4K', '1440p', '1080p', '720p', '420p', 'otro'
+    )),
     backup VARCHAR(200),
-    server VARCHAR(2) CHECK (server IN ('si', 'no')) NOT NULL,
+    server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
     rating INT
 );
+
 
 /* Creación de la tabla series */
 CREATE TABLE Series(
     id_serie INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(300) NOT NULL,
     poster VARCHAR(255) NOT NULL,
-    gender VARCHAR(100) CHECK (gender IN ('acción/aventura', 'animación', 'anime', 
-    'ciencia ficción', 'cortometraje', 'comedia', 'deportes', 'documental', 'drama',
-    'familiar', 'fantasía', 'guerra', 'terror', 'musical', 
-    'suspense', 'romance', 'vaqueros', 'misterio')) NOT NULL,
+    gender VARCHAR(100) NOT NULL CHECK (gender IN (
+        'acción/aventura', 'animación', 'anime', 
+        'ciencia ficción', 'cortometraje', 'comedia', 'deportes', 
+        'documental', 'drama', 'familiar', 'fantasía', 'guerra', 
+        'terror', 'musical', 'suspense', 'romance', 'vaqueros', 'misterio'
+    )),
     languages VARCHAR(100) NOT NULL,
     seasons INT NOT NULL,
-    complete VARCHAR(2) CHECK (complete IN ('si', 'no')) NOT NULL,
+    complete VARCHAR(2) NOT NULL CHECK (complete IN ('si', 'no')),
     year INT NOT NULL,
-    quality VARCHAR(50) CHECK (quality IN ('4K', '1440p', '1080p', '720p',
-    '420p', 'otro')) NOT NULL,
+    quality VARCHAR(50) NOT NULL CHECK (quality IN (
+        '4K', '1440p', '1080p', '720p', '420p', 'otro'
+    )),
     backup VARCHAR(200),
     size FLOAT NOT NULL,
-    server VARCHAR(2) CHECK (server IN ('si', 'no')) NOT NULL,
+    server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
     rating INT
 );
+
 
 /* Tabla que sale de la unión de usuarios y películas */
 CREATE TABLE Users_Movies(
