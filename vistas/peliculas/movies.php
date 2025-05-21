@@ -81,19 +81,19 @@ $movies = $movieController->getMoviesByUserId($userId);
                             <a class="nav-link" href="./add_movie.php">Añadir una película</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item me-2">
                             <a class="nav-link" href="../series/series.php">Ir a series</a>
                         </li>
 
                         <!-- Botón para alternar -->
-                        <li class="nav-item ms-3 d-flex align-items-center">
+                        <li class="nav-item me-3 d-flex align-items-center">
                             <button class="btn btn-outline-light btn-sm" id="toggle-search">
                                 Buscar por director
                             </button>
                         </li>
 
                         <!--Barra de búsqueda-->
-                        <li class="nav-item ms-3" id="search-by-name">
+                        <li class="nav-item" id="search-by-name">
                             <div class="input-group">
                                 <input type="search" id="buscador" placeholder="Busca una película..."
                                     class="form-control" />
@@ -104,7 +104,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                         </li>
 
                         <!--Barra de búsqueda de directores-->
-                        <li class="nav-item ms-3 d-none" id="search-by-director">
+                        <li class="nav-item d-none" id="search-by-director">
                             <div class="input-group">
                                 <input type="search" id="buscador_directores" placeholder="Busca por un director..."
                                     class="form-control" />
