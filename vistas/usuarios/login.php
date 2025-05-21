@@ -122,6 +122,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             placeholder="Contraseña" required />
                                         <label for="password">Contraseña</label>
                                     </div>
+                                    <button type="button" onclick="showPassword()" class="input-group-text">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
                                 </div>
 
                                 <!-- Botón de inicio de sesión -->
@@ -152,6 +155,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
+
+    <!-- Enlace al archivo JS que permite mostrar la contraseña -->
+     <script src="../../js/show_password.js"></script>
 </body>
 
 </html>
