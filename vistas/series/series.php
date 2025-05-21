@@ -81,12 +81,12 @@ $series = $controller->getSeriesByUserId($userId);
                             <a class="nav-link" href="./add_serie.php">Añadir una serie</a>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item me-2">
                             <a class="nav-link" href="../peliculas/movies.php">Ir a películas</a>
                         </li>
 
                         <!--Barra de búsqueda-->
-                        <li class="nav-item ms-3">
+                        <li class="nav-item">
                             <div class="input-group">
                                 <input type="search" id="buscador" placeholder="Busca una serie..."
                                     class="form-control" />
