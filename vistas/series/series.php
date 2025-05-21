@@ -86,7 +86,7 @@ $series = $controller->getSeriesByUserId($userId);
                         </li>
 
                         <!--Barra de búsqueda-->
-                        <li class="nav-item">
+                        <li class="nav-item me-1">
                             <div class="input-group">
                                 <input type="search" id="buscador" placeholder="Busca una serie..."
                                     class="form-control" />
@@ -98,7 +98,7 @@ $series = $controller->getSeriesByUserId($userId);
 
                         <!--Mostrar solo las series completas-->
                         <li class="nav-item">
-                            <div class="form-check">
+                            <div>
                                 <input hidden type="checkbox" onchange="showCompleteSeries()" id="completeSeries" />
                                 <label class="form-check-label nav-link" style="cursor: pointer;" for="completeSeries">
                                     Mostrar series completas
