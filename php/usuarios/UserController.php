@@ -44,7 +44,44 @@ class UserController
 
             // Procesar la imagen de perfil si existe
             $profilePath = null;
-            if (isset($_FILES['profile']) && $_FILES['profile']['error'] == 0) {
+
+            if (isset($_FILES['profile']) && $_FILES['profile']['error'] !== UPLOAD_ERR_NO_FILE) {
+                switch ($_FILES['profile']['error']) {
+                    case UPLOAD_ERR_OK:
+                        // No hay errores, continuar con la validación
+                        break;
+                    case UPLOAD_ERR_INI_SIZE:
+                    case UPLOAD_ERR_FORM_SIZE:
+                        throw new Exception("La imagen de perfil no puede pesar más de 3 MB.");
+                    default:
+                        throw new Exception("Error al subir la imagen de perfil.");
+                }
+
+                // Comprobar que el tamaño del archivo no exceda 3 MB
+                if ($_FILES["profile"]["size"] > 3 * 1024 * 1024) {
+                    throw new Exception("La imagen de perfil no puede pesar más de 3 MB.");
+                }
+
+                // Comprobar que sea una imagen válida
+                $imageInfo = getimagesize($_FILES["profile"]["tmp_name"]);
+                if ($imageInfo === false) {
+                    throw new Exception("El archivo subido no es una imagen válida.");
+                }
+
+                // Comprobar MIME type real del archivo
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                if (!in_array($imageInfo['mime'], $allowedMimes)) {
+                    throw new Exception("El tipo de imagen no es permitido.");
+                }
+
+                // Validar extensión del archivo
+                $fileType = pathinfo($_FILES["profile"]["name"], PATHINFO_EXTENSION);
+                $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
+                if (!in_array(strtolower($fileType), $allowTypes)) {
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG y WEBP para la imagen de perfil.");
+                }
+
+                // Lógica de subida del archivo
                 $targetDir = __DIR__ . "/../../img/avatares_usuarios/";
 
                 // Verificar que el directorio existe, si no, crearlo
@@ -54,17 +91,9 @@ class UserController
                     }
                 }
 
+                // Generar un nombre único para el archivo
                 $fileName = time() . '_' . basename($_FILES["profile"]["name"]);
                 $targetFilePath = $targetDir . $fileName;
-
-                // Verificar que el tamaño del archivo no exceda 2 MB
-                if ($_FILES["profile"]["size"] > 2 * 1024 * 1024) {
-                    throw new Exception("La imagen de perfil no puede pesar más de 2 MB.");
-                }
-
-                // Verificar que sea una imagen válida
-                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                $allowTypes = array('jpg', 'png', 'jpeg', 'gif', 'webp');
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
@@ -74,7 +103,7 @@ class UserController
                         throw new Exception("Error al subir la imagen de perfil.");
                     }
                 } else {
-                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG, GIF y WEBP para la imagen de perfil.");
+                    throw new Exception("Solo se permiten archivos JPG, JPEG, PNG y WEBP para la imagen de perfil.");
                 }
             }
 
@@ -298,12 +327,14 @@ class UserController
     }
 
     // Comprobar si el usuario tiene activada la verificación en 2 pasos
-    public function check2FAStatus($username){
+    public function check2FAStatus($username)
+    {
         return $this->userModel->check2FAStatus($username);
     }
 
     // Obtener el nombre de usuario en base a su correo
-    public function getUsernameByEmail($email){
+    public function getUsernameByEmail($email)
+    {
         return $this->userModel->getUsernameByEmail($email);
     }
 }

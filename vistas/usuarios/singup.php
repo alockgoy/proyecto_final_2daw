@@ -1,7 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 // Abrir una sesión
 session_start();
@@ -32,27 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Validar que las contraseñas coincidan
         if ($_POST['password'] !== $_POST['confirm_password']) {
             throw new Exception("Las contraseñas no coinciden");
-        }
-
-        // Validar que el archivo de foto de perfil es una imagen
-        if (!empty($_FILES['profile']['name'])) {
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
-            $fileType = $_FILES['profile']['type'];
-
-            // Verificar el tipo de imagen
-            if (!in_array($fileType, $allowedTypes)) {
-                throw new Exception("El archivo debe ser una imagen (JPEG, PNG o WEBP)");
-            }
-
-            // Comprobar algún otro error
-            if ($_FILES['profile']['error'] !== UPLOAD_ERR_OK) {
-                throw new Exception("Error al subir la imagen");
-            }
-
-            // Comprobar que la imagen no supera los 2 MB de peso
-            if ($_FILES['profile']['size'] > 2 * 1024 * 1024) {
-                throw new Exception("La imagen no debe superar los 2MB");
-            }
         }
 
         // Inicializar el controlador y procesar el registro
