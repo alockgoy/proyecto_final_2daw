@@ -227,23 +227,35 @@ class UserController
 
         try {
             // Validaciones de archivo
-            $maxSize = 2 * 1024 * 1024; // 2MB
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            $maxSize = 3 * 1024 * 1024; // 3MB
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
 
             // Verificar si se ha enviado un archivo
-            if (!isset($file) || $file['error'] !== 0) {
-                throw new Exception("No se ha seleccionado ningún archivo o ha ocurrido un error en la subida.");
+            if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+                switch ($file['error']) {
+                    case UPLOAD_ERR_INI_SIZE:
+                    case UPLOAD_ERR_FORM_SIZE:
+                        throw new Exception("La imagen de perfil no puede pesar más de 3 MB.");
+                    default:
+                        throw new Exception("Error al subir la imagen de perfil, comprueba que has subido algo.");
+                }
             }
 
             // Verificar tamaño del archivo
             if ($file['size'] > $maxSize) {
-                throw new Exception("El archivo es demasiado grande. El tamaño máximo permitido es 2MB.");
+                throw new Exception("El archivo es demasiado grande. El tamaño máximo permitido es 3MB.");
             }
 
-            // Verificar tipo de archivo
-            if (!in_array($file['type'], $allowedTypes)) {
-                throw new Exception("Tipo de archivo no permitido. Solo se aceptan imágenes.");
+            // Verificar que sea una imagen válida
+            $imageInfo = getimagesize($file['tmp_name']);
+            if ($imageInfo === false) {
+                throw new Exception("El archivo subido no es una imagen válida.");
+            }
+
+            // Validar MIME type real del archivo
+            if (!in_array($imageInfo['mime'], $allowedMimes)) {
+                throw new Exception("El tipo de imagen no es permitido.");
             }
 
             // Verificar extensión
