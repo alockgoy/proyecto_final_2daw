@@ -38,7 +38,7 @@ class MovieController
             $posterPath = '';
 
             // Procesar la imagen si ha sido subida
-            if (isset($_FILES['poster']) && $_FILES['poster']['error'] == 0) {
+            if (isset($_FILES['poster']) && $_FILES['poster']['error'] == UPLOAD_ERR_OK) {
                 $targetDir = __DIR__ . "/../../img/portadas_peliculas/";
                 $fileName = basename($_FILES["poster"]["name"]);
                 $targetFilePath = $targetDir . $fileName;
@@ -50,9 +50,34 @@ class MovieController
                 $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
                 $rutaPoster = $targetDir . $nombreUnicoArchivo;
 
-                // Verificar que sea una imagen válida
-                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                // Comprobar que el archivo fue subido correctamente
+                if (!is_uploaded_file($_FILES['poster']['tmp_name'])) {
+                    throw new Exception("El archivo subido no es válido o no existe.");
+                }
+
+                // Comprobar que el archivo no está vacío
+                if ($_FILES['poster']['size'] <= 0) {
+                    throw new Exception("El archivo subido está vacío.");
+                }
+
+                // Comprobar la extensión del archivo antes de usar getimagesize()
+                $fileType = pathinfo($_FILES["poster"]["name"], PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
+                if (!in_array(strtolower($fileType), $allowTypes)) {
+                    throw new Exception("Solo se permiten archivos con extensiones JPG, JPEG, PNG y WEBP.");
+                }
+
+                // Comprobar que es una imagen real
+                $imageInfo = getimagesize($_FILES["poster"]["tmp_name"]);
+                if ($imageInfo === false) {
+                    throw new Exception("El archivo no es una imagen válida");
+                }
+
+                // Verificar MIME type real del archivo
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                if (!in_array($imageInfo['mime'], $allowedMimes)) {
+                    throw new Exception("Tipo de imagen no permitido");
+                }
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
