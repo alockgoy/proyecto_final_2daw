@@ -63,9 +63,6 @@ class MovieController
                 // Comprobar la extensión del archivo antes de usar getimagesize()
                 $fileType = pathinfo($_FILES["poster"]["name"], PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
-                if (!in_array(strtolower($fileType), $allowTypes)) {
-                    throw new Exception("Solo se permiten archivos con extensiones JPG, JPEG, PNG y WEBP.");
-                }
 
                 // Comprobar que es una imagen real
                 $imageInfo = getimagesize($_FILES["poster"]["tmp_name"]);
@@ -163,9 +160,31 @@ class MovieController
                 $nombreUnicoArchivo = uniqid("poster_") . "_" . basename($_FILES['poster']['name']);
                 $rutaPoster = $targetDir . $nombreUnicoArchivo;
 
-                // Verificar que sea una imagen válida
-                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                // Comprobar que el archivo fue subido correctamente
+                if (!is_uploaded_file($_FILES['poster']['tmp_name'])) {
+                    throw new Exception("El archivo subido no es válido o no existe.");
+                }
+
+                // Comprobar que el archivo no está vacío
+                if ($_FILES['poster']['size'] <= 0) {
+                    throw new Exception("El archivo subido está vacío.");
+                }
+
+                // Comprobar la extensión del archivo antes de usar getimagesize()
+                $fileType = pathinfo($_FILES["poster"]["name"], PATHINFO_EXTENSION);
                 $allowTypes = array('jpg', 'png', 'jpeg', 'webp');
+
+                // Comprobar que es una imagen real
+                $imageInfo = getimagesize($_FILES["poster"]["tmp_name"]);
+                if ($imageInfo === false) {
+                    throw new Exception("El archivo no es una imagen válida");
+                }
+
+                // Verificar MIME type real del archivo
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+                if (!in_array($imageInfo['mime'], $allowedMimes)) {
+                    throw new Exception("Tipo de imagen no permitido");
+                }
 
                 if (in_array(strtolower($fileType), $allowTypes)) {
                     // Subir el archivo
@@ -515,9 +534,24 @@ class MovieController
         }
 
         // Validación de la imagen (opcional en edición)
-        if (isset($files['poster']) && $files['poster']['error'] === 0) {
-            // Comprobar que el poster no pesa más de 3 MB
-            if ($files['poster']['size'] > 3 * 1024 * 1024) { // 3MB en bytes
+        if (isset($files['poster'])) {
+            switch ($files['poster']['error']) {
+                case UPLOAD_ERR_OK:
+                    // No hay errores, continuar con la validación
+                    break;
+                case UPLOAD_ERR_INI_SIZE:
+                    return ['valid' => false, 'message' => 'El póster de la película no puede pesar más de 3 MB'];
+                case UPLOAD_ERR_FORM_SIZE:
+                    return ['valid' => false, 'message' => 'El archivo excede el tamaño máximo permitido por el formulario'];
+                case UPLOAD_ERR_NO_FILE:
+                    // No es obligatorio subir un nuevo póster en la edición
+                    break;
+                default:
+                    return ['valid' => false, 'message' => 'Error al subir el archivo'];
+            }
+
+            // Validar el tamaño del archivo
+            if ($files['poster']['size'] > 3 * 1024 * 1024) { // 3 MB
                 return ['valid' => false, 'message' => 'El póster de la película no puede pesar más de 3 MB'];
             }
         }
