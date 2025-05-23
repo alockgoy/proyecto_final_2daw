@@ -327,8 +327,18 @@ class MovieController
         }
 
         // Comprobar archivo
-        if (!isset($files['poster']) || $files['poster']['error'] !== 0) {
-            return ['valid' => false, 'message' => 'El póster de la película es obligatorio'];
+        if (!isset($files['poster']) || $files['poster']['error'] !== UPLOAD_ERR_OK) {
+            // Manejar errores específicos de subida
+            switch ($files['poster']['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                    return ['valid' => false, 'message' => 'El póster de la película no puede pesar más de 3 MB'];
+                case UPLOAD_ERR_FORM_SIZE:
+                    return ['valid' => false, 'message' => 'El archivo excede el tamaño máximo permitido por el formulario'];
+                case UPLOAD_ERR_NO_FILE:
+                    return ['valid' => false, 'message' => 'El póster de la película es obligatorio'];
+                default:
+                    return ['valid' => false, 'message' => 'Error al subir el archivo'];
+            }
         }
 
         // Comprobar que el poster no pesa más de 3 MB
