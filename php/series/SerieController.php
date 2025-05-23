@@ -304,13 +304,34 @@ class SerieController
         }
 
         // Comprobar archivo
-        if (!isset($files['poster']) || $files['poster']['error'] !== 0) {
-            return ['valid' => false, 'message' => 'El póster de la serie es obligatorio'];
+        if (!isset($files['poster']) || $files['poster']['error'] !== UPLOAD_ERR_OK) {
+            switch ($files['poster']['error']) {
+                case UPLOAD_ERR_INI_SIZE:
+                    return ['valid' => false, 'message' => 'El póster de la serie no puede pesar más de 3 MB'];
+                case UPLOAD_ERR_FORM_SIZE:
+                    return ['valid' => false, 'message' => 'El archivo excede el tamaño máximo permitido por el formulario'];
+                case UPLOAD_ERR_NO_FILE:
+                    return ['valid' => false, 'message' => 'El póster de la serie es obligatorio'];
+                default:
+                    return ['valid' => false, 'message' => 'Error al subir el archivo'];
+            }
         }
 
         // Comprobar que el poster no pesa más de 3 MB
         if ($_FILES['poster']['size'] > 3 * 1024 * 1024) { // 3MB en bytes
             return ['valid' => false, 'message' => 'El póster de la serie no puede pesar más de 3 MB'];
+        }
+
+        // Comprobar que sea una imagen válida
+        $imageInfo = getimagesize($files['poster']['tmp_name']);
+        if ($imageInfo === false) {
+            return ['valid' => false, 'message' => 'El archivo subido no es una imagen válida'];
+        }
+
+        // Comprobar MIME type real del archivo
+        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (!in_array($imageInfo['mime'], $allowedMimes)) {
+            return ['valid' => false, 'message' => 'El tipo de imagen no es permitido'];
         }
 
         // Comprobar puntuación
