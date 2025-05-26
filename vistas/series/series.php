@@ -134,7 +134,9 @@ $series = $controller->getSeriesByUserId($userId);
                                         alt="<?php echo htmlspecialchars($serie['name']); ?>" />
                                 </div>
                                 <div class="card-body text-center">
-                                    <h5 class="card-title"><?php echo htmlspecialchars($serie['name']); ?></h5>
+                                    <h5 class="card-title" title="<?php echo htmlspecialchars($serie['name']); ?>">
+                                        <?php echo htmlspecialchars($serie['name']); ?>
+                                    </h5>
                                     <p class="d-none complete"><?php echo htmlspecialchars($serie['complete']); ?></p>
                                     <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>"
                                         class="btn btn-primary mt-auto">Detalles</a>
