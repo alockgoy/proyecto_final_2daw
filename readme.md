@@ -89,30 +89,34 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
 
 ### Estructura del proyecto
 ```
-/
+```
+├── prototipo/
+├── sql/
 ├── css/
-├── html/
-│   └── vistas/
+│   └── usuarios/
 ├── img/
-│   ├── avatares_usuarios/
 │   ├── portadas_peliculas/
 │   ├── portadas_series/
-│   └── iconos_navegador/
+│   ├── iconos_navegador/
+│   ├── otras/
+│   └── avatares_usuarios/
+├── vistas/
+│   ├── peliculas/
+│   ├── series/
+│   └── usuarios/
 ├── js/
 ├── php/
 │   ├── usuarios/
-│   │   ├── modelo/
-│   │   └── controlador/
 │   ├── peliculas/
-│   │   ├── modelo/
-│   │   └── controlador/
 │   └── series/
-│       ├── modelo/
-│       └── controlador/
-├── sql/
-├── vendor/
-├── index.html
-└── 404.html
+├── html/
+└── vendor/
+    ├── composer/
+    └── phpmailer/
+        └── phpmailer/
+            ├── language/
+            └── src/
+```
 ```
 
 ### Atribuciones por iconos
