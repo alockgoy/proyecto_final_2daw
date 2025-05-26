@@ -88,7 +88,7 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
 - Navegar por películas que tienen secuelas
 
 ### Estructura del proyecto
-```
+
 ```
 ├── prototipo/
 ├── sql/
@@ -116,7 +116,6 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
         └── phpmailer/
             ├── language/
             └── src/
-```
 ```
 
 ### Atribuciones por iconos
