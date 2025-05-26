@@ -43,3 +43,11 @@
     padding-left: 0;
 }
 
+.card-title {
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
