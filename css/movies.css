@@ -48,6 +48,11 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    height: 2em;
+    line-height: 1em;
     width: 100%;
+    display: block;
+    cursor: default;
 }
+
 
