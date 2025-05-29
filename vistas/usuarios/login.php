@@ -142,6 +142,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                 <p class="mb-3">
                                     <a href="./recover_password.php" class="text-danger">He olvidado mi contraseña</a>
+                                    &nbsp;
+                                    <i class="fas fa-lock"></i>
+                                </p>
+
+                                <p class="mb-3">
+                                    <a href="./recover_username.php" class="text-danger">He olvidado mi nombre de usuario</a>
+                                    &nbsp;
+                                    <i class="fas fa-user"></i>
                                 </p>
                                 <a href="../../index.html" class="btn btn-outline-secondary">Volver al inicio</a>
                             </div>
