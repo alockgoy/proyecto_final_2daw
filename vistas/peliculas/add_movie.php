@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Añadir Película</title>
-    <link href="../../css/add_movie.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/peliculas/add_movie.css" type="text/css" rel="stylesheet" />
     <!-- Enlace al CSS de bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Para iconos -->
@@ -280,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <!-- Enlace al Javascript de añadir películas -->
-    <script src="../../js/add_movie.js"></script>
+    <script src="../../js/peliculas/add_movie.js"></script>
 </body>
 
 </html>

@@ -93,22 +93,27 @@ Un usuario no registrado (o registrado) podrá reportar errores de la aplicació
 ├── prototipo/
 ├── sql/
 ├── css/
+│   ├── peliculas/
+│   ├── series/
 │   └── usuarios/
 ├── img/
-│   ├── portadas_peliculas/
-│   ├── portadas_series/
+│   ├── avatares_usuarios/
 │   ├── iconos_navegador/
 │   ├── otras/
-│   └── avatares_usuarios/
+│   ├── portadas_peliculas/
+│   └── portadas_series/
 ├── vistas/
 │   ├── peliculas/
 │   ├── series/
 │   └── usuarios/
 ├── js/
-├── php/
-│   ├── usuarios/
 │   ├── peliculas/
-│   └── series/
+│   ├── series/
+│   └── usuarios/
+├── php/
+│   ├── peliculas/
+│   ├── series/
+│   └── usuarios/
 ├── html/
 └── vendor/
     ├── composer/

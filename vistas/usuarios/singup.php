@@ -62,7 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text-css" href="../../css/singup.css" />
+    <link rel="shortcut icon" href="../../img/iconos_navegador/usuario.png" type="image/x-icon" />
+    <link rel="stylesheet" type="text-css" href="../../css/usuarios/singup.css" />
     <title>Registro</title>
 </head>
 
@@ -176,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         crossorigin="anonymous"></script>
 
     <!-- Enlace al archivo JS que permite mostrar la contraseña -->
-    <script src="../../js/show_password.js"></script>
+    <script src="../../js/usuarios/show_password.js"></script>
 </body>
 
 </html>

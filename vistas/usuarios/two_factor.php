@@ -209,7 +209,7 @@ if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_dig
     </div>
 
     <!-- Enlace al archivo JS -->
-    <script src="../../js/auto_jump.js"></script>
+    <script src="../../js/usuarios/auto_jump.js"></script>
 </body>
 
 </html>

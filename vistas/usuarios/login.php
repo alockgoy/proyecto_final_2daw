@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous" />
 
     <!-- Enlace al archivo css -->
-    <link rel="stylesheet" type="text-css" href="../../css/login.css" />
+    <link rel="stylesheet" type="text-css" href="../../css/usuarios/login.css" />
     <title>Iniciar Sesión</title>
 
     <!-- Para iconos -->
@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         crossorigin="anonymous"></script>
 
     <!-- Enlace al archivo JS que permite mostrar la contraseña -->
-     <script src="../../js/show_password.js"></script>
+     <script src="../../js/usuarios/show_password.js"></script>
 </body>
 
 </html>

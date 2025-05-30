@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="../../css/edit_movie.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/peliculas/edit_movie.css" type="text/css" rel="stylesheet" />
     <!-- Enlace al CSS de bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Para iconos -->
@@ -318,7 +318,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <!-- Enlace al Javascript de editar películas -->
-    <script src="../../js/edit_movie.js"></script>
+    <script src="../../js/peliculas/edit_movie.js"></script>
 
 </body>
 

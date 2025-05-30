@@ -355,7 +355,7 @@ if (isset($_POST["update_pic"])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Enlace al Javascript de mi perfil -->
-    <script src="../../js/my_profile.js"></script>
+    <script src="../../js/usuarios/my_profile.js"></script>
 </body>
 
 </html>

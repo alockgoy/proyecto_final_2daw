@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Añadir Serie</title>
-    <link href="../../css/add_serie.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/series/add_serie.css" type="text/css" rel="stylesheet" />
     <!-- Bootstrap CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Para iconos -->
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Nombre"
                                         required />
-                                    <label for="name">Nombre de la serie</label>
+                                    <label for="name">Nombre de la serie *</label>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="year" name="year" placeholder="Año"
                                         required />
-                                    <label for="year">Año</label>
+                                    <label for="year">Año *</label>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="gender" name="gender" required>
-                                        <option value="" selected disabled>Selecciona un género</option>
+                                        <option value="" selected disabled>Selecciona un género *</option>
                                         <option value="acción/aventura">Acción/Aventura</option>
                                         <option value="animación">Animación</option>
                                         <option value="anime">Anime</option>
@@ -155,7 +155,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="seasons" name="seasons" min="1"
                                         placeholder="Temporadas" required />
-                                    <label for="seasons">Temporadas</label>
+                                    <label for="seasons">Temporadas *</label>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="complete" name="complete" required>
-                                        <option value="" selected disabled>Selecciona</option>
+                                        <option value="" selected disabled>Selecciona *</option>
                                         <option value="si">Sí</option>
                                         <option value="no">No</option>
                                     </select>
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="languages" name="languages"
                                         placeholder="Idiomas" required />
-                                    <label for="languages">Idiomas (ej: Español, Inglés)</label>
+                                    <label for="languages">Idiomas * (ej: Español, Inglés)</label>
                                 </div>
                             </div>
                         </div>
@@ -193,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-photo-video"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="quality" name="quality" required>
-                                        <option value="" selected disabled>Selecciona la calidad</option>
+                                        <option value="" selected disabled>Selecciona la calidad *</option>
                                         <option value="4K">4K</option>
                                         <option value="1440p">1440p</option>
                                         <option value="1080p">1080p</option>
@@ -213,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="size" name="size" placeholder="Tamaño"
                                         step="0.1" required />
-                                    <label for="size">Tamaño (GB)</label>
+                                    <label for="size">Tamaño * (GB)</label>
                                 </div>
                             </div>
                         </div>
@@ -236,7 +236,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-server"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="server" name="server" required>
-                                        <option value="" selected disabled>¿En servidor?</option>
+                                        <option value="" selected disabled>¿En servidor? *</option>
                                         <option value="si">Sí</option>
                                         <option value="no">No</option>
                                     </select>
@@ -252,14 +252,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="backup" name="backup"
                                         placeholder="¿Dónde está la copia de seguridad?" />
-                                    <label for="backup">Backup (URL)</label>
+                                    <label for="backup">Backup (URL) *</label>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Poster -->
                         <div class="col-12 form-group">
-                            <label for="poster" class="form-label"><i class="fas fa-image me-2"></i>Poster</label>
+                            <label for="poster" class="form-label"><i class="fas fa-image me-2"></i>Poster *</label>
                             <input type="file" class="form-control" id="poster" name="poster" accept="image/*" required />
                             <div class="invalid-feedback">
                                 Por favor, selecciona una imagen para el poster.
@@ -285,7 +285,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
     <!-- Enlace al Javascript de añadir series -->
-    <script src="../../js/add_serie.js"></script>
+    <script src="../../js/series/add_serie.js"></script>
 
 </body>
 </html>
