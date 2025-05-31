@@ -97,9 +97,9 @@ if (isset($_POST['update_password'])) {
     $confirmPassword = $_POST['confirm_password'];
 
     if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
-        echo ("Todos los campos de contraseña son obligatorios.");
+        $error = "Todos los campos de contraseña son obligatorios.";
     } else if ($newPassword !== $confirmPassword) {
-        echo ("Las nuevas contraseñas no coinciden.");
+        $error = "Las nuevas contraseñas no coinciden.";
     } else {
         $result = $userController->updatePassword($userData['id_user'], $currentPassword, $newPassword);
 
@@ -216,8 +216,14 @@ if (isset($_POST["update_pic"])) {
                                         required />
 
                                     <label for="password_for_username" class="labels">Escribe tu contraseña:</label>
-                                    <input type="password" name="password_for_username" id="password_for_username"
-                                        class="form-control" placeholder="Escribe tu contraseña" required />
+                                    <div class="input-group">
+                                        <input type="password" name="password_for_username" id="password_for_username"
+                                            class="form-control" placeholder="Escribe tu contraseña" required />
+                                        <button type="button" onclick="togglePassword('password_for_username')"
+                                            class="input-group-text">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="submit" name="update_username" class="profile-button">Cambiar nombre de
                                     usuario</button>
@@ -235,8 +241,14 @@ if (isset($_POST["update_pic"])) {
                                     <input type="email" id="new_email" name="new_email" class="form-control" required />
 
                                     <label for="password_for_email" class="labels">Escribe tu contraseña:</label>
-                                    <input type="password" name="password_for_email" id="password_for_email"
-                                        class="form-control" placeholder="Escribe tu contraseña" required />
+                                    <div class="input-group">
+                                        <input type="password" name="password_for_email" id="password_for_email"
+                                            class="form-control" placeholder="Escribe tu contraseña" required />
+                                        <button type="button" onclick="togglePassword('password_for_email')"
+                                            class="input-group-text">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
                                 <button type="submit" name="update_email" class="profile-button">Cambiar correo
                                     electrónico</button>
@@ -259,20 +271,38 @@ if (isset($_POST["update_pic"])) {
                             <form method="POST">
                                 <div class="form-group">
                                     <label for="current_password" class="labels">Contraseña actual:</label>
-                                    <input type="password" id="current_password" name="current_password"
-                                        class="form-control" required>
+                                    <div class="input-group">
+                                        <input type="password" id="current_password" name="current_password"
+                                            class="form-control" required />
+                                        <button type="button" onclick="togglePassword('current_password')"
+                                            class="input-group-text">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="new_password" class="labels">Nueva contraseña:</label>
-                                    <input type="password" id="new_password" name="new_password" class="form-control"
-                                        required>
+                                    <div class="input-group">
+                                        <input type="password" id="new_password" name="new_password"
+                                            class="form-control" required />
+                                        <button type="button" onclick="togglePassword('new_password')"
+                                            class="input-group-text">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="confirm_password" class="labels">Confirmar nueva contraseña:</label>
-                                    <input type="password" id="confirm_password" name="confirm_password"
-                                        class="form-control" required>
+                                    <div class="input-group">
+                                        <input type="password" id="confirm_password" name="confirm_password"
+                                            class="form-control" required />
+                                        <button type="button" onclick="togglePassword('confirm_password')"
+                                            class="input-group-text">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <button type="submit" name="update_password" class="profile-button">Cambiar
@@ -288,17 +318,18 @@ if (isset($_POST["update_pic"])) {
                             </p>
 
                             <form method="POST" class="two-factor-form">
-                                <div class="form-group d-flex flex-column flex-sm-row  align-items-start align-items-sm-center gap-2">
+                                <div
+                                    class="form-group d-flex flex-column flex-sm-row  align-items-start align-items-sm-center gap-2">
                                     <label class="switch">
                                         <input type="checkbox" name="two_factor" <?php echo $userData['two_factor'] ? 'checked' : ''; ?>>
                                         <span class="slider"></span>
                                     </label>
-                                    
+
                                 </div>
-                                    <span class="switch-label">
-                                        <?php echo $userData['two_factor'] ? 'Desactivar' : 'Activar'; ?> verificación
-                                        en 2 pasos
-                                    </span>
+                                <span class="switch-label">
+                                    <?php echo $userData['two_factor'] ? 'Desactivar' : 'Activar'; ?> verificación
+                                    en 2 pasos
+                                </span>
 
                                 <button type="submit" name="update_2fa" class="profile-button mt-3">
                                     Guardar configuración
@@ -356,6 +387,9 @@ if (isset($_POST["update_pic"])) {
 
     <!-- Enlace al Javascript de mi perfil -->
     <script src="../../js/usuarios/my_profile.js"></script>
+
+    <!-- Enlace al Javascript de ver contraseña -->
+    <script src="../../js/usuarios/show_password_my_profile.js"></script>
 </body>
 
 </html>
