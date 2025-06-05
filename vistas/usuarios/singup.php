@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <!-- Enlace a la documentación -->
                                     <div class="text-center mt-4 pt-3 border-top">
                                         <p class="">Es recomendable leer el &nbsp;
-                                            <a href="" class="link">manual de uso</a>
+                                            <a href="../../html/manual.pdf" target="_blank" class="link">manual de uso</a>
                                         </p>
                                     </div>
                                 </div>
