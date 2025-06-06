@@ -131,7 +131,7 @@ $series = $controller->getSeriesByUserId($userId);
                             <div class="card serie">
                                 <div class="card-img-container">
                                     <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>"
-                                        alt="<?php echo htmlspecialchars($serie['name']); ?>" />
+                                        alt="<?php echo htmlspecialchars($serie['name']); ?>" loading="lazy"/>
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title" title="<?php echo htmlspecialchars($serie['name']); ?>">
