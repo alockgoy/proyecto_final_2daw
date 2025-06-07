@@ -30,6 +30,7 @@ if (!isset($_SESSION['email']) && isset($userData['email'])) {
 $username = $_SESSION['username'];
 $email = $_SESSION['email'];
 $userData = $userController->getUserByUsername($username);
+$userRol = $userController->getUserRol($username);
 
 if (!$userData) {
     die("Error: No se ha podido obtener la información del usuario.");
@@ -356,6 +357,24 @@ if (isset($_POST["update_pic"])) {
                     <a class="btn btn-warning" href="./logout.php" style="text-decoration: none;">
                         <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                     </a>
+
+                    <?php
+                    // Comprobar el rol del usuario y mostrar diferentes botones dependiendo del caso
+                    if ($userRol != "root" && $userRol != "solicita") {
+                        echo '<a class="btn btn-info" href="" style="text-decoration: none;">
+                        <i class="fas fa-user-shield"></i> Solicitar ser admin
+                    </a>';
+                    } else if($userRol == "solicita"){
+                        echo '<button type="button" class="btn btn-light" href="" style="text-decoration: none;">
+                        <i class="fas fa-user-shield"></i> Solicitud pendiente
+                    </button>';
+                    } else {
+                        echo '<a class="btn btn-info" href="../../vistas_admin/usuarios/users.php" style="text-decoration: none;">
+                        <i class="fas fa-user-shield"></i> Modo admin
+                    </a>';
+                    }
+
+                    ?>
                 </div>
             </div>
 

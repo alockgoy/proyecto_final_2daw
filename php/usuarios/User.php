@@ -263,5 +263,14 @@ class User
         // Comprobar si se encontró un resultado
         return $result ? $result['username'] : null;
     }
+
+    // Obtener el rol de un usuario
+    public function getUserRol($username)
+    {
+        $stmt = $this->pdo->prepare("SELECT rol FROM Users WHERE username = ?");
+        $stmt->execute([$username]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['rol'] : null;
+    }  
 }
 ?>

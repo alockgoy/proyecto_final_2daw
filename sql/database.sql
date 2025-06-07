@@ -11,7 +11,7 @@ CREATE TABLE Users(
     password VARCHAR(300) NOT NULL,
     profile VARCHAR(255),
     two_factor BOOLEAN DEFAULT FALSE,
-    rol VARCHAR(10) DEFAULT 'normal' CHECK (rol IN ('root', 'normal'))
+    rol VARCHAR(10) DEFAULT 'normal' CHECK (rol IN ('root', 'normal', 'solicita'))
 );
 
 /* Creación de la tabla películas */
@@ -106,5 +106,8 @@ SELECT * FROM Users_Movies;
 
 /* Consulta para obtener los valores de la tabla series vinculadas a un usuario */
 SELECT * FROM Users_Series;
+
+/* Añadir el nuevo rol para usuarios */
+ALTER TABLE Users MODIFY rol VARCHAR(10) DEFAULT 'normal' CHECK (rol IN ('root', 'normal', 'solicita'));
 
 ---------------------------------------------------------------------------------------------

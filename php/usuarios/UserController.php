@@ -17,7 +17,7 @@ class UserController
     public function index()
     {
         $users = $this->userModel->getAllUsers();
-        //include __DIR__ . '/../vistas/users.php';
+        return $users;
     }
 
     // Método getPdo
@@ -348,6 +348,12 @@ class UserController
     public function getUsernameByEmail($email)
     {
         return $this->userModel->getUsernameByEmail($email);
+    }
+
+    // Obtener el rol de un usuario
+    public function getUserRol($username)
+    {
+        return $this->userModel->getUserRol($username);
     }
 }
 ?>
