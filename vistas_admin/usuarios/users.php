@@ -59,7 +59,7 @@ $usuarios = $userController->index();
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid px-2">
                 <!-- Foto de perfil del usuario -->
-                <a class="navbar-brand" href="../vistas/usuarios/my_profile.php">
+                <a class="navbar-brand" href="">
                     <img src="<?php echo !empty($profilePicture) ? '../../' . htmlspecialchars($profilePicture) : '../../img/avatares_usuarios/default.jpg'; ?>"
                         width="50" height="50" class="rounded-circle" alt="Foto de perfil">
                 </a>
@@ -187,6 +187,9 @@ $usuarios = $userController->index();
             </div>
         </nav>
     </footer>
+
+    <!-- Enlace al archivo JavaScript de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
