@@ -58,7 +58,7 @@ $movies = $movieController->index();
     <title>Películas</title>
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../../css/peliculas/movies.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/peliculas/movies_admin.css" type="text/css" rel="stylesheet" />
 
     <!--Para iconos-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
