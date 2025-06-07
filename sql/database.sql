@@ -109,5 +109,7 @@ SELECT * FROM Users_Series;
 
 /* Añadir el nuevo rol para usuarios */
 ALTER TABLE Users MODIFY rol VARCHAR(10) DEFAULT 'normal' CHECK (rol IN ('root', 'normal', 'solicita'));
+ALTER TABLE Users MODIFY rol ENUM('root', 'normal', 'solicita') DEFAULT 'normal';
+
 
 ---------------------------------------------------------------------------------------------
