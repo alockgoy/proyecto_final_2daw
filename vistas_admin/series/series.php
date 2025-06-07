@@ -140,6 +140,7 @@ $series = $controller->index();
                                         <?php echo htmlspecialchars($serie['name']); ?>
                                     </h5>
                                     <p class="d-none complete"><?php echo htmlspecialchars($serie['complete']); ?></p>
+                                    <p class="text-muted small">Subida por: <?php echo htmlspecialchars($controller->getUserNameBySerieId($serie['id_serie'])); ?></p>
                                     <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>"
                                         class="btn btn-primary mt-auto">Detalles</a>
                                 </div>

@@ -535,6 +535,12 @@ class SerieController
 
         return $result;
     }
+
+    // Obtener el nombre de usuario que subió la serie
+    public function getUserNameBySerieId($serieId)
+    {
+        return $this->serieModel->getUserNameBySerieId($serieId);
+    }
 }
 
 ?>

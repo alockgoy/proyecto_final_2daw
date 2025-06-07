@@ -109,5 +109,19 @@ class Serie
     ");
         return $stmt->execute();
     }
+
+    // Obtener el nombre de usuario que subió la serie
+    public function getUserNameBySerieId($serieId)
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT u.username 
+            FROM Users u
+            JOIN Users_Series us ON u.id_user = us.id_user
+            WHERE us.id_serie = ?
+        ");
+        $stmt->execute([$serieId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['username'] : null;
+    }
 }
 ?>
