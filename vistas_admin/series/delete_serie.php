@@ -28,25 +28,22 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $controller = new SerieController();
 $userController = new UserController();
 
+$username = $_SESSION['username'];
+$userRol = $userController->getUserRol($username);
+
+// Comprobar que el usuario sea 'root'
+if ($userRol != "root") {
+    header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    exit();
+}
+
 $id = $_GET['id'];
 
 try {
-    // Obtener el ID del usuario actual
-    $userId = $userController->getUserIdByUsername($_SESSION['username']);
-    
-    // Verificar que la serie pertenece al usuario
-    $isOwner = $controller->checkSerieBelongsToUser($id, $userId);
-    
-    // Si intenta borrar una serie que no le "pertenece", redirigir
-    if (!$isOwner) {
-        header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-        exit();
-    }
-    
     // Eliminar la serie si todas las verificaciones son correctas
     $controller->deleteSerie($id);
     
-    // Redirigir a la lista de películas
+    // Redirigir a la lista de series
     header('Location: series.php?deleted=true');
     exit;
 } catch (Exception $e) {
