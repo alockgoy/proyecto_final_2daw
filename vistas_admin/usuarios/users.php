@@ -147,7 +147,7 @@ $usuarios = $userController->index();
                                 </td>
 
                                 <td>
-                                    <a class="btn btn-warning" href="" style="text-decoration: none;">
+                                    <a class="btn btn-warning" href="show_user.php?username=<?php echo urlencode($usuario['username']); ?>" style="text-decoration: none;">
                                         Editar
                                     </a>
                                 </td>
