@@ -557,5 +557,11 @@ class MovieController
 
         return $result;
     }
+
+    // Obtener el nombre de usuario que subió la película
+    public function getUserNameByMovieId($movieId)
+    {
+        return $this->movieModel->getUserNameByMovieId($movieId);
+    }
 }
 ?>

@@ -112,5 +112,19 @@ class Movie
     ");
         return $stmt->execute();
     }
+
+    // Obtener el nombre de usuario que subió la película
+    public function getUserNameByMovieId($movieId)
+    {
+        $stmt = $this->pdo->prepare("
+            SELECT u.username 
+            FROM Users u
+            JOIN Users_Movies um ON u.id_user = um.id_user
+            WHERE um.id_movie = ?
+        ");
+        $stmt->execute([$movieId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['username'] : null;
+    }
 }
 ?>

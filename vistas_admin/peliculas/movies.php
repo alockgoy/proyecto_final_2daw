@@ -144,6 +144,7 @@ $movies = $movieController->index();
                                         <?php echo htmlspecialchars($movie['name']); ?>
                                     </h5>
                                     <p class="d-none director"><?php echo htmlspecialchars($movie['director']); ?></p>
+                                    <p class="text-muted small">Subida por: <?php echo htmlspecialchars($movieController->getUserNameByMovieId($movie['id_movie'])); ?></p>
                                     <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>"
                                         class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
