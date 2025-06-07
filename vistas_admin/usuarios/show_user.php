@@ -70,10 +70,6 @@ if (isset($_POST['update_email'])) {
 
     if (empty($newEmail)) {
         $error = ("El correo electrónico no puede estar vacío.");
-    } elseif (empty($passwordForEmail)) {
-        $error = ("Debes escribir tu contraseña para realizar cambios.");
-    } elseif (!$userController->checkPassword($username, $passwordForEmail)) {
-        $error = ("Contraseña incorrecta.");
     } elseif ($newEmail === $userData['email']) {
         $error = ("El nuevo correo debe ser diferente al actual.");
     } else {
@@ -246,16 +242,6 @@ if (isset($_POST['ask_for_admin'])) {
                                 <div class="form-group">
                                     <label for="new_email" class="labels">Nuevo correo electrónico:</label>
                                     <input type="email" id="new_email" name="new_email" class="form-control" required />
-
-                                    <label for="password_for_email" class="labels">Escribe tu contraseña:</label>
-                                    <div class="input-group">
-                                        <input type="password" name="password_for_email" id="password_for_email"
-                                            class="form-control" placeholder="Escribe tu contraseña" required />
-                                        <button type="button" onclick="togglePassword('password_for_email')"
-                                            class="input-group-text">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                    </div>
                                 </div>
                                 <button type="submit" name="update_email" class="profile-button">Cambiar correo
                                     electrónico</button>
