@@ -367,5 +367,17 @@ class UserController
     {
         return $this->userModel->updatePasswordAsAdmin($userId, $newPassword);
     }
+
+    // Convertir usuario a administrador
+    public function turnToAdmin($username)
+    {
+        return $this->userModel->turnToAdmin($username);
+    }
+
+    // Convertir el usuario a "normal"
+    public function turnToNormal($username)
+    {
+        return $this->userModel->turnToNormal($username);
+    }
 }
 ?>

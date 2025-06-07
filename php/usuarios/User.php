@@ -291,5 +291,19 @@ class User
         $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE id_user = ?");
         return $stmt->execute([$hashedNewPassword, $newSalt, $userId]);
     }
+
+    // Convertir usuario a administrador
+    public function turnToAdmin($username)
+    {
+        $stmt = $this->pdo->prepare("UPDATE Users SET rol='root' WHERE username = ?");
+        return $stmt->execute([$username]);
+    }
+
+    // Convertir al usuario a "normal"
+    public function turnToNormal($username)
+    {
+        $stmt = $this->pdo->prepare("UPDATE Users SET rol='normal' WHERE username = ?");
+        return $stmt->execute([$username]);
+    }
 }
 ?>

@@ -137,18 +137,27 @@ if (isset($_POST["update_pic"])) {
     }
 }
 
-// Procesar solicitud para ser admin
-if (isset($_POST['ask_for_admin'])) {
-    try {
-        $result = $userController->askForAdmin($targetUsername);
-        if ($result) {
-            $success = "Solicitud para ser admin enviada correctamente, recargando...";
-            $userData['rol'] = "solicita"; // Actualizar el rol
-        } else {
-            $error = "No se pudo enviar la solicitud para ser admin.";
-        }
-    } catch (Exception $e) {
-        $error = "Error al procesar la solicitud: " . $e->getMessage();
+// Procesar el promover a admin
+if (isset($_POST["turn_to_admin"])) {
+    $result = $userController->turnToAdmin($userData['username']);
+    
+    if ($result) {
+        $success = "Usuario promovido a administrador correctamente, recargando...";
+        $userData['rol'] = 'root';
+    } else {
+        $error = "No se pudo promover al usuario a administrador.";
+    }
+}
+
+// Procesar el dejar de ser admin
+if (isset($_POST["remove_admin"])) {
+    $result = $userController->turnToNormal($userData['username']);
+    
+    if ($result) {
+        $success = "Usuario nerfeado correctamente, recargando...";
+        $userData['rol'] = 'normal';
+    } else {
+        $error = "No se pudo eliminar el rol de administrador.";
     }
 }
 ?>
@@ -337,8 +346,14 @@ if (isset($_POST['ask_for_admin'])) {
                     // Comprobar el rol del usuario y mostrar la opción de darle el admin
                     if ($userData['rol'] == "solicita"): ?>
                         <form method="POST" class="d-inline">
-                            <button type="submit" name="ask_for_admin" class="btn btn-info" style="text-decoration: none;">
+                            <button type="submit" name="turn_to_admin" class="btn btn-info" style="text-decoration: none;">
                                 <i class="fas fa-user-shield"></i> Promover a admin
+                            </button>
+                        </form>
+                        <?php elseif ($userData['rol'] == "root"): ?>
+                        <form method="POST" class="d-inline">
+                            <button type="submit" name="remove_admin" class="btn btn-warning" style="text-decoration: none;">
+                                <i class="fas fa-user-minus"></i> Quitar rol de admin
                             </button>
                         </form>
                         <?php endif; ?>
