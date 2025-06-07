@@ -271,13 +271,25 @@ class User
         $stmt->execute([$username]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['rol'] : null;
-    }  
+    }
 
     // Solicitar ser admin
     public function askForAdmin($username)
     {
         $stmt = $this->pdo->prepare("UPDATE Users SET rol='solicita' WHERE username = ?");
         return $stmt->execute([$username]);
-    } 
+    }
+
+    // Actualizar la contraseña siendo admin
+    public function updatePasswordAsAdmin($userId, $newPassword)
+    {
+        // Generar un nueva salt y hash para la nueva contraseña
+        $newSalt = rand(-1000000, 1000000);
+        $hashedNewPassword = hash('sha256', $newPassword . $newSalt);
+
+        // Actualizar la contraseña
+        $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE id_user = ?");
+        return $stmt->execute([$hashedNewPassword, $newSalt, $userId]);
+    }
 }
 ?>

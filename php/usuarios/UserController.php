@@ -361,5 +361,11 @@ class UserController
     {
         return $this->userModel->askForAdmin($username);
     }
+
+    // Actualizar la contraseña como administrador
+    public function updatePasswordAsAdmin($userId, $newPassword)
+    {
+        return $this->userModel->updatePasswordAsAdmin($userId, $newPassword);
+    }
 }
 ?>

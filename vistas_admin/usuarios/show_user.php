@@ -87,16 +87,15 @@ if (isset($_POST['update_email'])) {
 
 // Procesar cambio de contraseña
 if (isset($_POST['update_password'])) {
-    $currentPassword = $_POST['current_password'];
     $newPassword = $_POST['new_password'];
     $confirmPassword = $_POST['confirm_password'];
 
-    if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+    if (empty($newPassword) || empty($confirmPassword)) {
         $error = "Todos los campos de contraseña son obligatorios.";
     } else if ($newPassword !== $confirmPassword) {
         $error = "Las nuevas contraseñas no coinciden.";
     } else {
-        $result = $userController->updatePassword($userData['id_user'], $currentPassword, $newPassword);
+        $result = $userController->updatePasswordAsAdmin($userData['id_user'], $newPassword);
 
         if ($result) {
             $success = ("Contraseña actualizada correctamente, recargando...");
@@ -263,18 +262,6 @@ if (isset($_POST['ask_for_admin'])) {
 
                             <form method="POST">
                                 <div class="form-group">
-                                    <label for="current_password" class="labels">Contraseña actual:</label>
-                                    <div class="input-group">
-                                        <input type="password" id="current_password" name="current_password"
-                                            class="form-control" required />
-                                        <button type="button" onclick="togglePassword('current_password')"
-                                            class="input-group-text">
-                                            <i class="fa-solid fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
                                     <label for="new_password" class="labels">Nueva contraseña:</label>
                                     <div class="input-group">
                                         <input type="password" id="new_password" name="new_password"
@@ -347,22 +334,14 @@ if (isset($_POST['ask_for_admin'])) {
                     </a>
 
                     <?php
-                    // Comprobar el rol del usuario y mostrar diferentes botones dependiendo del caso
-                    if ($userRol != "root" && $userRol != "solicita"): ?>
+                    // Comprobar el rol del usuario y mostrar la opción de darle el admin
+                    if ($userData['rol'] == "solicita"): ?>
                         <form method="POST" class="d-inline">
                             <button type="submit" name="ask_for_admin" class="btn btn-info" style="text-decoration: none;">
-                                <i class="fas fa-user-shield"></i> Solicitar ser admin
+                                <i class="fas fa-user-shield"></i> Promover a admin
                             </button>
                         </form>
-                    <?php elseif ($userRol == "solicita"): ?>
-                        <button type="button" class="btn btn-light" style="text-decoration: none;" disabled>
-                            <i class="fas fa-user-shield"></i> Solicitud pendiente
-                        </button>
-                    <?php else: ?>
-                        <a class="btn btn-info" href="../../vistas_admin/usuarios/users.php" style="text-decoration: none;">
-                            <i class="fas fa-user-shield"></i> Modo admin
-                        </a>
-                    <?php endif; ?>
+                        <?php endif; ?>
                 </div>
             </div>
 
