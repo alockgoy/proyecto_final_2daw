@@ -134,7 +134,7 @@ $usuarios = $userController->index();
                                 </td>
 
                                 <td>
-                                    <img src="<?php echo !empty($usuario['profile']) ? '../../' . htmlspecialchars($profilePicture) : '../../img/avatares_usuarios/default.jpg'; ?>"
+                                    <img src="<?php echo !empty($usuario['profile']) ? '../../' . htmlspecialchars($usuario['profile']) : '../../img/avatares_usuarios/default.jpg'; ?>"
                                         width="50" height="50" class="rounded-circle">
                                 </td>
 
