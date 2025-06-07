@@ -137,7 +137,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     class="form-control" placeholder="Repite la contraseña" required />
                                                 <label for="confirm_password">Repite la contraseña</label>
                                             </div>
-                                            <button type="button" onclick="showRepeatPassword()" class="input-group-text">
+                                            <button type="button" onclick="showRepeatPassword()"
+                                                class="input-group-text">
                                                 <i class="fa-solid fa-eye"></i>
                                             </button>
                                         </div>
@@ -162,6 +163,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="text-center mt-4 pt-3 border-top">
                                         <p class="h5 mb-3">¿Ya tienes una cuenta?</p>
                                         <a href="login.php" class="btn btn-success px-4">Iniciar sesión</a>
+                                    </div>
+
+                                    <!-- Enlace a la documentación -->
+                                    <div class="text-center mt-4 pt-3 border-top">
+                                        <p class="">Es recomendable leer el &nbsp;
+                                            <a href="../../html/manual.html" target="_blank" class="link">manual de uso</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>

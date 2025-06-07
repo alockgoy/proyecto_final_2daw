@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de uso</title>
+    <link rel="stylesheet" type="text/css" href="../css/manual.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Manual de uso de Biblioteca multimedia</h1>
+
+        <div class="toc">
+            <ul>
+                <li>Atención</li>
+                <li>¿Qué datos guarda la página?</li>
+                <li>Exposición de la web</li>
+                <li>¿Cómo funciona cada página?</li>
+                <li>Página de bienvenida</li>
+                <li>Reportar problema</li>
+                <li>Regístrate gratis</li>
+                <li>Inicio de sesión</li>
+                <li>¿Y si he olvidado mi contraseña?</li>
+                <li>¿Y si he olvidado mi nombre de usuario?</li>
+                <li>Vista de películas</li>
+                <li>Añadir una película</li>
+                <li>Ver detalles de una película</li>
+                <li>Editar una película</li>
+                <li>Vista de series</li>
+                <li>Añadir una serie</li>
+                <li>Ver detalles de una serie</li>
+                <li>Editar una serie</li>
+                <li>Gestión del perfil del usuario</li>
+                <li>Configuración del perfil</li>
+                <li>Seguridad</li>
+                <li>¿Cómo funciona la verificación en 2 pasos?</li>
+                <li>Resto de la vista mi perfil</li>
+            </ul>
+        </div>
+
+        <div class="section attention-box">
+            <h2>Atención</h2>
+            <p>Esta página puede guardar algunos datos del usuario en un servidor.</p>
+            <p>Dichos datos solo se usan para comprobar cómo se comporta la aplicación y poder estudiar
+                cómo funciona un error para su posterior corrección, por lo demás no hay de qué preocuparse.</p>
+            <p>No, los datos no serán vendidos.</p>
+
+            <h3>¿Qué datos guarda la página?</h3>
+            <ul class="field-list">
+                <li>Nombre de usuario.</li>
+                <li>Correo electrónico.</li>
+                <li>Contraseña.</li>
+                <li>Datos de sesión.</li>
+                <li>Foto de perfil.</li>
+                <li>Acciones realizadas por el usuario y fecha en que se hicieron.</li>
+                <li>Datos de películas y series (información y póster).</li>
+            </ul>
+        </div>
+
+        <div class="main-section">
+            <h2>Exposición de la web</h2>
+
+            <h3>¿Cómo funciona cada página?</h3>
+
+            <div class="section">
+                <h4>Página de bienvenida</h4>
+                <img src="../img/manual/welcome.png" alt="Página de bienvenida" loading="lazy" />
+                <p>
+                    Esto es lo que un usuario ve cuando abre la página, un título que reza "La mejor forma de
+                    organizar tus películas y series", junto a una imagen de fondo de cómo se ve el apartado de
+                    películas ya en funcionamiento (el estilo visual de series es muy similar), y un botón de
+                    "Comienza ahora" que lo que hace es redirigir al formulario de inicio de sesión.
+                </p>
+
+                <img src="../img/manual/features.png" alt="Características de la aplicación" loading="lazy" />
+                <p>
+                    Bajando un poco hay algunos detalles que quise recalcar de la aplicación, como el hecho de
+                    que es fácil de usar y que además cuenta con un diseño responsivo (que se adapta a
+                    diferentes tamaños de pantalla).
+                </p>
+
+                <img src="../img/manual/try.png" alt="Sección de prueba" loading="lazy" />
+                <p>
+                    Justo debajo se encuentra el título "Pruébala cuando gustes" junto con el botón que redirige
+                    al formulario de creación de cuenta, que además no tiene coste.
+                </p>
+
+                <img src="../img/manual/report.png" alt="Sección de reportar problema" loading="lazy" />
+                <p>
+                    Como siempre puede existir algún problema del que no me haya percatado, tengo este
+                    pequeño apartado que invita a reportar un problema si algo no funciona bien (lo explicaré en
+                    detalle más adelante).
+                </p>
+
+                <img src="../img/manual/alockgoy.png" alt="Pie de página con enlace al repositorio" loading="lazy" />
+                <p>
+                    Ya por último, como pie de página, está mi nombre de usuario en Github que es un enlace al
+                    repositorio de este proyecto, donde cualquiera puede ver el código y las modificaciones que
+                    se han ido haciendo.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Reportar problema</h4>
+                <img src="../img/manual/report-view.png" alt="Vista de reportar problema" loading="lazy" />
+
+                <p>
+                    Antes de desarrollar esta página de gestión de películas, desarrollé una que es una lista de
+                    videojuegos pendientes y cómo organizarlos para no acumular una lista infinita de títulos.
+                </p>
+
+                <p>
+                    Esa aplicación cuenta con una función para reportar errores, consistente en:
+                </p>
+
+                <ol class="numbered-list">
+                    <li>El usuario selecciona el tipo de error (error con su cuenta, error con la web, otro...).</li>
+                    <li>El usuario escribe su correo electrónico.</li>
+                    <li>El usuario detalla el error y le da al botón de enviar.</li>
+                </ol>
+
+                <p>
+                    Quería que la aplicación de gestión multimedia contara con algo similar, por eso decidí
+                    reutilizar el componente como estaba y, para este caso, le añadí la posibilidad de adjuntar
+                    una captura de pantalla por parte del usuario.
+                </p>
+
+                <p>
+                    Una vez el usuario pulsa el botón de enviar (suponiendo que no hay un error de validación),
+                    la aplicación usa una librería llamada "PHPMailer" para enviar un correo electrónico a una
+                    cuenta secundaria:
+                </p>
+
+                <img src="../img/manual/error.png" alt="Ejemplo de correo de error" loading="lazy" />
+            </div>
+
+            <div class="section">
+                <h4>Regístrate gratis</h4>
+                <img src="../img/manual/singup.png" alt="Formulario de registro" loading="lazy" />
+
+                <p>
+                    Este es un formulario sencillo con los siguientes campos:
+                </p>
+
+                <ol class="numbered-list">
+                    <li>Nombre de usuario (obligatorio).</li>
+                    <li>Correo electrónico (obligatorio).</li>
+                    <li>Contraseña (obligatorio).</li>
+                    <li>Repetir la contraseña (obligatorio).</li>
+                    <li>Foto de perfil (opcional).</li>
+                </ol>
+
+                <p>
+                    Suponiendo que no hay errores de validación (como que los campos de las contraseñas no
+                    coincidan o el usuario haya dejado vacío un campo obligatorio), la aplicación redirige
+                    automáticamente a la vista de películas:
+                </p>
+                <img src="../img/manual/empty_movies.png" alt="Vista de películas de un usuario recién creado"
+                    loading="lazy" />
+
+                <p>
+                    En caso de ya contar con una cuenta, se ofrece un botón que redirige al formulario de inicio
+                    de sesión.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Iniciar sesión</h4>
+                <img src="../img/manual/login.png" alt="Formulario de inicio de sesión" loading="lazy" />
+
+                <p>
+                    Este formulario solicita el nombre de usuario y la contraseña para poder iniciar sesión. Tras
+                    hacer las comprobaciones y comprobar que las credenciales coinciden, la aplicación redirige
+                    a la vista de películas del usuario.
+                </p>
+
+                <p>
+                    En caso de no contar con una cuenta, se ofrece un enlace que redirige al formulario de
+                    creación.
+                </p>
+
+                <h5>¿Y si he olvidado mi contraseña?</h5>
+                <p>
+                    No te preocupes, existe un sistema de recuperación de contraseña:
+                </p>
+                <img src="../img/manual/recover_password.png" alt="Formulario de recuperación de contraseña"
+                    loading="lazy" />
+
+                <p>
+                    Lo único que hay que hacer es escribir el correo del usuario y, si existe un usuario
+                    registrado con ese correo, debería aparecer el siguiente mensaje:
+                </p>
+                <img src="../img/manual/password_restored.png" alt="Mensaje de contraseña restaurada" loading="lazy" />
+
+                <p>
+                    La recuperación de contraseña funciona de la siguiente manera:
+                </p>
+                <ol class="numbered-list">
+                    <li>El usuario escribe su correo.</li>
+                    <li>El usuario pulsa el botón de "Recuperar contraseña".</li>
+                    <li>La aplicación genera una nueva contraseña de manera aleatoria.</li>
+                    <li>La aplicación actualiza la contraseña del usuario con la nueva generada.</li>
+                    <li>La nueva contraseña generada se envía por correo usando PHPMailer.</li>
+                </ol>
+                <img src="../img/manual/password_email.png" alt="Contraseña censurada en parte por motivos de seguridad"
+                    loading="lazy" />
+
+                <h5>¿Y si he olvidado mi nombre de usuario?</h5>
+                <p>
+                    No te preocupes, existe un sistema de "recuperación" de nombre de usuario:
+                </p>
+                <img src="../img/manual/recover_username.png" alt="Formulario de recuperación de nombre de usuario"
+                    loading="lazy" />
+
+                <p>
+                    Sí, la vista es una copia del sistema de recuperación de contraseña. La diferencia es que se
+                    ha suprimido la parte de envío de correo electrónico y cualquier referencia a "contraseñas".
+                </p>
+
+                <p>
+                    El funcionamiento aquí es bastante más simple, el usuario escribe su correo electrónico y, si
+                    existe una cuenta con ese correo, se devuelve el nombre de usuario:
+                </p>
+                <img src="../img/manual/username_restored.png" alt="Mensaje de nombre de usuario restaurado"
+                    loading="lazy" />
+
+                <p>
+                    Ante la pregunta de si esta forma de resolverlo puede suponer un problema de seguridad, lo
+                    pongo muy en duda.
+                </p>
+
+                <p>
+                    La aplicación únicamente devuelve el nombre de usuario cuyo correo ha sido comprobado y
+                    solamente el nombre de usuario. Además de que está el hecho de que a día de hoy entras
+                    a cualquier red social y puedes ver el nombre de usuario de cualquier persona en esa
+                    aplicación.
+                </p>
+
+                <p>
+                    Tener el nombre de usuario pero no la contraseña sirve de poco, y si el usuario tiene activada
+                    la verificación en 2 pasos, menos todavía.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Vista de películas</h4>
+                <p>
+                    Como se ha visto antes, con una cuenta recién creada, lo que aparece en la vista es una
+                    invitación a añadir películas (el funcionamiento se explicará más adelante), un enlace para la
+                    vista de series (que mostrará un mensaje similar), y enlaces al perfil y a cerrar sesión. Además
+                    de una especificación de que el usuario se encuentra en la vista de películas y su nombre.
+                </p>
+
+                <p>
+                    En caso de ser un usuario con películas añadidas, la vista será algo como esto:
+                </p>
+                <img src="../img/manual/movies.png" alt="Vista de películas con contenido" loading="lazy" />
+
+                <p>
+                    Cuando un usuario añade películas, lo que muestra la vista principal es:
+                </p>
+                <ul class="field-list">
+                    <li>El poster de la película.</li>
+                    <li>El nombre de la película.</li>
+                    <li>Un botón para ver detalles.</li>
+                </ul>
+
+                <p>
+                    Además de los enlaces a otras partes de la aplicación, esta vista cuenta con 2 buscadores,
+                    uno para buscar películas por su nombre y otro para buscar películas por su director:
+                </p>
+                <img src="../img/manual/search_bar.png" alt="Barra de búsqueda" loading="lazy" />
+
+                <p>
+                    El tipo de buscador se alterna con el botón que se encuentra al lado de la barra de búsqueda,
+                    el cual cambia el texto dependiendo del buscador al que se va a seleccionar.
+                </p>
+
+                <p>
+                    Ambos buscadores funcionan de la siguiente manera: cada vez que el usuario escribe una
+                    letra, mediante código Javascript se comprueban los nombres, a los que coinciden no se les
+                    hace nada, a los que no coinciden se les aplica un "display: none".
+                </p>
+
+                <p>
+                    Esto es un ejemplo de buscar una película por su nombre:
+                </p>
+                <img src="../img/manual/search_movie.png" alt="Búsqueda de película por nombre" loading="lazy" />
+
+                <p>
+                    Esto es un ejemplo de buscar películas por nombre de su director:
+                </p>
+                <img src="../img/manual/search_director.png" alt="Búsqueda de películas por director" loading="lazy" />
+            </div>
+
+            <div class="section">
+                <h4>Añadir una película</h4>
+                <img src="../img/manual/add_movie.png" alt="Formulario de añadir película" loading="lazy" />
+
+                <p>
+                    Es un formulario con los campos (algunos opcionales) para los datos de una película.
+                </p>
+
+                <p>
+                    Hay algunos campos aquí que podrían ser confusos así que voy a explicar que, al menos en
+                    España (según la información que he encontrado), no es ilegal extraer su contenido para
+                    realizar una <strong><u>copia de seguridad de uso personal:</u></strong>
+                </p>
+                <ul class="field-list">
+                    <li>
+                        <strong>Idiomas: </strong>Una película en un DVD puede contener varios idiomas (como Español e
+                        Inglés).
+                    </li>
+                    <li>
+                        <strong>Tamaño: </strong>Al extraer el archivo de la película, este ocupa un tamaño en el
+                        dispositivo
+                        de destino.
+                    </li>
+                    <li>
+                        <strong>Calidad: </strong>No todos los formatos de disco guardan en la misma calidad, por norma
+                        general un Bluray suele tener mejor calidad que un DVD convencional.
+                    </li>
+                    <li>
+                        <strong>¿En servidor?</strong>Existen aplicaciones como "Plex media server" o "Jellyfin" (entre
+                        otras), que permiten a un dispositivo actuar como una especie de "netflix casero". El
+                        objetivo de esta pregunta es que, si el usuario cuenta con este software y tiene la
+                        película añadida, lo especifique.
+                    </li>
+                    <li>
+                        <strong>Backup: </strong>En caso de haber realizado una copia de seguridad de la película,
+                        especificar
+                        dónde se encuentra (nube, disco duro, etc...).
+                    </li>
+                </ul>
+
+                <p>
+                    Tras introducir todos los datos (al menos los obligatorios) en el formulario, si no se ha
+                    producido ningún error de validación, la aplicación mostrará un mensaje de éxito y después
+                    llevará a la vista de películas, donde ya se encuentra la nueva añadida.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Ver detalles de una película</h4>
+                <p>
+                    Cuando el usuario desee ver información detallada sobre la película, simplemente tiene que
+                    pulsar en el botón "Detalles" de dicha película, y se abrirá una página como esta:
+                </p>
+                <img src="../img/manual/show_movie.png" alt="Vista de detalles de película" loading="lazy" />
+
+                <p>
+                    Aquí se mostrará toda la información introducida en el formulario de inserción con una vista
+                    más agradable y sin tener que saturar la vista de todas las películas con tarjetas
+                    excesivamente grandes y llenas de información.
+                </p>
+
+                <p>
+                    Entre las opciones el usuario se encuentra con:
+                </p>
+                <ul class="field-list">
+                    <li>La posibilidad de volver atrás.</li>
+                    <li>La posibilidad de eliminar la película (se mostrará una alerta de confirmación).</li>
+                    <li>La posibilidad de editar una película.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h4>Editar una película</h4>
+                <img src="../img/manual/edit_movie.png" alt="Formulario de editar película" loading="lazy" />
+
+                <p>
+                    El formulario de edición es muy similar al de inserción, cuenta con algunas diferencias:
+                </p>
+                <ul class="field-list">
+                    <li>Rellena automáticamente los campos con los valores ya existentes en caso de que
+                        no se produzcan cambios.</li>
+                    <li>El cambio de póster es opcional, de no realizarse, se conserva la imagen introducida
+                        anteriormente (de hecho el formulario muestra el póster actual).</li>
+                </ul>
+
+                <p>
+                    Al igual que el formulario de inserción, cuenta con un sistema de validación que compruebe
+                    que los campos obligatorios no estén vacíos, los campos numéricos no tengan valores
+                    alfabéticos, etc...
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Vista de series</h4>
+                <img src="../img/manual/series.png" alt="Vista de series" loading="lazy" />
+
+                <p>
+                    La vista de series sigue una estructura muy similar a la de películas, con algunas ligeras
+                    diferencias:
+                </p>
+                <ul class="field-list">
+                    <li>El buscador por director ha sido cambiado por un buscador de series completas.</li>
+                    <li>En la esquina superior derecha, se especifica al usuario que se encuentra en la vista
+                        de series.</li>
+                </ul>
+
+                <p>
+                    El buscador de series completas es como un "interruptor", cuando el usuario lo selecciona,
+                    busca todas las series que no estén completas y les aplica un "display: none":
+                </p>
+                <img src="../img/manual/show_complete.png" alt="Mostrar series completas activado" loading="lazy" />
+                <p>
+                    El buscador de series por nombre funciona exactamente igual al de películas.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Añadir una serie</h4>
+                <img src="../img/manual/add_serie.png" alt="Formulario de añadir serie" loading="lazy" />
+                <p>
+                    La estructura de añadir una serie es muy similar a la de añadir una película, se diferencian
+                    en que:
+                </p>
+                <ul class="field-list">
+                    <li>El campo del director ha sido suprimido.</li>
+                    <li>El campo de la sinopsis ha sido suprimido.</li>
+                    <li>Se añade un campo para indicar el número de temporadas de la serie.</li>
+                    <li>Se añade un campo para especificar si la serie está completa (ejemplo: existen 2
+                        temporadas pero hay 5 prometidas, no estaría completa).</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h4>Ver detalles de una serie</h4>
+                <img src="../img/manual/show_serie.png" alt="Vista de detalles de serie" loading="lazy" />
+                <p>
+                    Sigue el mismo estilo visual que el "ver detalles" de una película, la única diferencia está en
+                    los campos mencionados anteriormente.
+                </p>
+
+                <p>
+                    El comportamiento también es igual, un aviso de confirmación si se va a borrar y un enlace
+                    al formulario de edición.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Editar una serie</h4>
+                <img src="../img/manual/edit_serie.png" alt="Formulario de editar serie" loading="lazy" />
+                <p>
+                    El comportamiento es igual al de películas:
+                </p>
+                <ul class="field-list">
+                    <li>Se rellenan los campos con los valores ya existentes.</li>
+                    <li>Se realizan varias validaciones.</li>
+                    <li>Si no hay ningún problema, mensaje que indica que todo ha salido bien y la
+                        aplicación regresa a la vista de series.</li>
+                </ul>
+                <p>
+                    Para un usuario con una cuenta recién creada, al igual que en la vista de películas, aparecería
+                    una invitación a añadir una serie. Esto sucede si no tienes series/películas
+                    independientemente del tiempo que lleve existiendo la cuenta.
+                </p>
+            </div>
+
+            <div class="section">
+                <h4>Gestión del perfil del usuario</h4>
+                <p>
+                    A la configuración del perfil se puede acceder:
+                </p>
+                <ul class="field-list">
+                    <li>Pulsando la foto de perfil que aparece en la esquina superior izquierda en las vistas
+                        generales.</li>
+                    <li>Pulsando el enlace que reza "mi perfil" que aparece en la esquina inferior izquierda
+                        en las vistas generales.</li>
+                </ul>
+                <img src="../img/manual/show_profile.png" alt="Vista del perfil de usuario" loading="lazy" />
+
+                <p>
+                    En esta vista hay varias cosas a destacar:
+                </p>
+                <ul class="field-list">
+                    <li>Posibilidad de cambiar datos de la cuenta.</li>
+                    <li>Botones para volver atrás, cerrar sesión o borrar la cuenta.</li>
+                    <li>Especificación de la página "Flaticon", que cuenta con algunos iconos que se han
+                        usado en esta aplicación.</li>
+                </ul>
+
+                <h5 class="yellow">Configuración del perfil</h5>
+                <p>
+                    En la configuración del perfil el usuario puede realizar 3 acciones:
+                </p>
+                <ul class="field-list">
+                    <li>Cambiar su foto de perfil.</li>
+                    <li>Cambiar su nombre de usuario.</li>
+                    <li>Cambiar su correo electrónico.</li>
+                </ul>
+
+                <p>
+                    A excepción del cambio de foto de perfil, los otros cambios pedirán introducir la contraseña
+                    actual del usuario por motivos de seguridad: Se necesita el nombre de usuario para iniciar
+                    sesión y el correo electrónico para restablecer la contraseña y recibir el código de la
+                    verificación en 2 pasos.
+                </p>
+
+                <h5 class="yellow">Seguridad</h5>
+                <p>
+                    En el apartado de seguridad el usuario puede realizar 2 acciones:
+                </p>
+                <ul class="field-list">
+                    <li>Cambiar su contraseña (tendrá que introducir su contraseña actual).</li>
+                    <li>Activar/Desactivar la verificación en 2 pasos.</li>
+                </ul>
+
+                <h5>¿Cómo funciona la verificación en 2 pasos?</h5>
+                <p>
+                    Si el usuario tiene activada la verificación en 2 pasos, al momento de iniciar sesión ocurrirá
+                    lo siguiente:
+                </p>
+                <ul class="field-list">
+                    <li>Por un lado, se generará de forma aleatoria un código de 6 dígitos con una duración
+                        de 5 minutos que se le enviará por correo.</li>
+                    <li>Por otro lado, se le llevará a una página "diferente" para introducir dicho código.</li>
+                </ul>
+                <img src="../img/manual/two_factor.png" alt="Verificación en 2 pasos" loading="lazy" />
+                <p>
+                    El funcionamiento de esta parte es sencillo:
+                </p>
+                <ul class="field-list">
+                    <li>
+                        El usuario introduce el código que ha recibido.
+                        <ul>
+                            <li>Si el código es correcto, inicia sesión.</li>
+                            <li>Si el código es incorrecto, sale un mensaje de error específico y no inicia
+                                sesión.</li>
+                            <li>Si el código ha caducado, sale un mensaje de error específico y no inicia
+                                sesión.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p>
+                    En caso de que el código haya caducado, será necesario introducir de nuevo el nombre de
+                    usuario y la contraseña.
+                </p>
+
+                <p>
+                    Considero que 5 minutos es el tiempo ideal para que un usuario tenga margen a introducirlo
+                    por si el correo tardara en llegar, y por otro lado evitar que ese código sea válido por mucho
+                    tiempo para dificultar accesos ilícitos.
+                </p>
+
+                <h5 class="yellow">Resto de la vista mi perfil</h5>
+                <p>
+                    Un botón para volver a la biblioteca, redirige a la vista de películas.
+                </p>
+
+                <p>
+                    Un botón para borrar cuenta, muestra una alerta de confirmación indicando que no hay
+                    marcha atrás si se procede. Debido a varios factores no se ha implementado, pero existe la
+                    intención de implementar una confirmación más robusta para borrar una cuenta, incluyendo
+                    el escribir la contraseña del usuario como uno de los pasos.
+                </p>
+
+                <p>
+                    Un botón para cerrar sesión, también es posible hacerlo desde las vistas generales.
+                </p>
+
+                <p>
+                    Especificación de que se han usado iconos de la página "Flaticon" en esta aplicación.
+                </p>
+            </div>
+        </div>
+
+        <div class="bibliography">
+            <h3>Bibliografía</h3>
+            <p>
+                <strong>PHPMailer:</strong><br>
+                <a href="https://github.com/PHPMailer/PHPMailer"
+                    target="_blank">https://github.com/PHPMailer/PHPMailer</a>
+            </p>
+
+            <p>
+                <strong>Información legal sobre la copia privada:</strong><br>
+                <a href="https://www.cultura.gob.es/cultura/propiedadintelectual/limite-legal-copia-privada/regulacion.html"
+                    target="_blank">
+                    https://www.cultura.gob.es/cultura/propiedadintelectual/limite-legal-copia-privada/regulacion.html
+                </a><br>
+                <a href="https://www.cultura.gob.es/cultura/propiedadintelectual/la-propiedad-intelectual/preguntas-mas-frecuentes/copia-privada.html"
+                    target="_blank">
+                    https://www.cultura.gob.es/cultura/propiedadintelectual/la-propiedad-intelectual/preguntas-mas-frecuentes/copia-privada.html
+                </a>
+            </p>
+
+            <p>
+                <strong>Plex media server:</strong><br>
+                <a href="https://www.plex.tv/es/media-server-downloads/?cat=computer&plat=windows" target="_blank">
+                    https://www.plex.tv/es/media-server-downloads/?cat=computer&plat=windows
+                </a>
+            </p>
+
+            <p>
+                <strong>Jellyfin:</strong><br>
+                <a href="https://jellyfin.org/downloads/server" target="_blank">
+                    https://jellyfin.org/downloads/server
+                </a>
+            </p>
+
+            <p>
+                <strong>Datos de las películas y series (a excepción del tamaño, calidad y ubicación de la copia de
+                    seguridad):</strong><br>
+                <a href="https://www.imdb.com/es-es/" target="_blank">
+                    https://www.imdb.com/es-es/
+                </a>
+            </p>
+
+            <p>
+                <strong>Flaticon:</strong><br>
+                <a href="https://www.flaticon.es/" target="_blank">
+                    https://www.flaticon.es/
+                </a>
+            </p>
+
+            <p>
+                <strong>Plantilla de la vista de la autenticación en 2 pasos (el código fue adaptado a las necesidades
+                    de la
+                    aplicación):</strong><br>
+                <a href="https://www.bootdey.com/snippets/view/2FA-Security-form" target="_blank">
+                    https://www.bootdey.com/snippets/view/2FA-Security-form
+                </a>
+            </p>
+
+            <p>
+                <strong>Plantilla de la vista del perfil de usuario (el código fue adaptado a las necesidades de la
+                    aplicación):</strong><br>
+                <a href="https://bbbootstrap.com/snippets/bootstrap-5-myprofile-90806631"
+                    target="_blank">https://bbbootstrap.com/snippets/bootstrap-5-myprofile-90806631</a>
+            </p>
+
+            <p>
+                <strong>Plantilla de la vista de recuperación de contraseña (el código fue adaptado a las
+                    necesidades de la aplicación):</strong><br>
+                <a href="https://bootstrapbrain.com/component/bootstrap-free-forgot-password-form-template/"
+                    target="_blank">https://bootstrapbrain.com/component/bootstrap-free-forgot-password-form-template/</a>
+            </p>
+
+            <p>
+                <strong>Enlace a la web del proyecto:</strong><br>
+                <a href="https://alockgoy.ddns.net/proyecto_final_2daw/index.html"
+                    target="_blank">https://alockgoy.ddns.net/proyecto_final_2daw/index.html</a>
+            </p>
+
+            <p>
+                <strong>Enlace al repositorio del proyecto:</strong><br>
+                <a href="https://github.com/alockgoy/proyecto_final_2daw"
+                    target="_blank">https://github.com/alockgoy/proyecto_final_2daw</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

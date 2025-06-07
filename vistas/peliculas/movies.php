@@ -139,7 +139,7 @@ $movies = $movieController->getMoviesByUserId($userId);
                             <div class="card pelicula">
                                 <div class="card-img-container">
                                     <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>"
-                                        alt="<?php echo htmlspecialchars($movie['name']); ?>" />
+                                        alt="<?php echo htmlspecialchars($movie['name']); ?>" loading="lazy"/>
                                 </div>
                                 <div class="card-body text-center">
                                     <h5 class="card-title" title="<?php echo htmlspecialchars($movie['name']); ?>">

@@ -49,7 +49,7 @@ if (isset($_POST['update_username'])) {
     } elseif (!$userController->checkPassword($username, $passwordForUsername)) {
         $error = ("Contraseña incorrecta.");
     } elseif ($newUsername === $username) {
-        echo ("El nuevo nombre debe ser diferente al actual.");
+        $error = ("El nuevo nombre debe ser diferente al actual.");
     } else {
         $result = $userController->updateUsername($userData['id_user'], $newUsername);
 
