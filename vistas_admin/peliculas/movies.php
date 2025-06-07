@@ -71,7 +71,7 @@ $movies = $movieController->index();
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid px-2">
                 <!-- Foto de perfil del usuario -->
-                <a class="navbar-brand" href="../usuarios/my_profile.php">
+                <a class="navbar-brand" href="">
                     <img src="<?php echo !empty($profilePicture) ? '../../' . htmlspecialchars($profilePicture) : '../../img/avatares_usuarios/default.jpg'; ?>"
                         width="50" height="50" class="rounded-circle" alt="Foto de perfil">
                 </a>
