@@ -337,7 +337,7 @@ if (isset($_POST["remove_admin"])) {
                     </a>
 
                     <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>"
-                        onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')"
+                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta cuenta? Esta acción no se puede deshacer.')"
                         style="text-decoration: none;">
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
                     </a>
