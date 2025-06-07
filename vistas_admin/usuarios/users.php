@@ -102,8 +102,7 @@ $usuarios = $userController->index();
 
     <main>
         <div class="container-fluid px-4 mb-5 mt-2">
-            <div
-                class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4 g-4 justify-content-center">
+            <div class="table-responsive">
                 <table class="table table-striped table-dark text-center align-middle">
                     <thead>
                         <tr>
