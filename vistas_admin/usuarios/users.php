@@ -73,7 +73,7 @@ $usuarios = $userController->index();
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="">Ir a películas</a>
+                            <a class="nav-link" href="../peliculas/movies.php">Ir a películas</a>
                         </li>
 
                         <li class="nav-item me-2">

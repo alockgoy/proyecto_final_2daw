@@ -19,7 +19,6 @@ class MovieController
     {
         $movies = $this->movieModel->getAllMovies();
         return $movies;
-        //include __DIR__ . '/../views/movies.php';
     }
 
     // Añadir una película
