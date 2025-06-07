@@ -21,11 +21,6 @@ require_once '../../php/usuarios/User.php';
 // Crear instancia del controlador
 $userController = new UserController();
 
-if (!isset($_SESSION['email']) && isset($userData['email'])) {
-    // Si no existe en la sesión pero sí en los datos del usuario, recuperarlo
-    $_SESSION['email'] = $userData['email'];
-}
-
 // Obtener datos del usuario
 $username = $_SESSION['username'];
 $email = $_SESSION['email'];
@@ -57,6 +52,9 @@ if (isset($_POST['update_username'])) {
 
         if ($result) {
             $success = ("Nombre de usuario actualizado correctamente, recargando...");
+            // Actualizar
+            $userData['username'] = $newUsername;
+            $targetUsername = $newUsername;
             //header("Location: my_profile.php");
             //exit();
         } else {
@@ -76,13 +74,12 @@ if (isset($_POST['update_email'])) {
         $error = ("Debes escribir tu contraseña para realizar cambios.");
     } elseif (!$userController->checkPassword($username, $passwordForEmail)) {
         $error = ("Contraseña incorrecta.");
-    } elseif ($newEmail === $email) {
+    } elseif ($newEmail === $userData['email']) {
         $error = ("El nuevo correo debe ser diferente al actual.");
     } else {
         $result = $userController->updateEmail($userData['id_user'], $newEmail);
 
         if ($result) {
-            $_SESSION['email'] = $newEmail;
             $success = ("Correo electrónico actualizado correctamente, recargando...");
             //header("Location: my_profile.php");
             //exit();
@@ -137,8 +134,8 @@ if (isset($_POST["update_pic"])) {
         $message = $result['message'];
         $userData['profile'] = $result['profile'];
 
-        // Opcional: refrescar la página para mostrar la nueva imagen
-        header("Location: my_profile.php?updated=profile");
+        // Refrescar la página para mostrar la nueva imagen
+        header("Location: show_user.php?username=" . urlencode($targetUsername) . "&updated=profile");
         exit();
     } else {
         $error = $result['message'];
@@ -148,10 +145,10 @@ if (isset($_POST["update_pic"])) {
 // Procesar solicitud para ser admin
 if (isset($_POST['ask_for_admin'])) {
     try {
-        $result = $userController->askForAdmin($username);
+        $result = $userController->askForAdmin($targetUsername);
         if ($result) {
             $success = "Solicitud para ser admin enviada correctamente, recargando...";
-            $userRol = "solicita"; // Actualizar el rol en la sesión
+            $userData['rol'] = "solicita"; // Actualizar el rol
         } else {
             $error = "No se pudo enviar la solicitud para ser admin.";
         }
@@ -192,7 +189,8 @@ if (isset($_POST['ask_for_admin'])) {
                 <?php endif; ?>
 
                 <?php if (!empty($success)): ?>
-                    <div class="alert alert-success" role="alert" data-redirect="./movies.php">
+                    <div class="alert alert-success" role="alert"
+                        data-redirect="show_user.php?username=<?php echo urlencode($targetUsername); ?>">
                         <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
                     </div>
                 <?php endif; ?>
@@ -224,7 +222,9 @@ if (isset($_POST['ask_for_admin'])) {
                         <!-- Nombre de usuario -->
                         <div class="profile-section">
                             <h5>Nombre de usuario</h5>
-                            <p>Nombre de usuario actual: <strong><?php echo htmlspecialchars($userData['username']); ?></strong></p>
+                            <p>Nombre de usuario actual:
+                                <strong><?php echo htmlspecialchars($userData['username']); ?></strong>
+                            </p>
 
                             <form method="POST">
                                 <div class="form-group">
@@ -407,7 +407,7 @@ if (isset($_POST['ask_for_admin'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Enlace al Javascript de mi perfil -->
-    <script src="../../js/usuarios/my_profile.js"></script>
+    <script src="../../js/usuarios/show_user.js"></script>
 
     <!-- Enlace al Javascript de ver contraseña -->
     <script src="../../js/usuarios/show_password_my_profile.js"></script>
