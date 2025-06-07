@@ -3,8 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../php/peliculas/MovieController.php';
-require_once '../../php/peliculas/Movie.php';
+require_once '../../php/series/SerieController.php';
+require_once '../../php/series/Serie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 
@@ -22,8 +22,10 @@ if (!isset($_SESSION['username'])) {
 // Crear instancia del controlador de usuarios
 $userController = new UserController();
 
+$username = $_SESSION['username'];
+$userRol = $userController->getUserRol($username);
+
 // Comprobar que el usuario sea 'root'
-$userRol = $userController->getUserRol($_SESSION['username']);
 if ($userRol != "root") {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();
@@ -43,10 +45,10 @@ if (!$userId) {
 }
 
 // Crear instancia del controlador
-$movieController = new MovieController();
+$controller = new SerieController();
 
-// Obtener las películas vinculadas al usuario actual
-$movies = $movieController->index();
+// Obtener las series vinculadas al usuario actual
+$series = $controller->index();
 ?>
 
 <!DOCTYPE html>
@@ -55,14 +57,14 @@ $movies = $movieController->index();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Películas</title>
+    <title>Series</title>
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../../css/peliculas/movies.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/series/series.css" type="text/css" rel="stylesheet" />
 
     <!--Para iconos-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="../../img/iconos_navegador/pelicula.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../../img/iconos_navegador/serie.png" type="image/x-icon">
 </head>
 
 <body>
@@ -84,37 +86,30 @@ $movies = $movieController->index();
                 <!--Elementos de la barra de navegación-->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-                        <!-- Botón para alternar -->
-                        <li class="nav-item me-3 d-flex align-items-center">
-                            <button class="btn btn-outline-light btn-sm" id="toggle-search">
-                                Buscar por director
-                            </button>
-                        </li>
 
                         <!--Barra de búsqueda-->
-                        <li class="nav-item" id="search-by-name">
+                        <li class="nav-item me-1">
                             <div class="input-group">
-                                <input type="search" id="buscador" placeholder="Busca una película..."
+                                <input type="search" id="buscador" placeholder="Busca una serie..."
                                     class="form-control" />
-                                <button type="button" class="btn btn-light">
-                                    <i class="fa-solid fa-film"></i>
+                                <button type="button" class="btn btn-light" data-mdb-ripple-init>
+                                    <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </li>
 
-                        <!--Barra de búsqueda de directores-->
-                        <li class="nav-item d-none" id="search-by-director">
-                            <div class="input-group">
-                                <input type="search" id="buscador_directores" placeholder="Busca por un director..."
-                                    class="form-control" />
-                                <button type="button" class="btn btn-light" data-mdb-ripple-init>
-                                    <i class="fa-solid fa-user-tie"></i>
-                                </button>
+                        <!--Mostrar solo las series completas-->
+                        <li class="nav-item">
+                            <div>
+                                <input hidden type="checkbox" onchange="showCompleteSeries()" id="completeSeries" />
+                                <label class="form-check-label nav-link" style="cursor: pointer;" for="completeSeries">
+                                    Mostrar series completas
+                                </label>
                             </div>
                         </li>
                     </ul>
                     <span class="navbar-text text-light">
-                        Películas
+                        Series
                     </span>
                 </div>
             </div>
@@ -125,26 +120,27 @@ $movies = $movieController->index();
         <div class="container-fluid px-4 mb-5 mt-2">
             <div
                 class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-4 g-4 justify-content-center">
-                <!-- Comprobar que hay al menos una película -->
-                <?php if (empty($movies)): ?>
+                <!-- Comprobar que hay al menos una serie -->
+                <?php if (empty($series)): ?>
                     <div class="col-12 text-center mt-5">
-                        <p class="lead">No hay películas disponibles.</p>
+                        <p class="lead">No hay series disponibles.</p>
+                        <a href="add_serie.php" class="btn btn-primary mt-3">Añadir Nueva Serie</a>
                     </div>
                 <?php else: ?>
-                    <!-- Mostrar películas en tarjetas -->
-                    <?php foreach ($movies as $movie): ?>
+                    <!-- Mostrar series en tarjetas -->
+                    <?php foreach ($series as $serie): ?>
                         <div class="col">
-                            <div class="card pelicula">
+                            <div class="card serie">
                                 <div class="card-img-container">
-                                    <img src="../../<?php echo htmlspecialchars($movie['poster']); ?>"
-                                        alt="<?php echo htmlspecialchars($movie['name']); ?>" />
+                                    <img src="../../<?php echo htmlspecialchars($serie['poster']); ?>"
+                                        alt="<?php echo htmlspecialchars($serie['name']); ?>" />
                                 </div>
                                 <div class="card-body text-center">
-                                    <h5 class="card-title" title="<?php echo htmlspecialchars($movie['name']); ?>">
-                                        <?php echo htmlspecialchars($movie['name']); ?>
+                                    <h5 class="card-title" title="<?php echo htmlspecialchars($serie['name']); ?>">
+                                        <?php echo htmlspecialchars($serie['name']); ?>
                                     </h5>
-                                    <p class="d-none director"><?php echo htmlspecialchars($movie['director']); ?></p>
-                                    <a href="./show_movie.php?id=<?php echo urlencode($movie['id_movie']); ?>"
+                                    <p class="d-none complete"><?php echo htmlspecialchars($serie['complete']); ?></p>
+                                    <a href="./show_serie.php?id=<?php echo urlencode($serie['id_serie']); ?>"
                                         class="btn btn-primary mt-auto">Detalles</a>
                                 </div>
                             </div>
@@ -188,13 +184,10 @@ $movies = $movieController->index();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Enlace al archivo JavaScript del buscador -->
-    <script src="../../js/peliculas/search_movies.js"></script>
+    <script src="../../js/series/search_series.js"></script>
 
-    <!-- Enlace al archivo JavaScript del buscador de directores -->
-    <script src="../../js/peliculas/search_director.js"></script>
-
-    <!-- Enlace al archivo JavaScript de alternar los buscadores -->
-    <script src="../../js/peliculas/alternate_search-bar.js"></script>
+    <!-- Enlace al archivo JavaScript de solo mostrar series completas -->
+    <script src="../../js/series/complete_series.js"></script>
 </body>
 
 </html>

@@ -77,7 +77,7 @@ $usuarios = $userController->index();
                         </li>
 
                         <li class="nav-item me-2">
-                            <a class="nav-link" href="">Ir a series</a>
+                            <a class="nav-link" href="../series/series.php">Ir a series</a>
                         </li>
 
                         <!--Barra de búsqueda-->
