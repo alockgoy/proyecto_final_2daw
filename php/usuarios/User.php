@@ -272,5 +272,12 @@ class User
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ? $result['rol'] : null;
     }  
+
+    // Solicitar ser admin
+    public function askForAdmin($username)
+    {
+        $stmt = $this->pdo->prepare("UPDATE Users SET rol='solicita' WHERE username = ?");
+        return $stmt->execute([$username]);
+    } 
 }
 ?>

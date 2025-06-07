@@ -355,5 +355,11 @@ class UserController
     {
         return $this->userModel->getUserRol($username);
     }
+
+    // Solicitar ser admin
+    public function askForAdmin($username)
+    {
+        return $this->userModel->askForAdmin($username);
+    }
 }
 ?>

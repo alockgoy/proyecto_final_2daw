@@ -143,6 +143,21 @@ if (isset($_POST["update_pic"])) {
         $error = $result['message'];
     }
 }
+
+// Procesar solicitud para ser admin
+if (isset($_POST['ask_for_admin'])) {
+    try {
+        $result = $userController->askForAdmin($username);
+        if ($result) {
+            $success = "Solicitud para ser admin enviada correctamente, recargando...";
+            $userRol = "solicita"; // Actualizar el rol en la sesión
+        } else {
+            $error = "No se pudo enviar la solicitud para ser admin.";
+        }
+    } catch (Exception $e) {
+        $error = "Error al procesar la solicitud: " . $e->getMessage();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -360,21 +375,21 @@ if (isset($_POST["update_pic"])) {
 
                     <?php
                     // Comprobar el rol del usuario y mostrar diferentes botones dependiendo del caso
-                    if ($userRol != "root" && $userRol != "solicita") {
-                        echo '<a class="btn btn-info" href="" style="text-decoration: none;">
-                        <i class="fas fa-user-shield"></i> Solicitar ser admin
-                    </a>';
-                    } else if($userRol == "solicita"){
-                        echo '<button type="button" class="btn btn-light" href="" style="text-decoration: none;">
-                        <i class="fas fa-user-shield"></i> Solicitud pendiente
-                    </button>';
-                    } else {
-                        echo '<a class="btn btn-info" href="../../vistas_admin/usuarios/users.php" style="text-decoration: none;">
-                        <i class="fas fa-user-shield"></i> Modo admin
-                    </a>';
-                    }
-
-                    ?>
+                    if ($userRol != "root" && $userRol != "solicita"): ?>
+                        <form method="POST" class="d-inline">
+                            <button type="submit" name="ask_for_admin" class="btn btn-info" style="text-decoration: none;">
+                                <i class="fas fa-user-shield"></i> Solicitar ser admin
+                            </button>
+                        </form>
+                    <?php elseif ($userRol == "solicita"): ?>
+                        <button type="button" class="btn btn-light" style="text-decoration: none;" disabled>
+                            <i class="fas fa-user-shield"></i> Solicitud pendiente
+                        </button>
+                    <?php else: ?>
+                        <a class="btn btn-info" href="../../vistas_admin/usuarios/users.php" style="text-decoration: none;">
+                            <i class="fas fa-user-shield"></i> Modo admin
+                        </a>
+                    <?php endif; ?>
                 </div>
             </div>
 
