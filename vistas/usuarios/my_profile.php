@@ -363,9 +363,10 @@ if (isset($_POST['ask_for_admin'])) {
                         <i class="fas fa-arrow-left"></i> Volver a la biblioteca
                     </a>
 
-                    <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>"
-                        onclick="return confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')"
-                        style="text-decoration: none;">
+                    <a class="btn btn-danger" href="#"
+                        data-confirm="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
+                        data-url="delete_user.php?id=<?php echo $userData['id_user']; ?>"
+                        data-confirm-text="Borrar cuenta" style="text-decoration: none;">
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
                     </a>
 
@@ -424,6 +425,9 @@ if (isset($_POST['ask_for_admin'])) {
 
     <!-- Enlace al Javascript de ver contraseña -->
     <script src="../../js/usuarios/show_password_my_profile.js"></script>
+
+    <!-- Enlace al JS del modal de bootstrap -->
+    <script src="../../js/confirm_modal.js"></script>
 </body>
 
 </html>
