@@ -119,7 +119,7 @@ $usuarios = $userController->index();
                     <!-- Mostrar a todos los usuarios -->
                     <tbody>
                         <?php foreach ($usuarios as $usuario): ?>
-                            <tr>
+                            <tr class="tr">
                                 <th>
                                     <?php echo htmlspecialchars($usuario['id_user']); ?>
                                 </th>
@@ -189,6 +189,9 @@ $usuarios = $userController->index();
 
     <!-- Enlace al archivo JavaScript de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Enlace al JS de buscar usuarios -->
+    <script src="../../js/usuarios/search_users.js"></script>
 </body>
 
 </html>
