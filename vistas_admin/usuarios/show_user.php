@@ -140,7 +140,7 @@ if (isset($_POST["update_pic"])) {
 // Procesar el promover a admin
 if (isset($_POST["turn_to_admin"])) {
     $result = $userController->turnToAdmin($userData['username']);
-    
+
     if ($result) {
         $success = "Usuario promovido a administrador correctamente, recargando...";
         $userData['rol'] = 'root';
@@ -152,7 +152,7 @@ if (isset($_POST["turn_to_admin"])) {
 // Procesar el dejar de ser admin
 if (isset($_POST["remove_admin"])) {
     $result = $userController->turnToNormal($userData['username']);
-    
+
     if ($result) {
         $success = "Usuario nerfeado correctamente, recargando...";
         $userData['rol'] = 'normal';
@@ -336,9 +336,10 @@ if (isset($_POST["remove_admin"])) {
                         <i class="fas fa-arrow-left"></i> Volver atrás
                     </a>
 
-                    <a class="btn btn-danger" href="delete_user.php?id=<?php echo $userData['id_user']; ?>"
-                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta cuenta? Esta acción no se puede deshacer.')"
-                        style="text-decoration: none;">
+                    <a class="btn btn-danger" href="#"
+                        data-confirm="¿Estás seguro de que deseas eliminar esta cuenta? Esta acción no se puede deshacer."
+                        data-url="delete_user.php?id=<?php echo $userData['id_user']; ?>"
+                        data-confirm-text="Borrar cuenta" style="text-decoration: none;">
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
                     </a>
 
@@ -350,13 +351,14 @@ if (isset($_POST["remove_admin"])) {
                                 <i class="fas fa-user-shield"></i> Promover a admin
                             </button>
                         </form>
-                        <?php elseif ($userData['rol'] == "root"): ?>
+                    <?php elseif ($userData['rol'] == "root"): ?>
                         <form method="POST" class="d-inline">
-                            <button type="submit" name="remove_admin" class="btn btn-warning" style="text-decoration: none;">
+                            <button type="submit" name="remove_admin" class="btn btn-warning"
+                                style="text-decoration: none;">
                                 <i class="fas fa-user-minus"></i> Quitar rol de admin
                             </button>
                         </form>
-                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -391,6 +393,9 @@ if (isset($_POST["remove_admin"])) {
 
     <!-- Enlace al Javascript de ver contraseña -->
     <script src="../../js/usuarios/show_password_my_profile.js"></script>
+
+    <!-- Enlace al JS del modal de bootstrap -->
+    <script src="../../js/confirm_modal.js"></script>
 </body>
 
 </html>

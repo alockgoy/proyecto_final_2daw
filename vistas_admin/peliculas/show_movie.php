@@ -148,8 +148,8 @@ if (!$movie) {
     <!-- Botones de borrar película y volver atrás -->
     <footer class="bg-dark text-white text-center py-3 fixed-bottom">
         <div class="container footer-container d-flex justify-content-center align-items-center">
-            <a href="delete_movie.php?id=<?php echo $movie['id_movie']; ?>"
-                onclick="return confirm('¿Estás seguro de que deseas eliminar esta película?')"
+            <a href="#" data-confirm="¿Estás seguro de que deseas eliminar esta película?"
+                data-url="delete_movie.php?id=<?php echo $movie['id_movie']; ?>" data-confirm-text="Borrar Película"
                 class="btn btn-danger me-2">Borrar Película</a>
             <a href="movies.php" class="btn btn-secondary">Volver Atrás</a>
         </div>
@@ -159,6 +159,9 @@ if (!$movie) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Iconos de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- Enlace al JS del modal de bootstrap -->
+    <script src="../../js/confirm_modal.js"></script>
 </body>
 
 </html>

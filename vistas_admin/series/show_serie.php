@@ -43,7 +43,7 @@ $id = $_GET['id'];
 $serie = $controller->getSerie($id);
 
 // Si la serie no existe, mostrar error
-if (!$serie) { 
+if (!$serie) {
     die('Error: La serie solicitada no existe.');
 }
 ?>
@@ -133,14 +133,14 @@ if (!$serie) {
 
                 <!-- Sinopsis -->
                 <?php if (isset($serie['synopsis']) && !empty($serie['synopsis'])): ?>
-                <div class="card mb-4">
-                    <div class="card-header bg-secondary text-white">
-                        <h3 class="card-title h5 mb-0">Sinopsis</h3>
+                    <div class="card mb-4">
+                        <div class="card-header bg-secondary text-white">
+                            <h3 class="card-title h5 mb-0">Sinopsis</h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><?php echo htmlspecialchars($serie['synopsis']); ?></p>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p class="card-text"><?php echo htmlspecialchars($serie['synopsis']); ?></p>
-                    </div>
-                </div>
                 <?php endif; ?>
 
                 <!-- Botón para ir a la pantalla de edición -->
@@ -156,8 +156,8 @@ if (!$serie) {
     <!-- Botones de borrar serie y volver atrás -->
     <footer class="bg-dark text-white text-center py-3 fixed-bottom">
         <div class="container footer-container d-flex justify-content-center align-items-center">
-            <a href="delete_serie.php?id=<?php echo $serie['id_serie']; ?>"
-                onclick="return confirm('¿Estás seguro de que deseas eliminar esta serie?')"
+            <a href="#" data-confirm="¿Estás seguro de que deseas eliminar esta serie?"
+                data-url="delete_serie.php?id=<?php echo $serie['id_serie']; ?>" data-confirm-text="Borrar Serie"
                 class="btn btn-danger me-2">Borrar Serie</a>
             <a href="series.php" class="btn btn-secondary">Volver Atrás</a>
         </div>
@@ -167,6 +167,9 @@ if (!$serie) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Iconos de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
+    <!-- Enlace al JS del modal de bootstrap -->
+    <script src="../../js/confirm_modal.js"></script>
 </body>
 
 </html>
