@@ -28,9 +28,18 @@ $targetUsername = urldecode($_GET['username']);
 $userData = $userController->getUserByUsername($targetUsername);
 $userRol = $userController->getUserRol($username);
 
+// Comprobar si un admin se está editando a sí mismo
+$isEditingSelf = ($targetUsername === $username);
+
 // Comprobar que el usuario sea 'root'
-if ($userRol != "root") {
+if ($userRol != "root" && !$isEditingSelf) {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    exit();
+} elseif ($userRol != "root" && $isEditingSelf) {
+    session_start();
+    session_unset();
+    session_destroy();
+    header("Location: ../../vistas/usuarios/logout.php");
     exit();
 }
 
