@@ -69,7 +69,7 @@ class SerieController
 
             // Convertir los valores a los tipos correctos
             $size = (isset($_POST["size"]) && is_numeric($_POST["size"])) ? (float) $_POST["size"] : 0;
-            $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (int) $_POST["rating"] : null;
+            $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (float) $_POST["rating"] : null;
 
             // Crear la serie con la ruta de la imagen - ajustado a la estructura real de la tabla
             $result = $this->serieModel->createSerie(
@@ -170,7 +170,7 @@ class SerieController
 
             // Convertir los valores a los tipos correctos
             $size = (isset($_POST["size"]) && is_numeric($_POST["size"])) ? (float) $_POST["size"] : 0;
-            $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (int) $_POST["rating"] : null;
+            $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (float) $_POST["rating"] : null;
 
             // Actualizar la serie en la base de datos
             $result = $this->serieModel->updateSerie(
@@ -344,16 +344,8 @@ class SerieController
                 return ['valid' => false, 'message' => 'La calificación debe ser un número'];
             }
 
-            // Verificar si contiene un punto decimal
-            if (strpos($rating, '.') !== false) {
-                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
-            }
-
-            // Convertir a entero para la verificación de rango
-            $intVal = (int) $rating;
-
             // Comprobar rango 1-10
-            if ($intVal < 1 || $intVal > 10) {
+            if ($rating < 1.0 || $rating > 10.0) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
         }
@@ -439,16 +431,8 @@ class SerieController
                 return ['valid' => false, 'message' => 'La calificación debe ser un número'];
             }
 
-            // Verificar si contiene un punto decimal
-            if (strpos($rating, '.') !== false) {
-                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
-            }
-
-            // Convertir a entero para la verificación de rango
-            $intVal = (int) $rating;
-
             // Comprobar rango 1-10
-            if ($intVal < 1 || $intVal > 10) {
+            if ($rating < 1.0 || $rating > 10.0) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
         }

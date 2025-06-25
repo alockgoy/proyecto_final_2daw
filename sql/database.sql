@@ -35,7 +35,7 @@ CREATE TABLE Movies(
     )),
     backup VARCHAR(200),
     server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
-    rating INT
+    rating FLOAT
 );
 
 
@@ -60,7 +60,7 @@ CREATE TABLE Series(
     backup VARCHAR(200),
     size FLOAT NOT NULL,
     server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
-    rating INT
+    rating FLOAT
 );
 
 
