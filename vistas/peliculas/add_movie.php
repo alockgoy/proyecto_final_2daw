@@ -210,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-star"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="rating" name="rating"
-                                        placeholder="Calificación" min="1" max="10" />
+                                        placeholder="Calificación" step="0.1" min="1" max="10" />
                                     <label for="rating">Calificación (1-10)</label>
                                 </div>
                             </div>

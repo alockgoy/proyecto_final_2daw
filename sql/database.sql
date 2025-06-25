@@ -111,5 +111,9 @@ SELECT * FROM Users_Series;
 ALTER TABLE Users MODIFY rol VARCHAR(10) DEFAULT 'normal' CHECK (rol IN ('root', 'normal', 'solicita'));
 ALTER TABLE Users MODIFY rol ENUM('root', 'normal', 'solicita') DEFAULT 'normal';
 
+/* Modificar el campo "rating" en las tablas ya existentes */
+ALTER TABLE Movies MODIFY rating FLOAT;
+ALTER TABLE Series MODIFY rating FLOAT;
+
 
 ---------------------------------------------------------------------------------------------

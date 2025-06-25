@@ -89,8 +89,8 @@ class MovieController
                 throw new Exception("Debes seleccionar una imagen para el póster.");
             }
 
-            // Parchear la valoración (sí, aquí también)
-            $rating = isset($_POST["rating"]) && $_POST["rating"] !== '' ? (int) $_POST["rating"] : null;
+            // Valoración
+            $rating = isset($_POST["rating"]) && $_POST["rating"] !== '' ? (float) $_POST["rating"] : null;
 
             // Crear la película con la ruta de la imagen
             $result = $this->movieModel->createMovie(
@@ -205,8 +205,8 @@ class MovieController
                 }
             }
 
-            // Parchear la puntuación (sí, aquí también)
-            $rating = isset($_POST["rating"]) && $_POST["rating"] !== '' ? (int) $_POST["rating"] : null;
+            // Puntuación
+            $rating = isset($_POST["rating"]) && $_POST["rating"] !== '' ? (float) $_POST["rating"] : null;
 
             // Actualizar la película en la base de datos
             $result = $this->movieModel->updateMovie(
@@ -374,16 +374,8 @@ class MovieController
                 return ['valid' => false, 'message' => 'La calificación debe ser un número'];
             }
 
-            // Verificar si contiene un punto decimal
-            if (strpos($rating, '.') !== false) {
-                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
-            }
-
-            // Convertir a entero para la verificación de rango
-            $intVal = (int) $rating;
-
             // Comprobar rango 1-10
-            if ($intVal < 1 || $intVal > 10) {
+            if ($rating < 1.0 || $rating > 10.0) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
         }
@@ -468,11 +460,6 @@ class MovieController
             // Comprobar que sea un número
             if (!is_numeric($rating)) {
                 return ['valid' => false, 'message' => 'La calificación debe ser un número'];
-            }
-
-            // Verificar si contiene un punto decimal
-            if (strpos($rating, '.') !== false) {
-                return ['valid' => false, 'message' => 'La calificación no puede ser decimal'];
             }
 
             // Convertir a entero para la verificación de rango
