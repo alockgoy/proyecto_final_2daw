@@ -59,6 +59,7 @@ $movies = $movieController->index();
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="../../css/peliculas/movies_admin.css" type="text/css" rel="stylesheet" />
+    <link href="../../css/go_top.css" type="text/css" rel="stylesheet" />
 
     <!--Para iconos-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -156,6 +157,13 @@ $movies = $movieController->index();
         </div>
     </main>
 
+    <!-- Botón para volver arriba -->
+    <div class="go-top-container">
+        <div class="go-top-button">
+            <i class="fas fa-chevron-up"></i>
+        </div>
+    </div>
+
     <footer class="mt-5 fixed-bottom">
         <!--Barra de navegación-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -196,6 +204,9 @@ $movies = $movieController->index();
 
     <!-- Enlace al archivo JavaScript de alternar los buscadores -->
     <script src="../../js/peliculas/alternate_search-bar.js"></script>
+
+    <!-- Enlace al archivo JavaScript de botón para volver al inicio -->
+    <script src="../../js/go_top.js"></script>
 </body>
 
 </html>
