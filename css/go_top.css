@@ -1,8 +1,8 @@
 /* Estilos del contenedor */
 .go-top-container{
     position: fixed;
-    bottom: 4rem;
-    right: 2rem;
+    bottom: 2rem;
+    right: 0rem;
     width: 6.6rem;
     height: 6.6rem;
     z-index: -1;
@@ -64,5 +64,19 @@
     100%{
         width: 6.6rem;
         height: 6.6rem;
+    }
+}
+
+/* Estilos móviles */
+@media (max-width: 576px) {
+    .go-top-container{
+        right: 2rem;
+        width: 2rem;
+        height: 2rem;
+        bottom: 5rem;
+    }
+
+    .go-top-button{
+        background: rgba(32, 113, 178, 0.7); /* Translúcido */
     }
 }
