@@ -1,0 +1,68 @@
+/* Estilos del contenedor */
+.go-top-container{
+    position: fixed;
+    bottom: 4rem;
+    right: 2rem;
+    width: 6.6rem;
+    height: 6.6rem;
+    z-index: -1;
+}
+
+/* Estilos del botón */
+.go-top-button{
+    width: 0rem;
+    height: 0rem;
+    background: #2071b2;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: .2s;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+}
+
+/* Estilos del icono */
+.go-top-button i{
+    position: absolute;
+    font-size: 1.7rem;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: white;
+    transition: .2s;
+}
+
+/* Estilos para el contenedor con JS */
+.show{
+    z-index: 10;
+}
+
+.show .go-top-button{
+    animation: popup .3s ease-in-out;
+    width: 6.6rem;
+    height: 6.6rem;
+    z-index: 11;
+}
+
+.show i{
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Animación */
+@keyframes popup{
+    0%{
+        width: 0rem;
+        height: 0rem;
+    }
+
+    50%{
+        width: 8rem;
+        height: 8rem;
+    }
+
+    100%{
+        width: 6.6rem;
+        height: 6.6rem;
+    }
+}
