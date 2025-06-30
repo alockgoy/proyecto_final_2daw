@@ -33,13 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($controller->addMovie()) {
             // Obtener el ID de la última película insertada
             $movieId = $controller->getLastInsertedId();
-            
+
             // Obtener el ID del usuario actual
             $userId = $userController->getUserIdByUsername($_SESSION['username']);
-            
+
             // Asociar la película con el usuario
             $result = $controller->associateMovieWithUser($movieId, $userId);
-            
+
             if ($result) {
                 $success = "Película añadida correctamente, redirigiendo...";
                 //header("Location: movies.php");
@@ -197,8 +197,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-hdd"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <input type="number" class="form-control" id="size" name="size" step="0.1" placeholder="Tamaño"
-                                        required />
+                                    <input type="number" class="form-control" id="size" name="size" step="0.1"
+                                        placeholder="Tamaño" required />
                                     <label for="size">Tamaño * (GB)</label>
                                 </div>
                             </div>
@@ -246,11 +246,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- Poster -->
                         <div class="col-12 form-group">
                             <label for="poster" class="form-label"><i class="fas fa-image me-2"></i>Poster *</label>
-                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*"
-                                required />
-                            <div class="invalid-feedback">
-                                Por favor, selecciona una imagen para el poster. *
+                            <div class="d-flex align-items-center">
+                                <input type="file" class="form-control" id="poster" name="poster" accept="image/*"
+                                    required />
+                                <div class="invalid-feedback">
+                                    Por favor, selecciona una imagen para el poster. *
+                                </div>
+                                <a href="#" id="clear" class="btn btn-outline-danger ms-2"
+                                    title="Eliminar foto de perfil">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
                             </div>
+
                         </div>
 
                         <!-- Sinopsis -->
@@ -281,6 +288,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al Javascript de añadir películas -->
     <script src="../../js/peliculas/add_movie.js"></script>
+
+    <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
+    <script src="../../js/peliculas/delete_input_file.js"></script>
 </body>
 
 </html>
