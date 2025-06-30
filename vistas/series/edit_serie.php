@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     } catch (Exception $e) {
-         $error = ("Error al actualizar la serie: " . $e->getMessage());
+        $error = ("Error al actualizar la serie: " . $e->getMessage());
     }
 }
 ?>
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Para iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="../../img/iconos_navegador/serie.png" type="image/x-icon" />
-    
+
     <title>Editar Serie - <?php echo htmlspecialchars($serie['name']); ?></title>
 </head>
 
@@ -89,7 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center mb-0"><i class="fas fa-edit me-2"></i>Editar Serie:
-                    <?php echo htmlspecialchars($serie['name']); ?></h2>
+                    <?php echo htmlspecialchars($serie['name']); ?>
+                </h2>
             </div>
             <div class="card-body">
                 <?php if (!empty($error)): ?>
@@ -112,7 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-tv"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="<?php echo htmlspecialchars($serie['name']); ?>" placeholder="Nombre" required />
+                                        value="<?php echo htmlspecialchars($serie['name']); ?>" placeholder="Nombre"
+                                        required />
                                     <label for="name">Nombre de la serie</label>
                                 </div>
                             </div>
@@ -176,8 +178,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="seasons" name="seasons" min="1"
-                                        value="<?php echo htmlspecialchars($serie['seasons']); ?>" placeholder="Temporadas"
-                                        required />
+                                        value="<?php echo htmlspecialchars($serie['seasons']); ?>"
+                                        placeholder="Temporadas" required />
                                     <label for="seasons">Temporadas</label>
                                 </div>
                             </div>
@@ -189,9 +191,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="complete" name="complete" required>
-                                        <option value="si" <?php echo ($serie['complete'] == 'si') ? 'selected' : ''; ?>>Sí
+                                        <option value="si" <?php echo ($serie['complete'] == 'si') ? 'selected' : ''; ?>>
+                                            Sí
                                         </option>
-                                        <option value="no" <?php echo ($serie['complete'] == 'no') ? 'selected' : ''; ?>>No
+                                        <option value="no" <?php echo ($serie['complete'] == 'no') ? 'selected' : ''; ?>>
+                                            No
                                         </option>
                                     </select>
                                     <label for="complete">¿Completa?</label>
@@ -296,7 +300,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     class="poster-preview img-fluid" height="400" width="200" />
                             </div>
                             <label for="poster" class="form-label">Cambiar póster (opcional):</label>
-                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*">
+                            <div class="d-flex align-items-center">
+                                <input type="file" class="form-control" id="poster" name="poster" accept="image/*">
+                                <a href="#" id="clear" class="btn btn-outline-danger ms-2"
+                                    title="Eliminar foto de perfil">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+
                         </div>
 
                         <!-- Botones -->
@@ -319,6 +330,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al Javascript de editar películas -->
     <script src="../../js/series/edit_serie.js"></script>
+
+    <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
+    <script src="../../js/series/delete_input_file.js"></script>
 
 </body>
 
