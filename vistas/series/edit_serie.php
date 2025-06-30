@@ -307,7 +307,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </div>
-
                         </div>
 
                         <!-- Botones -->

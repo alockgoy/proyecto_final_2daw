@@ -285,7 +285,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     class="poster-preview img-fluid" height="400" width="200" />
                             </div>
                             <label for="poster" class="form-label">Cambiar póster (opcional):</label>
-                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*">
+                            <div class="d-flex align-items-center">
+                                <input type="file" class="form-control" id="poster" name="poster" accept="image/*">
+                                <a href="#" id="clear" class="btn btn-outline-danger ms-2"
+                                    title="Eliminar foto de perfil">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
                         </div>
 
                         <!-- Sinopsis -->
@@ -316,6 +322,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al Javascript de editar películas -->
     <script src="../../js/peliculas/edit_movie.js"></script>
+
+    <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
+    <script src="../../js/peliculas/delete_input_file.js"></script>
 
 </body>
 
