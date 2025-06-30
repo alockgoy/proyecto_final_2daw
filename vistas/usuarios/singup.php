@@ -148,8 +148,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <label for="profile" class="form-label fw-bold">
                                                 <i class="fas fa-image me-2"></i>Foto de perfil (opcional)
                                             </label>
-                                            <input type="file" id="profile" name="profile" class="form-control"
-                                                accept="image/*" />
+                                            <div class="d-flex align-items-center">
+                                                <input type="file" id="profile" name="profile" class="form-control"
+                                                    accept="image/*" />
+                                                <a href="#" id="clear" class="btn btn-outline-danger ms-2"
+                                                    title="Eliminar foto de perfil">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
                                         </div>
 
                                         <!-- Botones de acción -->
@@ -168,7 +174,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <!-- Enlace a la documentación -->
                                     <div class="text-center mt-4 pt-3 border-top">
                                         <p class="">Es recomendable leer el &nbsp;
-                                            <a href="../../html/manual.html" target="_blank" class="link">manual de uso</a>
+                                            <a href="../../html/manual.html" target="_blank" class="link">manual de
+                                                uso</a>
                                         </p>
                                     </div>
                                 </div>
@@ -186,6 +193,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al archivo JS que permite mostrar la contraseña -->
     <script src="../../js/usuarios/show_password.js"></script>
+
+    <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
+    <script src="../../js/usuarios/delete_input_file.js"></script>
 </body>
 
 </html>
