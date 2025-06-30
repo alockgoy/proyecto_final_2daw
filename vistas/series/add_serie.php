@@ -260,10 +260,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- Poster -->
                         <div class="col-12 form-group">
                             <label for="poster" class="form-label"><i class="fas fa-image me-2"></i>Poster *</label>
-                            <input type="file" class="form-control" id="poster" name="poster" accept="image/*" required />
-                            <div class="invalid-feedback">
-                                Por favor, selecciona una imagen para el poster.
+                            <div class="d-flex align-items-center">
+                                <input type="file" class="form-control" id="poster" name="poster" accept="image/*"
+                                    required />
+                                <div class="invalid-feedback">
+                                    Por favor, selecciona una imagen para el poster.
+                                </div>
+                                <a href="#" id="clear" class="btn btn-outline-danger ms-2"
+                                    title="Eliminar foto de perfil">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
                             </div>
+
                         </div>
 
                         <!-- Botones -->
@@ -287,5 +295,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Enlace al Javascript de añadir series -->
     <script src="../../js/series/add_serie.js"></script>
 
+    <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
+    <script src="../../js/series/delete_input_file.js"></script>
+
 </body>
+
 </html>
