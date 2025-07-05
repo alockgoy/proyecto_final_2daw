@@ -35,10 +35,10 @@ class Movie
     }
 
     // Actualizar una película
-    public function updateMovie($id, $name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating)
+    public function updateMovie($id, $name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating)
     {
-        $stmt = $this->pdo->prepare("UPDATE Movies SET name=?, synopsis=?, poster=?, director=?, gender=?, languages=?, size=?, year=?, quality=?, backup=?, server=?, rating=? WHERE id_movie=?");
-        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating, $id]);
+        $stmt = $this->pdo->prepare("UPDATE Movies SET name=?, synopsis=?, poster=?, director=?, gender=?, languages=?, size=?, year=?, id_quality=?, backup=?, server=?, rating=? WHERE id_movie=?");
+        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating, $id]);
     }
 
     // Eliminar una película

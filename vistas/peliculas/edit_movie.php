@@ -7,6 +7,8 @@ require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/calidades/QualityController.php';
+require_once '../../php/calidades/Quality.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -35,6 +37,9 @@ $movie = $controller->getMovie($id);
 
 // Llamar al controlador de usuarios
 $userController = new UserController();
+
+// Llamar al controlador de calidades
+$qualityController = new QualityController();
 
 // Si la película no existe, mostrar error
 if (!$movie) {
@@ -209,13 +214,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-photo-video"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="quality" name="quality" required>
+                                    <select class="form-select" id="id_quality" name="id_quality" required>
                                         <?php
-                                        $qualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+                                        $qualities = $qualityController->index();
                                         foreach ($qualities as $quality) {
-                                            $selected = ($movie['quality'] == $quality) ? 'selected' : '';
-                                            echo "<option value=\"" . htmlspecialchars($quality) . "\" $selected>" .
-                                                htmlspecialchars($quality) . "</option>";
+                                            $selected = ($movie['id_quality'] == $quality['id_quality']) ? 'selected' : '';
+                                            echo '<option value="' . htmlspecialchars($quality['id_quality']) . '" ' . $selected . '>' .
+                                                htmlspecialchars($quality['name']) . '</option>';
                                         }
                                         ?>
                                     </select>
