@@ -30,9 +30,8 @@ CREATE TABLE Movies(
     languages VARCHAR(100) NOT NULL,
     size FLOAT NOT NULL,
     year INT NOT NULL,
-    quality VARCHAR(50) NOT NULL CHECK (quality IN (
-        '4K', '1440p', '1080p', '720p', '420p', 'otro'
-    )),
+    id_quality INT NOT NULL,
+    FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality),
     backup VARCHAR(200),
     server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
     rating FLOAT
@@ -54,15 +53,27 @@ CREATE TABLE Series(
     seasons INT NOT NULL,
     complete VARCHAR(2) NOT NULL CHECK (complete IN ('si', 'no')),
     year INT NOT NULL,
-    quality VARCHAR(50) NOT NULL CHECK (quality IN (
-        '4K', '1440p', '1080p', '720p', '420p', 'otro'
-    )),
+    id_quality INT NOT NULL,
+    FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality),
     backup VARCHAR(200),
     size FLOAT NOT NULL,
     server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
     rating FLOAT
 );
 
+/* Nueva tabla, calidades */
+CREATE TABLE Qualities(
+    id_quality INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(15) NOT NULL
+);
+
+    /* Insertar valores por defecto en la tabla de calidades */
+    INSERT INTO Qualities(name) VALUES('4K');
+    INSERT INTO Qualities(name) VALUES('1440p');
+    INSERT INTO Qualities(name) VALUES('1080p');
+    INSERT INTO Qualities(name) VALUES('720p');
+    INSERT INTO Qualities(name) VALUES('480p');
+    INSERT INTO Qualities(name) VALUES('otro');
 
 /* Tabla que sale de la unión de usuarios y películas */
 CREATE TABLE Users_Movies(
@@ -115,5 +126,70 @@ ALTER TABLE Users MODIFY rol ENUM('root', 'normal', 'solicita') DEFAULT 'normal'
 ALTER TABLE Movies MODIFY rating FLOAT;
 ALTER TABLE Series MODIFY rating FLOAT;
 
+/* Modificar el campo 'quality' en las tablas ya existentes */
+ALTER TABLE Movies ADD COLUMN id_quality INT;
+ALTER TABLE Series ADD COLUMN id_quality INT;
+
+    -- Películas
+    UPDATE Movies SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '4K'
+    ) WHERE quality = '4K';
+
+    UPDATE Movies SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '1440p'
+    ) WHERE quality = '1440p';
+
+    UPDATE Movies SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '1080p'
+    ) WHERE quality = '1080p';
+
+    UPDATE Movies SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '720p'
+    ) WHERE quality = '720p';
+
+    UPDATE Movies SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '420p'
+    ) WHERE quality = '420p';
+
+    UPDATE Movies SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = 'otro'
+    ) WHERE quality = 'otro';
+
+    -- Series
+    UPDATE Series SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '4K'
+    ) WHERE quality = '4K';
+
+    UPDATE Series SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '1440p'
+    ) WHERE quality = '1440p';
+
+    UPDATE Series SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '1080p'
+    ) WHERE quality = '1080p';
+
+    UPDATE Series SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '720p'
+    ) WHERE quality = '720p';
+
+    UPDATE Series SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = '420p'
+    ) WHERE quality = '420p';
+
+    UPDATE Series SET id_quality = (
+        SELECT q.id_quality FROM Qualities q WHERE q.name = 'otro'
+    ) WHERE quality = 'otro';
+
+-- Hacer las columnas NOT NULL
+ALTER TABLE Movies MODIFY id_quality INT NOT NULL;
+ALTER TABLE Series MODIFY id_quality INT NOT NULL;
+
+-- Agregar las claves foráneas
+ALTER TABLE Movies ADD FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality);
+ALTER TABLE Series ADD FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality);
+
+-- Eliminar las columnas 'quality' originales
+ALTER TABLE Movies DROP COLUMN quality;
+ALTER TABLE Series DROP COLUMN quality;
 
 ---------------------------------------------------------------------------------------------
