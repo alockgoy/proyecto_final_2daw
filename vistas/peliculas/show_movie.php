@@ -7,6 +7,8 @@ require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/calidades/QualityController.php';
+require_once '../../php/calidades/Quality.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -24,6 +26,9 @@ $controller = new MovieController();
 
 // Llamar al controlador de usuarios
 $userController = new UserController();
+
+// Llamar al controlador de calidades
+$qualityController = new QualityController();
 
 // Verificar que se ha proporcionado un ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -47,6 +52,9 @@ if (!$isOwner) {
 if (!$movie) {
     die('Error: La película solicitada no existe.');
 }
+
+// Obtener la calidad de la película
+$qualityName = $qualityController->getQualityById($movie['id_quality']);
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +108,7 @@ if (!$movie) {
 
                     <!-- Calidad -->
                     <li class="list-group-item"><strong>Calidad:</strong>
-                        <?php echo htmlspecialchars($movie['quality']); ?></li>
+                        <?php echo htmlspecialchars($qualityName['name']); ?></li>
 
                     <!-- Tamaño en GB -->
                     <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($movie['size']); ?>
