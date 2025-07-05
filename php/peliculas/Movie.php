@@ -27,11 +27,11 @@ class Movie
     }
 
     // Crear una película
-    public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating)
+    public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO Movies (name, synopsis, poster, director, gender, languages, size, year, quality, backup, server, rating) 
+        $stmt = $this->pdo->prepare("INSERT INTO Movies (name, synopsis, poster, director, gender, languages, size, year, id_quality, backup, server, rating) 
                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $quality, $backup, $server, $rating]);
+        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating]);
     }
 
     // Actualizar una película

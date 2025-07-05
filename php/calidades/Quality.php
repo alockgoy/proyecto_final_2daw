@@ -14,7 +14,7 @@ class Quality
     // Obtener todas las calidades
     public function getAllQualities()
     {
-        $stmt = $this->pdo->query("SELECT * FROM Qualities");
+        $stmt = $this->pdo->query("SELECT * FROM Qualities ORDER BY name");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
