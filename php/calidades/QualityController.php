@@ -28,5 +28,28 @@ class QualityController
         return $this->qualityModel->getQualityById($id);
     }
 
+    // Añadir nueva calidad
+    public function addQuality($name)
+    {
+        return $this->qualityModel->addQuality($name);
+    }
+
+    // Eliminar una calidad
+    public function deleteQuality($id)
+    {
+        return $this->qualityModel->deleteQuality($id);
+    }
+
+    // Comprobar si una calidad está en uso en películas
+    public function checkMovieQuality($id)
+    {
+        return $this->qualityModel->checkMovieQuality($id);
+    }
+
+    // Comprobar si una calidad está en uso en series
+    public function checkSerieQuality($id)
+    {
+        return $this->qualityModel->checkSerieQuality($id);
+    }
 }
 ?>

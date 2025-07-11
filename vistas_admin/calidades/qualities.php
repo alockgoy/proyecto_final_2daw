@@ -17,9 +17,12 @@ if (!isset($_SESSION['username'])) {
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/calidades/QualityController.php';
+require_once '../../php/calidades/Quality.php';
 
 // Crear instancia del controlador
 $userController = new UserController();
+$qualityController = new QualityController();
 
 // Obtener datos del usuario actual
 $username = $_SESSION['username'];
@@ -34,8 +37,8 @@ if ($userRol != "root") {
 // Obtener la ruta de la foto de perfil del usuario
 $profilePicture = $userController->getUserProfilePicture($_SESSION['username']);
 
-// Obtener a todos los usuarios
-$usuarios = $userController->index();
+// Obtener a todas las calidades
+$calidades = $qualityController->index();
 ?>
 
 <!DOCTYPE html>
@@ -44,11 +47,10 @@ $usuarios = $userController->index();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
+    <title>Calidades</title>
 
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../../css/go_top.css" type="text/css" rel="stylesheet" />
 
     <!--Para iconos-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
@@ -74,26 +76,7 @@ $usuarios = $userController->index();
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="../peliculas/movies.php">Ir a películas</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="../series/series.php">Ir a series</a>
-                        </li>
-
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="../calidades/qualities.php">Gestionar calidades</a>
-                        </li>
-
-                        <!--Barra de búsqueda-->
-                        <li class="nav-item" id="search-by-username">
-                            <div class="input-group">
-                                <input type="search" id="buscador_usuarios" placeholder="Busca un usuario..."
-                                    class="form-control" />
-                                <button type="button" class="btn btn-light">
-                                    <i class="fa-solid fa-search"></i>
-                                </button>
-                            </div>
+                            <a class="nav-link" href="./add_quality.php">Añadir calidad</a>
                         </li>
                     </ul>
 
@@ -112,48 +95,40 @@ $usuarios = $userController->index();
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Alias</th>
-                            <th scope="col">Correo</th>
-                            <th scope="col">Perfil</th>
-                            <th scope="col">Autenticación</th>
-                            <th scope="col">Rol</th>
+                            <th scope="col">Nombre</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
 
-                    <!-- Mostrar a todos los usuarios -->
+                    <!-- Mostrar a todas las calidades -->
                     <tbody>
-                        <?php foreach ($usuarios as $usuario): ?>
+                        <?php foreach ($calidades as $calidad): ?>
                             <tr class="tr">
                                 <th>
-                                    <?php echo htmlspecialchars($usuario['id_user']); ?>
+                                    <?php echo htmlspecialchars($calidad['id_quality']); ?>
                                 </th>
 
                                 <td>
-                                    <?php echo htmlspecialchars($usuario['username']); ?>
+                                    <?php echo htmlspecialchars($calidad['name']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo htmlspecialchars($usuario['email']); ?>
-                                </td>
-
-                                <td>
-                                    <img src="<?php echo !empty($usuario['profile']) ? '../../' . htmlspecialchars($usuario['profile']) : '../../img/avatares_usuarios/default.jpg'; ?>"
-                                        width="50" height="50" class="rounded-circle">
-                                </td>
-
-                                <td>
-                                    <?php echo $usuario['two_factor'] == '1' ? 'Sí' : 'No'; ?>
-                                </td>
-
-                                <td>
-                                    <?php echo htmlspecialchars($usuario['rol']); ?>
-                                </td>
-
-                                <td>
-                                    <a class="btn btn-warning" href="show_user.php?username=<?php echo urlencode($usuario['username']); ?>" style="text-decoration: none;">
-                                        Editar
-                                    </a>
+                                    <?php
+                                        $enUsoPelicula = $qualityController->checkMovieQuality($calidad['id_quality']);
+                                        $enUsoSerie = $qualityController->checkSerieQuality($calidad['id_quality']);
+                                        $enUso = $enUsoPelicula || $enUsoSerie;
+                                    ?>
+                                    <?php if ($enUso): ?>
+                                        <button class="btn btn-info" disabled>En uso</button>
+                                    <?php else: ?>
+                                        <a class="btn btn-danger"
+                                            href="delete_quality.php?id=<?php echo urlencode($calidad['id_quality']); ?>"
+                                            style="text-decoration: none;"
+                                            data-confirm="¿Estás seguro de que quieres eliminar esta calidad?"
+                                            data-confirm-text="Eliminar" data-cancel-text="Cancelar">
+                                            Borrar
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -181,12 +156,12 @@ $usuarios = $userController->index();
 
                 <!--Elementos de la barra de navegación-->
                 <div class="collapse navbar-collapse" id="navbarFooter">
-                <ul class="navbar-nav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../../vistas/usuarios/my_profile.php">Volver atrás</a>
+                            <a class="nav-link" href="../usuarios/users.php">Volver atrás</a>
                         </li>
                     </ul>
-                <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="../../vistas/usuarios/logout.php">
                                 <i class="fa-solid fa-right-from-bracket me-1"></i>
@@ -202,11 +177,8 @@ $usuarios = $userController->index();
     <!-- Enlace al archivo JavaScript de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Enlace al JS de buscar usuarios -->
-    <script src="../../js/usuarios/search_users.js"></script>
-
-    <!-- Enlace al archivo JavaScript de botón para volver al inicio -->
-    <script src="../../js/go_top.js"></script>
+    <!-- Enlace al archivo JavaScript de confirmar eliminación -->
+    <script src="../../js/confirm_modal.js"></script>
 </body>
 
 </html>
