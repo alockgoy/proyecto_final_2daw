@@ -80,7 +80,7 @@ class SerieController
                 $_POST["seasons"],
                 $_POST["complete"] ?? "no",
                 $_POST["year"],
-                $_POST["quality"],
+                $_POST["id_quality"],
                 $_POST["backup"] ?? null,
                 $rating,
                 $_POST["server"],
@@ -182,7 +182,7 @@ class SerieController
                 $_POST["seasons"],
                 $_POST["complete"],
                 $_POST["year"],
-                $_POST["quality"],
+                $_POST["id_quality"],
                 $_POST["backup"] ?? null,
                 $rating,
                 $_POST["server"],
@@ -289,7 +289,7 @@ class SerieController
         $result = ['valid' => true, 'message' => ''];
 
         // Campos obligatorios
-        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'quality', 'size', 'server'];
+        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'id_quality', 'size', 'server'];
 
         // Comprobar campos obligatorios
         foreach ($requiredFields as $field) {
@@ -378,10 +378,11 @@ class SerieController
         }
 
         // Comprobar opciones de las calidades
-        $validQualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+        $stmt = $GLOBALS['pdo']->query("SELECT id_quality FROM Qualities");
+        $validQualities = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
 
         // Verificar que no se ha cambiado el valor de una calidad
-        if (!in_array($data['quality'], $validQualities)) {
+        if (!in_array($data['id_quality'], $validQualities)) {
             return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
         }
 
@@ -407,7 +408,7 @@ class SerieController
         $result = ['valid' => true, 'message' => ''];
 
         // Campos obligatorios
-        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'quality', 'size', 'server'];
+        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'id_quality', 'size', 'server'];
 
         // Comprobar campos obligatorios
         foreach ($requiredFields as $field) {
@@ -465,10 +466,11 @@ class SerieController
         }
 
         // Comprobar opciones de las calidades
-        $validQualities = ['4K', '1440p', '1080p', '720p', '420p', 'otro'];
+        $stmt = $GLOBALS['pdo']->query("SELECT id_quality FROM Qualities");
+        $validQualities = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
 
         // Verificar que no se ha cambiado el valor de una calidad
-        if (!in_array($data['quality'], $validQualities)) {
+        if (!in_array($data['id_quality'], $validQualities)) {
             return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
         }
 

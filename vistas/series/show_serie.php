@@ -7,6 +7,8 @@ require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/calidades/QualityController.php';
+require_once '../../php/calidades/Quality.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -24,6 +26,9 @@ $controller = new SerieController();
 
 // Llamar al controlador de usuarios
 $userController = new UserController();
+
+// Llamar al controlador de calidades
+$qualityController = new QualityController();
 
 // Verificar que se ha proporcionado un ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -47,6 +52,9 @@ if (!$isOwner) {
 if (!$serie) {
     die('Error: La serie solicitada no existe.');
 }
+
+// Obtener la calidad de la serie
+$qualityName = $qualityController->getQualityById($serie['id_quality']);
 ?>
 
 <!DOCTYPE html>
@@ -104,7 +112,7 @@ if (!$serie) {
 
                     <!-- Calidad -->
                     <li class="list-group-item"><strong>Calidad:</strong>
-                        <?php echo htmlspecialchars($serie['quality']); ?></li>
+                        <?php echo htmlspecialchars($qualityName['name']); ?></li>
 
                     <!-- Tamaño en GB -->
                     <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($serie['size']); ?>

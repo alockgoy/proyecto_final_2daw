@@ -19,10 +19,13 @@ require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/calidades/QualityController.php';
+require_once '../../php/calidades/Quality.php';
 
 // Crear instancia del controlador
 $controller = new SerieController();
 $userController = new UserController();
+$qualityController = new QualityController();
 
 // Variable del mensaje de error si algo salió mal
 $error = "";
@@ -192,16 +195,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-photo-video"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="quality" name="quality" required>
-                                        <option value="" selected disabled>Selecciona la calidad *</option>
-                                        <option value="4K">4K</option>
-                                        <option value="1440p">1440p</option>
-                                        <option value="1080p">1080p</option>
-                                        <option value="720p">720p</option>
-                                        <option value="420p">420p</option>
-                                        <option value="otro">Otro</option>
+                                    <select class="form-select" id="id_quality" name="id_quality" required>
+                                        <option value="" selected disabled>Selecciona la calidad</option>
+                                        <?php
+                                            // Obtener todas las calidades disponibles desde el controlador
+                                            $qualities = $qualityController->index();
+                                            foreach ($qualities as $quality) {
+                                                echo '<option value="' . htmlspecialchars($quality['id_quality']) . '">' . htmlspecialchars($quality['name']) . '</option>';
+                                            }
+                                        ?>
                                     </select>
-                                    <label for="quality">Calidad</label>
+                                    <label for="quality">Calidad *</label>
                                 </div>
                             </div>
                         </div>

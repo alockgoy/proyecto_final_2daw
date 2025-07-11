@@ -28,10 +28,10 @@ class Serie
     }
 
     // Añadir una serie
-    public function createSerie($name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size)
+    public function createSerie($name, $poster, $gender, $languages, $seasons, $complete, $year, $id_quality, $backup, $rating, $server, $size)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO Series (name, poster, gender, languages, seasons, complete, year, quality, backup, rating, server, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size]);
+        $stmt = $this->pdo->prepare("INSERT INTO Series (name, poster, gender, languages, seasons, complete, year, id_quality, backup, rating, server, size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $id_quality, $backup, $rating, $server, $size]);
     }
 
     // Eliminar una serie
@@ -42,10 +42,10 @@ class Serie
     }
 
     // Actualizar una serie
-    public function updateSerie($id, $name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size)
+    public function updateSerie($id, $name, $poster, $gender, $languages, $seasons, $complete, $year, $id_quality, $backup, $rating, $server, $size)
     {
-        $stmt = $this->pdo->prepare("UPDATE Series SET name=?, poster=?, gender=?, languages=?, seasons=?, complete=?, year=?, quality=?, backup=?, rating=?, server=?, size=? WHERE id_serie=?");
-        return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $quality, $backup, $rating, $server, $size, $id]);
+        $stmt = $this->pdo->prepare("UPDATE Series SET name=?, poster=?, gender=?, languages=?, seasons=?, complete=?, year=?, id_quality=?, backup=?, rating=?, server=?, size=? WHERE id_serie=?");
+        return $stmt->execute([$name, $poster, $gender, $languages, $seasons, $complete, $year, $id_quality, $backup, $rating, $server, $size, $id]);
     }
 
     // Obtener las series vinculadas al usuario
