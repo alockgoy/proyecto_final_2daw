@@ -91,7 +91,7 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
                 <ul class="list-group mb-4">
 
                     <!-- Género -->
-                    <li class="list-group-item"><strong>Género:</strong>
+                    <li class="list-group-item"><strong>Género(s):</strong>
                         <?php echo htmlspecialchars($serie['gender']); ?></li>
 
                     <!-- Año -->

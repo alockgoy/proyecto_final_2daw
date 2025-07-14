@@ -95,7 +95,7 @@ $qualityName = $qualityController->getQualityById($movie['id_quality']);
                         <?php echo htmlspecialchars($movie['director']); ?></li>
 
                     <!-- Género -->
-                    <li class="list-group-item"><strong>Género:</strong>
+                    <li class="list-group-item"><strong>Género(s):</strong>
                         <?php echo htmlspecialchars($movie['gender']); ?></li>
 
                     <!-- Año -->

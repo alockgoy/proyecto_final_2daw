@@ -162,35 +162,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="gender" name="gender" required>
-                                        <?php
-                                        $genders = [
-                                            'acción/aventura',
-                                            'animación',
-                                            'anime',
-                                            'ciencia ficción',
-                                            'cortometraje',
-                                            'comedia',
-                                            'deportes',
-                                            'documental',
-                                            'drama',
-                                            'familiar',
-                                            'fantasía',
-                                            'guerra',
-                                            'terror',
-                                            'musical',
-                                            'suspense',
-                                            'romance',
-                                            'vaqueros',
-                                            'misterio'
-                                        ];
-                                        foreach ($genders as $gender) {
-                                            $selected = ($movie['gender'] == $gender) ? 'selected' : '';
-                                            echo "<option value=\"" . htmlspecialchars($gender) . "\" $selected>" .
-                                                ucfirst(htmlspecialchars($gender)) . "</option>";
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" class="form-control" id="gender" name="gender"
+                                        value="<?php echo htmlspecialchars($movie['gender']); ?>" placeholder="Género" required />
                                     <label for="gender">Género</label>
                                 </div>
                             </div>

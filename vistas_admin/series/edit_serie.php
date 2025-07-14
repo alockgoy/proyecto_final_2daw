@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     } catch (Exception $e) {
-         $error = ("Error al actualizar la serie: " . $e->getMessage());
+        $error = ("Error al actualizar la serie: " . $e->getMessage());
     }
 }
 ?>
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Para iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="../../img/iconos_navegador/serie.png" type="image/x-icon" />
-    
+
     <title>Editar Serie - <?php echo htmlspecialchars($serie['name']); ?></title>
 </head>
 
@@ -93,7 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center mb-0"><i class="fas fa-edit me-2"></i>Editar Serie:
-                    <?php echo htmlspecialchars($serie['name']); ?></h2>
+                    <?php echo htmlspecialchars($serie['name']); ?>
+                </h2>
             </div>
             <div class="card-body">
                 <?php if (!empty($error)): ?>
@@ -116,7 +117,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-tv"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="<?php echo htmlspecialchars($serie['name']); ?>" placeholder="Nombre" required />
+                                        value="<?php echo htmlspecialchars($serie['name']); ?>" placeholder="Nombre"
+                                        required />
                                     <label for="name">Nombre de la serie</label>
                                 </div>
                             </div>
@@ -140,35 +142,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="gender" name="gender" required>
-                                        <?php
-                                        $genders = [
-                                            'acción/aventura',
-                                            'animación',
-                                            'anime',
-                                            'ciencia ficción',
-                                            'cortometraje',
-                                            'comedia',
-                                            'deportes',
-                                            'documental',
-                                            'drama',
-                                            'familiar',
-                                            'fantasía',
-                                            'guerra',
-                                            'terror',
-                                            'musical',
-                                            'suspense',
-                                            'romance',
-                                            'vaqueros',
-                                            'misterio'
-                                        ];
-                                        foreach ($genders as $gender) {
-                                            $selected = ($serie['gender'] == $gender) ? 'selected' : '';
-                                            echo "<option value=\"" . htmlspecialchars($gender) . "\" $selected>" .
-                                                ucfirst(htmlspecialchars($gender)) . "</option>";
-                                        }
-                                        ?>
-                                    </select>
+                                    <input type="text" class="form-control" id="gender" name="gender"
+                                        value="<?php echo htmlspecialchars($serie['gender']); ?>" placeholder="Género"
+                                        required />
                                     <label for="gender">Género</label>
                                 </div>
                             </div>
@@ -180,8 +156,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="number" class="form-control" id="seasons" name="seasons" min="1"
-                                        value="<?php echo htmlspecialchars($serie['seasons']); ?>" placeholder="Temporadas"
-                                        required />
+                                        value="<?php echo htmlspecialchars($serie['seasons']); ?>"
+                                        placeholder="Temporadas" required />
                                     <label for="seasons">Temporadas</label>
                                 </div>
                             </div>
@@ -193,9 +169,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <select class="form-select" id="complete" name="complete" required>
-                                        <option value="si" <?php echo ($serie['complete'] == 'si') ? 'selected' : ''; ?>>Sí
+                                        <option value="si" <?php echo ($serie['complete'] == 'si') ? 'selected' : ''; ?>>
+                                            Sí
                                         </option>
-                                        <option value="no" <?php echo ($serie['complete'] == 'no') ? 'selected' : ''; ?>>No
+                                        <option value="no" <?php echo ($serie['complete'] == 'no') ? 'selected' : ''; ?>>
+                                            No
                                         </option>
                                     </select>
                                     <label for="complete">¿Completa?</label>

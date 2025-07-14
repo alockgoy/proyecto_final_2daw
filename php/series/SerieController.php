@@ -350,33 +350,6 @@ class SerieController
             }
         }
 
-        // Comprobar opciones de los géneros
-        $validGenders = [
-            'acción/aventura',
-            'animación',
-            'anime',
-            'ciencia ficción',
-            'cortometraje',
-            'comedia',
-            'deportes',
-            'documental',
-            'drama',
-            'familiar',
-            'fantasía',
-            'guerra',
-            'terror',
-            'musical',
-            'suspense',
-            'romance',
-            'vaqueros',
-            'misterio'
-        ];
-
-        // Verificar que no se ha cambiado el valor de un género
-        if (!in_array($data['gender'], $validGenders)) {
-            return ['valid' => false, 'message' => 'El género seleccionado no es válido'];
-        }
-
         // Comprobar opciones de las calidades
         $stmt = $GLOBALS['pdo']->query("SELECT id_quality FROM Qualities");
         $validQualities = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
@@ -436,33 +409,6 @@ class SerieController
             if ($rating < 1.0 || $rating > 10.0) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
-        }
-
-        // Comprobar opciones de los géneros
-        $validGenders = [
-            'acción/aventura',
-            'animación',
-            'anime',
-            'ciencia ficción',
-            'cortometraje',
-            'comedia',
-            'deportes',
-            'documental',
-            'drama',
-            'familiar',
-            'fantasía',
-            'guerra',
-            'terror',
-            'musical',
-            'suspense',
-            'romance',
-            'vaqueros',
-            'misterio'
-        ];
-
-        // Verificar que no se ha cambiado el valor de un género
-        if (!in_array($data['gender'], $validGenders)) {
-            return ['valid' => false, 'message' => 'El género seleccionado no es válido'];
         }
 
         // Comprobar opciones de las calidades

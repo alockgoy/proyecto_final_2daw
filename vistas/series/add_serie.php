@@ -125,27 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="gender" name="gender" required>
-                                        <option value="" selected disabled>Selecciona un género *</option>
-                                        <option value="acción/aventura">Acción/Aventura</option>
-                                        <option value="animación">Animación</option>
-                                        <option value="anime">Anime</option>
-                                        <option value="ciencia ficción">Ciencia Ficción</option>
-                                        <option value="cortometraje">Cortometraje</option>
-                                        <option value="comedia">Comedia</option>
-                                        <option value="deportes">Deportes</option>
-                                        <option value="documental">Documental</option>
-                                        <option value="drama">Drama</option>
-                                        <option value="familiar">Familiar</option>
-                                        <option value="fantasía">Fantasía</option>
-                                        <option value="guerra">Guerra</option>
-                                        <option value="terror">Terror</option>
-                                        <option value="musical">Musical</option>
-                                        <option value="suspense">Suspense</option>
-                                        <option value="romance">Romance</option>
-                                        <option value="vaqueros">Vaqueros</option>
-                                        <option value="misterio">Misterio</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="gender" name="gender" placeholder="Género" required />
                                     <label for="gender">Género</label>
                                 </div>
                             </div>

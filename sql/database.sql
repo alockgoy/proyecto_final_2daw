@@ -21,12 +21,7 @@ CREATE TABLE Movies(
     synopsis VARCHAR(600),
     poster VARCHAR(255) NOT NULL,
     director VARCHAR(100) NOT NULL,
-    gender VARCHAR(100) NOT NULL CHECK (gender IN (
-        'acción/aventura', 'animación', 'anime', 
-        'ciencia ficción', 'cortometraje', 'comedia', 'deportes', 
-        'documental', 'drama', 'familiar', 'fantasía', 'guerra', 
-        'terror', 'musical', 'suspense', 'romance', 'vaqueros', 'misterio'
-    )),
+    gender VARCHAR(100) NOT NULL,
     languages VARCHAR(100) NOT NULL,
     size FLOAT NOT NULL,
     year INT NOT NULL,
@@ -43,12 +38,7 @@ CREATE TABLE Series(
     id_serie INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(300) NOT NULL,
     poster VARCHAR(255) NOT NULL,
-    gender VARCHAR(100) NOT NULL CHECK (gender IN (
-        'acción/aventura', 'animación', 'anime', 
-        'ciencia ficción', 'cortometraje', 'comedia', 'deportes', 
-        'documental', 'drama', 'familiar', 'fantasía', 'guerra', 
-        'terror', 'musical', 'suspense', 'romance', 'vaqueros', 'misterio'
-    )),
+    gender VARCHAR(100) NOT NULL,
     languages VARCHAR(100) NOT NULL,
     seasons INT NOT NULL,
     complete VARCHAR(2) NOT NULL CHECK (complete IN ('si', 'no')),
@@ -192,4 +182,12 @@ ALTER TABLE Series ADD FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality)
 ALTER TABLE Movies DROP COLUMN quality;
 ALTER TABLE Series DROP COLUMN quality;
 
+-- Ver qué restricciones CHECK existen
+SELECT CONSTRAINT_NAME, CHECK_CLAUSE 
+FROM INFORMATION_SCHEMA.CHECK_CONSTRAINTS 
+WHERE CONSTRAINT_SCHEMA = 'BibliotecaMultimedia';
+
+-- Eliminar las restricciones CHECK de géneros
+ALTER TABLE Movies DROP CHECK Movies_chk_1;
+ALTER TABLE Series DROP CHECK Series_chk_1;
 ---------------------------------------------------------------------------------------------
