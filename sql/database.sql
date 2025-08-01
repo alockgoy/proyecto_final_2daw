@@ -83,6 +83,15 @@ CREATE TABLE Users_Series(
     FOREIGN KEY (id_serie) REFERENCES Series(id_serie) ON DELETE CASCADE
 );
 
+/* Tabla que guarda un registro de los movimientos en la aplicación */
+CREATE TABLE Movements(
+    id_movement INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    he_did VARCHAR(500) NOT NULL,
+    moment DATETIME NOT NULL,
+    with_result VARCHAR(20) NOT NULL
+);
+
 /* Crear un usuario específico para esta base de datos y asignarle todos los permisos */
 CREATE USER 'usuario_multimedia'@'localhost' IDENTIFIED BY 'Esta contraseña será cambiada';
 GRANT ALL PRIVILEGES ON BibliotecaMultimedia.* TO 'usuario_multimedia'@'localhost';
