@@ -89,7 +89,7 @@ CREATE TABLE Movements(
     username VARCHAR(50) NOT NULL,
     he_did VARCHAR(500) NOT NULL,
     moment DATETIME NOT NULL,
-    with_result VARCHAR(20) NOT NULL
+    with_result VARCHAR(200) NOT NULL
 );
 
 /* Crear un usuario específico para esta base de datos y asignarle todos los permisos */

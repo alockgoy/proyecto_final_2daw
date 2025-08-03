@@ -47,12 +47,16 @@ if (isset($_POST['update_username'])) {
 
     if (empty($newUsername)) {
         $error = ("El nombre de usuario no puede estar vacío.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su alias a: $newUsername", date('Y-m-d H:i:s'), "alias vacío");
     } elseif (empty($passwordForUsername)) {
         $error = ("Debes escribir tu contraseña para realizar cambios.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su alias a: $newUsername", date('Y-m-d H:i:s'), "clave vacía");
     } elseif (!$userController->checkPassword($username, $passwordForUsername)) {
         $error = ("Contraseña incorrecta.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su alias a: $newUsername", date('Y-m-d H:i:s'), "clave fallida");
     } elseif ($newUsername === $username) {
         $error = ("El nuevo nombre debe ser diferente al actual.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su alias a: $newUsername", date('Y-m-d H:i:s'), "alias repetido");
     } else {
         $result = $userController->updateUsername($userData['id_user'], $newUsername);
 
@@ -64,6 +68,7 @@ if (isset($_POST['update_username'])) {
             //header("Location: my_profile.php");
             //exit();
         } else {
+            $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su alias a: $newUsername", date('Y-m-d H:i:s'), "fallido");
             $error = "No se pudo actualizar el nombre de usuario.";
         }
     }
@@ -76,16 +81,22 @@ if (isset($_POST['update_email'])) {
 
     if (empty($newEmail)) {
         $error = ("El correo electrónico no puede estar vacío.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su correo a: $newEmail", date('Y-m-d H:i:s'), "correo vacío");
     } elseif (empty($passwordForEmail)) {
         $error = ("Debes escribir tu contraseña para realizar cambios.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su correo a: $newEmail", date('Y-m-d H:i:s'), "clave vacía");
     } elseif (!$userController->checkPassword($username, $passwordForEmail)) {
         $error = ("Contraseña incorrecta.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su correo a: $newEmail", date('Y-m-d H:i:s'), "clave fallida");
     } elseif ($newEmail === $email) {
         $error = ("El nuevo correo debe ser diferente al actual.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su correo a: $newEmail", date('Y-m-d H:i:s'), "correo repetido");
     } else {
         $result = $userController->updateEmail($userData['id_user'], $newEmail);
 
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha cambiado su correo a: $newEmail", date('Y-m-d H:i:s'), "correcto");
+
             $_SESSION['email'] = $newEmail;
             $success = ("Correo electrónico actualizado correctamente, recargando...");
             //header("Location: my_profile.php");
@@ -104,14 +115,18 @@ if (isset($_POST['update_password'])) {
 
     if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
         $error = "Todos los campos de contraseña son obligatorios.";
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su contraseña", date('Y-m-d H:i:s'), "campo vacío");
     } else if ($newPassword !== $confirmPassword) {
         $error = "Las nuevas contraseñas no coinciden.";
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su contraseña", date('Y-m-d H:i:s'), "no coincide");
     } else {
         $result = $userController->updatePassword($userData['id_user'], $currentPassword, $newPassword);
 
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha cambiado su contraseña", date('Y-m-d H:i:s'), "correcto");
             $success = ("Contraseña actualizada correctamente, recargando...");
         } else {
+            $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su contraseña", date('Y-m-d H:i:s'), "clave fallida");
             $error = ("No se pudo actualizar la contraseña.");
         }
     }
@@ -125,9 +140,12 @@ if (isset($_POST['update_2fa'])) {
         $result = $userController->update2FAStatus($userData['id_user'], $new2FAStatus);
 
         if ($result) {
+            $estado = $new2FAStatus ? "activado" : "desactivado";
+            $movementController->addMovement($_SESSION['username'], "ha $estado la doble verificación", date('Y-m-d H:i:s'), "correcto");
             $success = ("Estado de verificación en 2 pasos actualizado correctamente, recargando...");
             $userData['two_factor'] = $new2FAStatus;
         } else {
+            $movementController->addMovement($_SESSION['username'], "ha intentado cambiar el estado de la doble verificación", date('Y-m-d H:i:s'), "fallido");
             $error = ("No se pudo actualizar el estado de verificación en 2 pasos.");
         }
     }
@@ -138,6 +156,7 @@ if (isset($_POST["update_pic"])) {
     $result = $userController->updateProfileImage($userData['id_user'], $_FILES['profile_pic'] ?? null);
 
     if ($result['success']) {
+        $movementController->addMovement($_SESSION['username'], "ha cambiado su foto de perfil", date('Y-m-d H:i:s'), "correcto");
         $message = $result['message'];
         $userData['profile'] = $result['profile'];
 
@@ -145,6 +164,7 @@ if (isset($_POST["update_pic"])) {
         header("Location: my_profile.php?updated=profile");
         exit();
     } else {
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar su foto de perfil", date('Y-m-d H:i:s'), "fallido");
         $error = $result['message'];
     }
 }
@@ -154,6 +174,7 @@ if (isset($_POST['ask_for_admin'])) {
     try {
         $result = $userController->askForAdmin($username);
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha solicitado ser administrador", date('Y-m-d H:i:s'), "correcto");
             $success = "Solicitud para ser admin enviada correctamente, recargando...";
             $userRol = "solicita"; // Actualizar el rol en la sesión
         } else {
