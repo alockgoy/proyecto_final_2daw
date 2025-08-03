@@ -1,10 +1,12 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Iniciar sesión
 session_start();
@@ -27,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Inicializar el controlador de usuarios
         $controller = new UserController();
+        $movementController = new MovementController();
 
         // Intentar iniciar sesión
         $user = $controller->login($_POST['username'], $_POST['password']);
@@ -39,6 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['two_factor'] = $user['email'];
                 $_SESSION['user_trying'] = $user['username'];
 
+                // Guardar movimiento
+                $movementController->addMovement($_POST['username'], "ha intentado iniciar sesión", date('Y-m-d H:i:s'), "2FA");
+
                 // Redirigir a otra vista
                 header("Location: ./two_factor.php");
                 exit();
@@ -46,6 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Guardar información en la sesión
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
+
+                $movementController->addMovement($_POST['username'], "ha iniciado sesión", date('Y-m-d H:i:s'), "correcto");
 
                 // Redirigir a la página de películas
                 header("Location: ../peliculas/movies.php");

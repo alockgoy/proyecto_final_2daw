@@ -1,7 +1,4 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -17,13 +14,19 @@ if (!isset($_SESSION['username'])) {
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
-// Crear instancia del controlador
+// Crear instancia de los controladores
 $userController = new UserController();
+$movementController = new MovementController();
 
 // Obtener datos del usuario actual
 $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
+
+// Obtener la foto de perfil del usuario
+$profilePicture = $userController->getUserProfilePicture($username);
 
 // Comprobar que el usuario sea 'root'
 if ($userRol != "root") {
@@ -31,11 +34,8 @@ if ($userRol != "root") {
     exit();
 }
 
-// Obtener la ruta de la foto de perfil del usuario
-$profilePicture = $userController->getUserProfilePicture($_SESSION['username']);
-
-// Obtener a todos los usuarios
-$usuarios = $userController->index();
+// Obtener todos los movimientos
+$movimientos = $movementController->index();
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,7 @@ $usuarios = $userController->index();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
+    <title>Movimientos</title>
 
     <!--Enlace al CSS de bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -73,32 +73,8 @@ $usuarios = $userController->index();
                 <!--Elementos de la barra de navegación-->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
-
                         <li class="nav-item">
-                            <a class="nav-link" href="../peliculas/movies.php">Ir a películas</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="../series/series.php">Ir a series</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="../movimientos/movements.php">Ver movimientos</a>
-                        </li>
-
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="../calidades/qualities.php">Gestionar calidades</a>
-                        </li>
-
-                        <!--Barra de búsqueda-->
-                        <li class="nav-item" id="search-by-username">
-                            <div class="input-group">
-                                <input type="search" id="buscador_usuarios" placeholder="Busca un usuario..."
-                                    class="form-control" />
-                                <button type="button" class="btn btn-light">
-                                    <i class="fa-solid fa-search"></i>
-                                </button>
-                            </div>
+                            <p class="nav-link" href=""></p>
                         </li>
                     </ul>
 
@@ -117,48 +93,35 @@ $usuarios = $userController->index();
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Alias</th>
-                            <th scope="col">Correo</th>
-                            <th scope="col">Perfil</th>
-                            <th scope="col">Autenticación</th>
-                            <th scope="col">Rol</th>
-                            <th scope="col">Acciones</th>
+                            <th scope="col">Usuario</th>
+                            <th scope="col">Ha:</th>
+                            <th scope="col">¿Cuándo?</th>
+                            <th scope="col">Resultado</th>
                         </tr>
                     </thead>
 
-                    <!-- Mostrar a todos los usuarios -->
+                    <!-- Mostrar todos los movimientos -->
                     <tbody>
-                        <?php foreach ($usuarios as $usuario): ?>
+                        <?php foreach ($movimientos as $movimiento): ?>
                             <tr class="tr">
                                 <th>
-                                    <?php echo htmlspecialchars($usuario['id_user']); ?>
+                                    <?php echo htmlspecialchars($movimiento['id_movement']); ?>
                                 </th>
 
                                 <td>
-                                    <?php echo htmlspecialchars($usuario['username']); ?>
+                                    <?php echo htmlspecialchars($movimiento['username']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo htmlspecialchars($usuario['email']); ?>
+                                    <?php echo htmlspecialchars($movimiento['he_did']); ?>
                                 </td>
 
                                 <td>
-                                    <img src="<?php echo !empty($usuario['profile']) ? '../../' . htmlspecialchars($usuario['profile']) : '../../img/avatares_usuarios/default.jpg'; ?>"
-                                        width="50" height="50" class="rounded-circle">
+                                    <?php echo htmlspecialchars($movimiento['moment']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo $usuario['two_factor'] == '1' ? 'Sí' : 'No'; ?>
-                                </td>
-
-                                <td>
-                                    <?php echo htmlspecialchars($usuario['rol']); ?>
-                                </td>
-
-                                <td>
-                                    <a class="btn btn-warning" href="show_user.php?username=<?php echo urlencode($usuario['username']); ?>" style="text-decoration: none;">
-                                        Editar
-                                    </a>
+                                    <?php echo htmlspecialchars($movimiento['with_result']); ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -186,12 +149,12 @@ $usuarios = $userController->index();
 
                 <!--Elementos de la barra de navegación-->
                 <div class="collapse navbar-collapse" id="navbarFooter">
-                <ul class="navbar-nav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="../../vistas/usuarios/my_profile.php">Volver atrás</a>
+                            <a class="nav-link" href="../usuarios/users.php">Volver atrás</a>
                         </li>
                     </ul>
-                <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="../../vistas/usuarios/logout.php">
                                 <i class="fa-solid fa-right-from-bracket me-1"></i>
@@ -207,11 +170,8 @@ $usuarios = $userController->index();
     <!-- Enlace al archivo JavaScript de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Enlace al JS de buscar usuarios -->
-    <script src="../../js/usuarios/search_users.js"></script>
-
-    <!-- Enlace al archivo JavaScript de botón para volver al inicio -->
-    <script src="../../js/go_top.js"></script>
+    <!-- Enlace al archivo JavaScript de confirmar eliminación -->
+    <script src="../../js/confirm_modal.js"></script>
 </body>
 
 </html>

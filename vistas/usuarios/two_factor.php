@@ -17,9 +17,12 @@ if (!isset($_SESSION['two_factor'])) {
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Crear instancia del controlador
 $controller = new UserController();
+$movementController = new MovementController();
 
 // Traer el archivo autoload del php mailer
 require '../../vendor/autoload.php';
@@ -119,6 +122,9 @@ if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_dig
             // Rellenar los datos de la sesión
             $_SESSION['email'] = $email;
             $_SESSION['username'] = $controller->getUsernameByEmail($email);
+
+            // Añadir el movimiento
+            $movementController->addMovement($_SESSION['username'], "ha superado la doble verificación", date('Y-m-d H:i:s'), "correcto");
 
             header("Location: ../peliculas/movies.php");
             exit();

@@ -14,7 +14,7 @@ class Movement
     // Obtener todos los movimientos
     public function getAllMovements()
     {
-        $stmt = $this->pdo->query("SELECT * FROM Movements ORDER BY moment");
+        $stmt = $this->pdo->query("SELECT * FROM Movements ORDER BY moment DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

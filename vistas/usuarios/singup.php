@@ -9,6 +9,8 @@ session_start();
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Variable para almacenar los errores
 $error = "";
@@ -36,10 +38,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Inicializar el controlador y procesar el registro
         $controller = new UserController();
+        $movementController = new MovementController();
+
         if ($controller->addUser()) {
             // Guardar la información de la sesión
             $_SESSION['username'] = $_POST['username'];
             $_SESSION['email'] = $_POST['email'];
+
+            // Añadir el movimiento al registro
+            $movementController->addMovement($_POST['username'], "ha creado su cuenta", date('Y-m-d H:i:s'), "correcto");
 
             header("Location: ../peliculas/movies.php");
             exit();

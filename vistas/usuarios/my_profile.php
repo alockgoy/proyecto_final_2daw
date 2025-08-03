@@ -17,9 +17,12 @@ if (!isset($_SESSION['username'])) {
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Crear instancia del controlador
 $userController = new UserController();
+$movementController = new MovementController();
 
 if (!isset($_SESSION['email']) && isset($userData['email'])) {
     // Si no existe en la sesión pero sí en los datos del usuario, recuperarlo
@@ -54,6 +57,8 @@ if (isset($_POST['update_username'])) {
         $result = $userController->updateUsername($userData['id_user'], $newUsername);
 
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha cambiado su alias a: $newUsername", date('Y-m-d H:i:s'), "correcto");
+
             $_SESSION['username'] = $newUsername;
             $success = ("Nombre de usuario actualizado correctamente, recargando...");
             //header("Location: my_profile.php");
