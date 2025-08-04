@@ -21,11 +21,14 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Crear instancia del controlador
 $controller = new SerieController();
 $userController = new UserController();
 $qualityController = new QualityController();
+$movementController = new MovementController();
 
 // Variable del mensaje de error si algo salió mal
 $error = "";
@@ -44,15 +47,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = $controller->associateSerieWithUser($serieId, $userId);
 
             if ($result) {
+                $serieData = $controller->getSerie($serieId);
+                $serieName = $serieData ? $serieData['name'] : 'serie desconocida';
+                $movementController->addMovement($_SESSION['username'], "ha añadido la serie $serieName", date('Y-m-d H:i:s'), "correcto");
                 $success = "Serie añadida correctamente, redirigiendo...";
                 //header("Location: series.php");
                 //exit();
             } else {
+                $movementController->addMovement($_SESSION['username'], "ha intentado añadir la serie $serieName", date('Y-m-d H:i:s'), "fallo al asociar");
                 $error = ("Error al asociar la serie con el usuario.");
             }
         } else {
             // Obtener el error de validación del controlador
-            $error = $controller->lastError ?: "Error al añadir la película.";
+            $error = $controller->lastError ?: "Error al añadir la serie.";
         }
     } catch (Exception $e) {
         $error = ("Error al añadir la serie: " . $e->getMessage());

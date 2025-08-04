@@ -7,6 +7,8 @@ require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -29,23 +31,27 @@ $movieId = $_GET['id'];
 // Crear instancias de los controladores
 $controller = new MovieController();
 $userController = new UserController();
+$movementController = new MovementController();
 
 try {
     // Obtener el ID del usuario actual
     $userId = $userController->getUserIdByUsername($_SESSION['username']);
-    
+
     // Verificar que la película pertenece al usuario
     $isOwner = $controller->checkMovieBelongsToUser($movieId, $userId);
-    
+
     // Si intenta borrar una película que no le "pertenece", redirigir
     if (!$isOwner) {
         header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         exit();
     }
-    
+
     // Eliminar la película si todas las verificaciones son correctas
+    $movieData = $controller->getMovie($movieId);
+    $movieName = $movieData ? $movieData['name'] : 'serie desconocida';
+    $movementController->addMovement($_SESSION['username'], "ha eliminado la película $movieName", date('Y-m-d H:i:s'), "correcto");
     $controller->deleteMovie($movieId);
-    
+
     // Redirigir a la lista de películas
     header('Location: movies.php?deleted=true');
     exit;

@@ -21,11 +21,14 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Crear instancia del controlador
 $controller = new MovieController();
 $userController = new UserController();
 $qualityController = new QualityController();
+$movementController = new MovementController();
 
 // Variable del mensaje de error si algo salió mal
 $error = "";
@@ -44,6 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = $controller->associateMovieWithUser($movieId, $userId);
 
             if ($result) {
+                $movieData = $controller->getMovie($movieId);
+                $movieName = $movieData ? $movieData['name'] : 'serie desconocida';
+                $movementController->addMovement($_SESSION['username'], "ha añadido la película $movieName", date('Y-m-d H:i:s'), "correcto");
                 $success = "Película añadida correctamente, redirigiendo...";
                 //header("Location: movies.php");
                 //exit();

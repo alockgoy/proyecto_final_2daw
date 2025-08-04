@@ -9,6 +9,8 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -41,6 +43,9 @@ $userController = new UserController();
 // Llamar al controlador de calidades
 $qualityController = new QualityController();
 
+// Llamar al controlador de movimientos
+$movementController = new MovementController();
+
 // Si la película no existe, mostrar error
 if (!$movie) {
     die('Error: La película solicitada no existe.');
@@ -63,6 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         if ($controller->updateMovie($id)) {
+            $movieData = $controller->getMovie($id);
+            $movieName = $movieData ? $movieData['name'] : 'serie desconocida';
+            $movementController->addMovement($_SESSION['username'], "ha editado la película $movieName", date('Y-m-d H:i:s'), "correcto");
             $success = "Película modificada correctamente, redirigiendo...";
         } else {
             // Obtener el error de validación del controlador
@@ -163,7 +171,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="gender" name="gender"
-                                        value="<?php echo htmlspecialchars($movie['gender']); ?>" placeholder="Género" required />
+                                        value="<?php echo htmlspecialchars($movie['gender']); ?>" placeholder="Género"
+                                        required />
                                     <label for="gender">Género</label>
                                 </div>
                             </div>

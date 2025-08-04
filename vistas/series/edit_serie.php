@@ -9,6 +9,8 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -23,6 +25,7 @@ if (!isset($_SESSION['username'])) {
 
 // Crear instancia del controlador
 $controller = new SerieController();
+$movementController = new MovementController();
 
 // Verificar que se ha proporcionado un ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -61,6 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         if ($controller->updateSerie($id)) {
+            $serieData = $controller->getSerie($id);
+            $serieName = $serieData ? $serieData['name'] : 'serie desconocida';
+            $movementController->addMovement($_SESSION['username'], "ha modificado la serie $serieName", date('Y-m-d H:i:s'), "correcto");
             $success = "Serie modificada correctamente, redirigiendo...";
         } else {
             // Obtener el error de validación del controlador
