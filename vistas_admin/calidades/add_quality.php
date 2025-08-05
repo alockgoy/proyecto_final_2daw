@@ -7,6 +7,8 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -27,6 +29,9 @@ $userController = new UserController();
 // Llamar al controlador de calidades
 $qualityController = new QualityController();
 
+// Llamar al controlador de movimientos
+$movementController = new MovementController();
+
 $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
 
@@ -39,16 +44,25 @@ if ($userRol != "root") {
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
+        // Comprobar que el nombre no esté vacío
+        $qualityName = trim($_POST["name"]);
 
-        if ($qualityController->addQuality($_POST["name"])) {
-            $success = "Calidad añadida correctamente, redirigiendo...";
+        if (empty($qualityName)) {
+            $movementController->addMovement($username, "ha intentado añadir una calidad vacía", date('Y-m-d H:i:s'), "fallido");
+            $error = "El nombre de la calidad no puede estar vacío.";
         } else {
-            // Obtener el error de validación del controlador
-            $error = $controller->lastError ?: "Error al añadir la calidad.";
+            // Intentar añadir la calidad
+            if ($qualityController->addQuality($qualityName)) {
+                $movementController->addMovement($username, "ha añadido la calidad: $qualityName", date('Y-m-d H:i:s'), "correcto");
+                $success = "Calidad añadida correctamente, redirigiendo...";
+            } else {
+                $movementController->addMovement($username, "ha intentado añadir la calidad: $qualityName", date('Y-m-d H:i:s'), "fallido");
+                $error = "Error al añadir la calidad. Puede que ya exista.";
+            }
         }
-
     } catch (Exception $e) {
-         $error = ("Error al añadir la calidad: " . $e->getMessage());
+        $movementController->addMovement($username, "ha intentado añadir una calidad", date('Y-m-d H:i:s'), "error");
+        $error = "Error al añadir la calidad: " . $e->getMessage();
     }
 }
 ?>
@@ -65,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Para iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="shortcut icon" href="../../img/iconos_navegador/serie.png" type="image/x-icon" />
-    
+
     <title>Añadir calidad</title>
 </head>
 
@@ -95,8 +109,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-cog"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        value="" placeholder="Ej: 1080p" required />
+                                    <input type="text" class="form-control" id="name" name="name" value=""
+                                        placeholder="Ej: 1080p" required />
                                     <label for="name">Nombre de la calidad</label>
                                 </div>
                             </div>

@@ -48,7 +48,7 @@ try {
 
     // Eliminar la película si todas las verificaciones son correctas
     $movieData = $controller->getMovie($movieId);
-    $movieName = $movieData ? $movieData['name'] : 'serie desconocida';
+    $movieName = $movieData ? $movieData['name'] : 'película desconocida';
     $movementController->addMovement($_SESSION['username'], "ha eliminado la película $movieName", date('Y-m-d H:i:s'), "correcto");
     $controller->deleteMovie($movieId);
 

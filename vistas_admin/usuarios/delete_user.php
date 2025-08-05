@@ -11,6 +11,10 @@ require_once '../../php/peliculas/Movie.php';
 require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
 
+// Traer los archivos de movimientos
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
+
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -31,6 +35,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 $userController = new UserController();
 $movieController = new MovieController();
 $serieController = new SerieController();
+$movementController = new MovementController();
 
 $adminUsername = $_SESSION['username'];
 $userRol = $userController->getUserRol($adminUsername);
@@ -46,6 +51,9 @@ try {
     $userId = $_GET['id'];
     
     // Eliminar el usuario si todas las verificaciones son correctas
+    $user = $userController->getUserById($userId);
+    $username = $user ? $user['username'] : 'Desconocido';
+    $movementController->addMovement($adminUsername, "ha eliminado a $username", date('Y-m-d H:i:s'), "correcto");
     $userController->deleteUser($userId);
 
     // Eliminar toda la multimedia que no tenga usuario asociado

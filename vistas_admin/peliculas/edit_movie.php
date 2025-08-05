@@ -9,6 +9,8 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -41,6 +43,9 @@ $userController = new UserController();
 // Llamar al controlador de calidades
 $qualityController = new QualityController();
 
+// Llamar al controlador de movimientos
+$movementController = new MovementController();
+
 // Comprobar que el usuario sea 'root'
 $userRol = $userController->getUserRol($_SESSION['username']);
 if ($userRol != "root") {
@@ -60,6 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
 
         if ($controller->updateMovie($id)) {
+            $movieData = $controller->getMovie($id);
+            $movieName = $movieData ? $movieData['name'] : 'película desconocida';
+            $movementController->addMovement($_SESSION['username'], "ha editado la película $movieName", date('Y-m-d H:i:s'), "correcto");
             $success = "Película modificada correctamente, redirigiendo...";
         } else {
             // Obtener el error de validación del controlador

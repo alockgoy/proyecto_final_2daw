@@ -379,5 +379,11 @@ class UserController
     {
         return $this->userModel->turnToNormal($username);
     }
+
+    // Obtener los datos de un usuario por su ID
+    public function getUserById($id)
+    {
+        return $this->userModel->getUserById($id);
+    }   
 }
 ?>

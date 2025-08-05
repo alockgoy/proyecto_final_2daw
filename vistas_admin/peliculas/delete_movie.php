@@ -7,6 +7,8 @@ require_once '../../php/peliculas/MovieController.php';
 require_once '../../php/peliculas/Movie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -29,6 +31,7 @@ $movieId = $_GET['id'];
 // Crear instancias de los controladores
 $controller = new MovieController();
 $userController = new UserController();
+$movementController = new MovementController();
 
 // Comprobar que el usuario sea 'root'
 $userRol = $userController->getUserRol($_SESSION['username']);
@@ -39,6 +42,9 @@ if ($userRol != "root") {
 
 try {
     // Eliminar la película si todas las verificaciones son correctas
+    $movieData = $controller->getMovie($movieId);
+    $movieName = $movieData ? $movieData['name'] : 'película desconocida';
+    $movementController->addMovement($_SESSION['username'], "ha eliminado la película $movieName", date('Y-m-d H:i:s'), "correcto");
     $controller->deleteMovie($movieId);
 
     // Redirigir a la lista de películas

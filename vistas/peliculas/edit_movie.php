@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($controller->updateMovie($id)) {
             $movieData = $controller->getMovie($id);
-            $movieName = $movieData ? $movieData['name'] : 'serie desconocida';
+            $movieName = $movieData ? $movieData['name'] : 'película desconocida';
             $movementController->addMovement($_SESSION['username'], "ha editado la película $movieName", date('Y-m-d H:i:s'), "correcto");
             $success = "Película modificada correctamente, redirigiendo...";
         } else {

@@ -17,6 +17,8 @@ if (!isset($_SESSION['username'])) {
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Crear instancia del controlador
 $userController = new UserController();
@@ -27,6 +29,7 @@ $email = $_SESSION['email'];
 $targetUsername = urldecode($_GET['username']);
 $userData = $userController->getUserByUsername($targetUsername);
 $userRol = $userController->getUserRol($username);
+$movementController = new MovementController();
 
 // Comprobar si un admin se está editando a sí mismo
 $isEditingSelf = ($targetUsername === $username);
@@ -54,12 +57,15 @@ if (isset($_POST['update_username'])) {
 
     if (empty($newUsername)) {
         $error = ("El nombre de usuario no puede estar vacío.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar el alias de $targetUsername a: $newUsername", date('Y-m-d H:i:s'), "alias vacío");
     } elseif ($newUsername === $userData['username']) {
         $error = "El nuevo nombre debe ser diferente al actual.";
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar el alias de $targetUsername a: $newUsername", date('Y-m-d H:i:s'), "alias repetido");
     } else {
         $result = $userController->updateUsername($userData['id_user'], $newUsername);
 
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha cambiado el alias de $targetUsername a: $newUsername", date('Y-m-d H:i:s'), "correcto");
             $success = ("Nombre de usuario actualizado correctamente, recargando...");
             // Actualizar
             $userData['username'] = $newUsername;
@@ -79,12 +85,15 @@ if (isset($_POST['update_email'])) {
 
     if (empty($newEmail)) {
         $error = ("El correo electrónico no puede estar vacío.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar el correo de $targetUsername", date('Y-m-d H:i:s'), "correo vacío");
     } elseif ($newEmail === $userData['email']) {
         $error = ("El nuevo correo debe ser diferente al actual.");
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar el correo de $targetUsername", date('Y-m-d H:i:s'), "correo repetido");
     } else {
         $result = $userController->updateEmail($userData['id_user'], $newEmail);
 
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha cambiado el correo de $targetUsername", date('Y-m-d H:i:s'), "correcto");
             $success = ("Correo electrónico actualizado correctamente, recargando...");
             //header("Location: my_profile.php");
             //exit();
@@ -101,14 +110,18 @@ if (isset($_POST['update_password'])) {
 
     if (empty($newPassword) || empty($confirmPassword)) {
         $error = "Todos los campos de contraseña son obligatorios.";
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar la clave de $targetUsername", date('Y-m-d H:i:s'), "campo vacío");
     } else if ($newPassword !== $confirmPassword) {
         $error = "Las nuevas contraseñas no coinciden.";
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar la clave de $targetUsername", date('Y-m-d H:i:s'), "no coincide");
     } else {
         $result = $userController->updatePasswordAsAdmin($userData['id_user'], $newPassword);
 
         if ($result) {
+            $movementController->addMovement($_SESSION['username'], "ha cambiado la clave de $targetUsername", date('Y-m-d H:i:s'), "correcto");
             $success = ("Contraseña actualizada correctamente, recargando...");
         } else {
+            $movementController->addMovement($_SESSION['username'], "ha intentado cambiar la clave de $targetUsername", date('Y-m-d H:i:s'), "error");
             $error = ("No se pudo actualizar la contraseña.");
         }
     }
@@ -122,9 +135,12 @@ if (isset($_POST['update_2fa'])) {
         $result = $userController->update2FAStatus($userData['id_user'], $new2FAStatus);
 
         if ($result) {
+            $estado = $new2FAStatus ? "activado" : "desactivado";
+            $movementController->addMovement($_SESSION['username'], "ha $estado la doble verificación de $targetUsername", date('Y-m-d H:i:s'), "correcto");
             $success = ("Estado de verificación en 2 pasos actualizado correctamente, recargando...");
             $userData['two_factor'] = $new2FAStatus;
         } else {
+            $movementController->addMovement($_SESSION['username'], "ha intentado cambiar el estado de la doble verificación de $targetUsername", date('Y-m-d H:i:s'), "fallido");
             $error = ("No se pudo actualizar el estado de verificación en 2 pasos.");
         }
     }
@@ -135,6 +151,7 @@ if (isset($_POST["update_pic"])) {
     $result = $userController->updateProfileImage($userData['id_user'], $_FILES['profile_pic'] ?? null);
 
     if ($result['success']) {
+        $movementController->addMovement($_SESSION['username'], "ha cambiado la foto de perfil de $targetUsername", date('Y-m-d H:i:s'), "correcto");
         $message = $result['message'];
         $userData['profile'] = $result['profile'];
 
@@ -142,6 +159,7 @@ if (isset($_POST["update_pic"])) {
         header("Location: show_user.php?username=" . urlencode($targetUsername) . "&updated=profile");
         exit();
     } else {
+        $movementController->addMovement($_SESSION['username'], "ha intentado cambiar la foto de perfil de $targetUsername", date('Y-m-d H:i:s'), "fallido");
         $error = $result['message'];
     }
 }
@@ -151,6 +169,7 @@ if (isset($_POST["turn_to_admin"])) {
     $result = $userController->turnToAdmin($userData['username']);
 
     if ($result) {
+        $movementController->addMovement($_SESSION['username'], "ha convertido en admin a $targetUsername", date('Y-m-d H:i:s'), "correcto");
         $success = "Usuario promovido a administrador correctamente, recargando...";
         $userData['rol'] = 'root';
     } else {
@@ -163,6 +182,7 @@ if (isset($_POST["remove_admin"])) {
     $result = $userController->turnToNormal($userData['username']);
 
     if ($result) {
+        $movementController->addMovement($_SESSION['username'], "ha nerfeado a $targetUsername", date('Y-m-d H:i:s'), "correcto");
         $success = "Usuario nerfeado correctamente, recargando...";
         $userData['rol'] = 'normal';
     } else {

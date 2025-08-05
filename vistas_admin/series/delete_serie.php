@@ -7,6 +7,8 @@ require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/movimientos/Movement.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -27,6 +29,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 // Crear instancias de los controladores
 $controller = new SerieController();
 $userController = new UserController();
+$movementController = new MovementController();
 
 $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
@@ -41,6 +44,9 @@ $id = $_GET['id'];
 
 try {
     // Eliminar la serie si todas las verificaciones son correctas
+    $serieData = $controller->getSerie($id);
+    $serieName = $serieData ? $serieData['name'] : 'serie desconocida';
+    $movementController->addMovement($_SESSION['username'], "ha eliminado la serie $serieName", date('Y-m-d H:i:s'), "correcto");
     $controller->deleteSerie($id);
     
     // Redirigir a la lista de series
