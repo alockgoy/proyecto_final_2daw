@@ -7,3 +7,4 @@ img/portadas_series/*
 img/avatares_usuarios/*
 !img/avatares_usuarios/*.txt
 !img/avatares_usuarios/default.jpg
+api_config.php

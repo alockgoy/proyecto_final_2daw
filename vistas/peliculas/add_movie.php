@@ -23,17 +23,36 @@ require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/api/ApiController.php';
+require_once '../../php/api/api_config.php';
 
 // Crear instancia del controlador
 $controller = new MovieController();
 $userController = new UserController();
 $qualityController = new QualityController();
 $movementController = new MovementController();
+$apiController = new ApiController();
 
 // Variable del mensaje de error si algo salió mal
 $error = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Variable para almacenar resultados de búsqueda
+$searchResults = [];
+
+if (isset($_POST['search_movie'])) {
+    $searchQuery = trim($_POST['search_query']);
+    if (!empty($searchQuery)) {
+        $searchResults = $apiController->searchMovie($searchQuery);
+
+        // Verificar si hay error en la API
+        if (isset($searchResults['error'])) {
+            $apiError = $searchResults['error'];
+            $searchResults = [];
+        }
+    }
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['search_movie'])) {
     try {
         // Añadir la película con la validación incorporada
         if ($controller->addMovie()) {
@@ -86,6 +105,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center mb-0"><i class="fas fa-film me-2"></i>Añadir Película</h2>
+
+                <div class="card-body border-bottom">
+                    <h5><i class="fas fa-search me-2"></i>Buscar en TheMovieDB</h5>
+                    <form method="POST" class="mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search_query" placeholder="Buscar película..."
+                                value="<?php echo isset($_POST['search_query']) ? htmlspecialchars($_POST['search_query']) : ''; ?>">
+                            <button type="submit" name="search_movie" class="btn btn-outline-primary">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </form>
+
+                    <?php if (!empty($searchResults['results'])): ?>
+                        <div class="row">
+                            <?php foreach (array_slice($searchResults['results'], 0, 5) as $movie): ?>
+                                <div class="col-md-6 mb-2">
+                                    <div class="card h-100">
+                                        <div class="row g-0">
+                                            <div class="col-4">
+                                                <?php if ($movie['poster_path']): ?>
+                                                    <img src="<?php echo TMDBConfig::IMAGE_BASE_URL . $movie['poster_path']; ?>"
+                                                        class="img-fluid rounded-start h-100" style="object-fit: cover;">
+                                                <?php else: ?>
+                                                    <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                                                        <i class="fas fa-film fa-2x text-muted"></i>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="card-body p-2">
+                                                    <h6 class="card-title"><?php echo htmlspecialchars($movie['title']); ?></h6>
+                                                    <p class="card-text small">
+                                                        <?php echo htmlspecialchars(substr($movie['overview'], 0, 100)); ?>...
+                                                    </p>
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        onclick="fillMovieData(<?php echo $movie['id']; ?>)">
+                                                        <i class="fas fa-plus"></i> Usar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="card-body">
 
@@ -144,7 +211,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <input type="text" class="form-control" id="gender" name="gender" placeholder="Género" required />
+                                    <input type="text" class="form-control" id="gender" name="gender"
+                                        placeholder="Género" required />
                                     <label for="gender">Género</label>
                                 </div>
                             </div>
@@ -170,11 +238,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <select class="form-select" id="id_quality" name="id_quality" required>
                                         <option value="" selected disabled>Selecciona la calidad</option>
                                         <?php
-                                            // Obtener todas las calidades disponibles desde el controlador
-                                            $qualities = $qualityController->index();
-                                            foreach ($qualities as $quality) {
-                                                echo '<option value="' . htmlspecialchars($quality['id_quality']) . '">' . htmlspecialchars($quality['name']) . '</option>';
-                                            }
+                                        // Obtener todas las calidades disponibles desde el controlador
+                                        $qualities = $qualityController->index();
+                                        foreach ($qualities as $quality) {
+                                            echo '<option value="' . htmlspecialchars($quality['id_quality']) . '">' . htmlspecialchars($quality['name']) . '</option>';
+                                        }
                                         ?>
                                     </select>
                                     <label for="quality">Calidad *</label>
@@ -281,6 +349,84 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
     <script src="../../js/peliculas/delete_input_file.js"></script>
+
+    <script>
+        function fillMovieData(movieId) {
+            console.log('fillMovieData llamada con ID:', movieId);
+            fetch(`../../php/api/ApiComponent.php?id=${movieId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Datos recibidos:', data);
+
+                    // Rellenar campos del formulario
+                    if (data.name) document.getElementById('name').value = data.name;
+                    if (data.year) document.getElementById('year').value = data.year;
+                    if (data.synopsis) document.getElementById('synopsis').value = data.synopsis;
+                    if (data.genres) document.getElementById('gender').value = data.genres;
+                    if (data.rating) document.getElementById('rating').value = data.rating;
+
+                    // Scroll al formulario
+                    document.getElementById('name').scrollIntoView({ behavior: 'smooth' });
+
+                    // Mostrar notificación de éxito
+                    showNotification('Datos cargados desde TheMovieDB', 'success');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Error al cargar los datos de la película', 'danger');
+                });
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+            notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+            const cardBody = document.querySelector('.card-body');
+            cardBody.insertBefore(notification, cardBody.firstChild);
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
+        function downloadAndSetPoster(posterUrl, movieName) {
+            // Mostrar que se está descargando
+            const posterInput = document.getElementById('poster');
+            const posterLabel = document.querySelector('label[for="poster"]');
+
+            posterLabel.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Descargando poster...';
+
+            // Crear un enlace para descargar la imagen
+            fetch(`../../php/api/DownloadPoster.php?url=${encodeURIComponent(posterUrl)}&name=${encodeURIComponent(movieName)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Simular la selección del archivo
+                        posterLabel.innerHTML = '<i class="fas fa-check me-2"></i>Poster cargado: ' + data.filename;
+                        posterInput.setAttribute('data-auto-poster', data.filename);
+                        posterInput.removeAttribute('required');
+
+                        showNotification('Poster descargado automáticamente', 'success');
+                    } else {
+                        posterLabel.innerHTML = '<i class="fas fa-image me-2"></i>Poster *';
+                        showNotification('No se pudo descargar el poster automáticamente', 'warning');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error descargando poster:', error);
+                    posterLabel.innerHTML = '<i class="fas fa-image me-2"></i>Poster *';
+                    showNotification('Error al descargar el poster', 'warning');
+                });
+            }
+            console.log('JavaScript inline cargado');
+    </script>
 </body>
 
 </html>
