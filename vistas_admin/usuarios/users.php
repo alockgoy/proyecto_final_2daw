@@ -156,17 +156,26 @@ $usuarios = $userController->index();
                                 </td>
 
                                 <td>
-                                    <?php if ($usuario['username'] !== $username): ?>
+                                    <?php
+                                    $isCurrentUser = ($usuario['username'] === $username);
+                                    $isOwner = ($usuario['rol'] === 'propietario');
+
+                                    if ($isCurrentUser): ?>
+                                        <span class="text">
+                                            <i class="fas fa-user-circle me-1"></i>
+                                            Tú
+                                        </span>
+                                    <?php elseif ($isOwner): ?>
+                                        <span class="text-warning">
+                                            <i class="fas fa-crown me-1"></i>
+                                            Propietario
+                                        </span>
+                                    <?php else: ?>
                                         <a class="btn btn-warning"
                                             href="show_user.php?username=<?php echo urlencode($usuario['username']); ?>"
                                             style="text-decoration: none;">
                                             Editar
                                         </a>
-                                    <?php else: ?>
-                                        <span class="text">
-                                            <i class="fas fa-user-circle me-1"></i>
-                                            Tú
-                                        </span>
                                     <?php endif; ?>
                                 </td>
                             </tr>
