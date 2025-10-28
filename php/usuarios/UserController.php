@@ -147,6 +147,11 @@ class UserController
     // Eliminar un usuario
     public function deleteUser($id)
     {
+        // Verificar si el usuario es propietario
+        if ($this->userModel->isOwner($id)) {
+            throw new Exception("No se puede eliminar la cuenta del propietario.");
+        }
+
         // Primero obtener la información del usuario para saber su foto de perfil
         $user = $this->userModel->getUserById($id);
 
@@ -167,7 +172,11 @@ class UserController
         }
 
         // Después, eliminar el usuario de la base de datos
-        $this->userModel->deleteUser($id);
+        $result = $this->userModel->deleteUser($id);
+
+        if (!$result) {
+            throw new Exception("No se pudo eliminar el usuario.");
+        }
 
         header("Location: ../../index.html");
     }
@@ -356,6 +365,28 @@ class UserController
         return $this->userModel->getUserRol($username);
     }
 
+    // Comprobar si el usuario tiene privilegios de administrador (root o propietario)
+    public function hasAdminPrivileges($username)
+    {
+        return $this->userModel->hasAdminPrivileges($username);
+    }
+
+    // Comprobar si un usuario es propietario por ID
+    public function isOwner($userId)
+    {
+        return $this->userModel->isOwner($userId);
+    }
+
+    // Comprobar si un usuario es propietario por nombre de usuario
+    public function isOwnerByUsername($username)
+    {
+        $userId = $this->getUserIdByUsername($username);
+        if ($userId) {
+            return $this->userModel->isOwner($userId);
+        }
+        return false;
+    }
+
     // Solicitar ser admin
     public function askForAdmin($username)
     {
@@ -384,6 +415,6 @@ class UserController
     public function getUserById($id)
     {
         return $this->userModel->getUserById($id);
-    }   
+    }
 }
 ?>

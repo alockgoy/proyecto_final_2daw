@@ -389,20 +389,24 @@ if (isset($_POST['ask_for_admin'])) {
                         <i class="fas fa-arrow-left"></i> Volver a la biblioteca
                     </a>
 
-                    <a class="btn btn-danger" href="#"
+                    <?php
+                    if ($userRol != "propietario") {
+                        echo '<a class="btn btn-danger" href="#"
                         data-confirm="¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer."
-                        data-url="delete_user.php?id=<?php echo $userData['id_user']; ?>"
+                        data-url="delete_user.php?id=' . $userData['id_user'] . '"
                         data-confirm-text="Borrar cuenta" style="text-decoration: none;">
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
-                    </a>
-
+                    </a>';
+                    }
+                    
+                    ?>
                     <a class="btn btn-warning" href="./logout.php" style="text-decoration: none;">
                         <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                     </a>
 
                     <?php
                     // Comprobar el rol del usuario y mostrar diferentes botones dependiendo del caso
-                    if ($userRol != "root" && $userRol != "solicita"): ?>
+                    if ($userRol != "root" && $userRol != "solicita" && $userRol != "propietario"): ?>
                         <form method="POST" class="d-inline">
                             <button type="submit" name="ask_for_admin" class="btn btn-info" style="text-decoration: none;">
                                 <i class="fas fa-user-shield"></i> Solicitar ser admin

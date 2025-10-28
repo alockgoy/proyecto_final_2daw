@@ -26,7 +26,7 @@ $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
 
 // Comprobar que el usuario sea 'root'
-if ($userRol != "root") {
+if ($userRol != "root" && $userRol != "propietario") {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();
 }
@@ -125,7 +125,6 @@ $series = $controller->index();
                 <?php if (empty($series)): ?>
                     <div class="col-12 text-center mt-5">
                         <p class="lead">No hay series disponibles.</p>
-                        <a href="add_serie.php" class="btn btn-primary mt-3">Añadir Nueva Serie</a>
                     </div>
                 <?php else: ?>
                     <!-- Mostrar series en tarjetas -->

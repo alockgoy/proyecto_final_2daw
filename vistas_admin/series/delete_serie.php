@@ -35,7 +35,7 @@ $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
 
 // Comprobar que el usuario sea 'root'
-if ($userRol != "root") {
+if ($userRol != "root" && $userRol != "propietario") {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();
 }

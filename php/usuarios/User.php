@@ -51,9 +51,24 @@ class User
         }
     }
 
-    // Eliminar un usuario
+    // Comprobar si un usuario es propietario
+    public function isOwner($id_user)
+    {
+        $stmt = $this->pdo->prepare("SELECT rol FROM Users WHERE id_user = ?");
+        $stmt->execute([$id_user]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result && $result['rol'] === 'propietario';
+    }
+
+    // Eliminar un usuario (no se puede eliminar al propietario)
     public function deleteUser($id_user)
     {
+        // Comprobar si el usuario es propietario
+        if ($this->isOwner($id_user)) {
+            error_log("No se puede eliminar al propietario");
+            return false;
+        }
+
         $stmt = $this->pdo->prepare("DELETE FROM Users WHERE id_user = ?");
         return $stmt->execute([$id_user]);
     }
@@ -273,6 +288,13 @@ class User
         return $result ? $result['rol'] : null;
     }
 
+    // Comprobar si el usuario tiene privilegios de administrador (root o propietario)
+    public function hasAdminPrivileges($username)
+    {
+        $rol = $this->getUserRol($username);
+        return $rol === 'root' || $rol === 'propietario';
+    }
+
     // Solicitar ser admin
     public function askForAdmin($username)
     {
@@ -295,6 +317,13 @@ class User
     // Convertir usuario a administrador
     public function turnToAdmin($username)
     {
+        // Comprobar que no sea el propietario 
+        $currentRol = $this->getUserRol($username);
+        if ($currentRol === 'propietario') {
+            error_log("No se puede cambiar el rol del propietario.");
+            return false;
+        }
+
         $stmt = $this->pdo->prepare("UPDATE Users SET rol='root' WHERE username = ?");
         return $stmt->execute([$username]);
     }
@@ -302,6 +331,13 @@ class User
     // Convertir al usuario a "normal"
     public function turnToNormal($username)
     {
+        // Comprobar que no sea el propietario 
+        $currentRol = $this->getUserRol($username);
+        if ($currentRol === 'propietario') {
+            error_log("Intento de cambiar rol de propietario - Operación bloqueada");
+            return false;
+        }
+
         $stmt = $this->pdo->prepare("UPDATE Users SET rol='normal' WHERE username = ?");
         return $stmt->execute([$username]);
     }

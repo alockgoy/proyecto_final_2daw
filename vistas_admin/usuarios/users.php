@@ -26,7 +26,7 @@ $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
 
 // Comprobar que el usuario sea 'root'
-if ($userRol != "root") {
+if ($userRol != "root" && $userRol != "propietario") {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();
 }
@@ -156,9 +156,18 @@ $usuarios = $userController->index();
                                 </td>
 
                                 <td>
-                                    <a class="btn btn-warning" href="show_user.php?username=<?php echo urlencode($usuario['username']); ?>" style="text-decoration: none;">
-                                        Editar
-                                    </a>
+                                    <?php if ($usuario['username'] !== $username): ?>
+                                        <a class="btn btn-warning"
+                                            href="show_user.php?username=<?php echo urlencode($usuario['username']); ?>"
+                                            style="text-decoration: none;">
+                                            Editar
+                                        </a>
+                                    <?php else: ?>
+                                        <span class="text">
+                                            <i class="fas fa-user-circle me-1"></i>
+                                            Tú
+                                        </span>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -186,12 +195,12 @@ $usuarios = $userController->index();
 
                 <!--Elementos de la barra de navegación-->
                 <div class="collapse navbar-collapse" id="navbarFooter">
-                <ul class="navbar-nav">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="../../vistas/usuarios/my_profile.php">Volver atrás</a>
                         </li>
                     </ul>
-                <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="../../vistas/usuarios/logout.php">
                                 <i class="fa-solid fa-right-from-bracket me-1"></i>

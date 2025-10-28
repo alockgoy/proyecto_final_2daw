@@ -32,17 +32,17 @@ $userRol = $userController->getUserRol($username);
 $movementController = new MovementController();
 
 // Comprobar si un admin se está editando a sí mismo
-$isEditingSelf = ($targetUsername === $username);
+$isEditingSelf = ($userData['username'] === $username);
 
 // Comprobar que el usuario sea 'root'
-if ($userRol != "root" && !$isEditingSelf) {
+if ($userRol != "root" && $userRol != "propietario") {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();
-} elseif ($userRol != "root" && $isEditingSelf) {
-    session_start();
-    session_unset();
-    session_destroy();
-    header("Location: ../../vistas/usuarios/logout.php");
+}
+
+// Si es root/propietario pero se está editando a sí mismo, redirigir a users.php
+if ($isEditingSelf) {
+    header("Location: ./users.php");
     exit();
 }
 

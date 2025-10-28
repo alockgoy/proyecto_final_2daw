@@ -11,8 +11,22 @@ CREATE TABLE Users(
     password VARCHAR(300) NOT NULL,
     profile VARCHAR(255),
     two_factor BOOLEAN DEFAULT FALSE,
-    rol VARCHAR(10) DEFAULT 'normal' CHECK (rol IN ('root', 'normal', 'solicita'))
+    rol VARCHAR(15) DEFAULT 'normal' CHECK (rol IN ('root', 'normal', 'solicita', 'propietario'))
 );
+
+/* Nueva tabla, calidades */
+CREATE TABLE Qualities(
+    id_quality INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(15) NOT NULL
+);
+
+    /* Insertar valores por defecto en la tabla de calidades */
+    INSERT INTO Qualities(name) VALUES('4K');
+    INSERT INTO Qualities(name) VALUES('1440p');
+    INSERT INTO Qualities(name) VALUES('1080p');
+    INSERT INTO Qualities(name) VALUES('720p');
+    INSERT INTO Qualities(name) VALUES('480p');
+    INSERT INTO Qualities(name) VALUES('otro');
 
 /* Creación de la tabla películas */
 CREATE TABLE Movies(
@@ -50,20 +64,6 @@ CREATE TABLE Series(
     server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
     rating FLOAT
 );
-
-/* Nueva tabla, calidades */
-CREATE TABLE Qualities(
-    id_quality INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(15) NOT NULL
-);
-
-    /* Insertar valores por defecto en la tabla de calidades */
-    INSERT INTO Qualities(name) VALUES('4K');
-    INSERT INTO Qualities(name) VALUES('1440p');
-    INSERT INTO Qualities(name) VALUES('1080p');
-    INSERT INTO Qualities(name) VALUES('720p');
-    INSERT INTO Qualities(name) VALUES('480p');
-    INSERT INTO Qualities(name) VALUES('otro');
 
 /* Tabla que sale de la unión de usuarios y películas */
 CREATE TABLE Users_Movies(
