@@ -31,11 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validaciones
     if (empty($formusername) || empty($formemail) || empty($formpassword) || empty($formconfirm_password)) {
-        $error = 'No puede haber campos vacíos';
+        $error = 'campos_vacios';
     } elseif (!filter_var($formemail, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Correo inválido';
+        $error = 'email_invalido';
     } elseif ($formpassword !== $formconfirm_password) {
-        $error = 'Las contraseñas no coinciden';
+        $error = 'passwords_no_coinciden';
     }
 
     // Si no hay errores, proceder con la instalación
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php
                 switch ($_GET['error']) {
                     case 'campos_vacios':
-                        echo 'Por favor, completa todos los campos.';
+                        echo 'No puedes dejar campos vacíos.';
                         break;
                     case 'email_invalido':
                         echo 'El email no es válido.';
