@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Si hubo error, redirigir con el error en la URL
     if ($error !== null) {
-        header("Location: install.php?error=$error&username=" . urlencode($username) . "&email=" . urlencode($email));
+        header("Location: install.php?error=" . urlencode($error) . "&username=" . urlencode($formusername) . "&email=" . urlencode($formemail));
         exit();
     }
 }
