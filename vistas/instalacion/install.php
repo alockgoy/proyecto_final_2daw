@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 6. Crear el usuario propietario
             $salt = rand(-1000000, 1000000);
             $hashedPassword = hash('sha256', $formpassword . $salt);
-            $profile = '../../img/avatares_usuarios/default.jpg'; // Imagen por defecto
+            $profile = 'img/avatares_usuarios/default.jpg'; // Imagen por defecto
             
             $result = $controller->createOwner(
                 $formusername,
