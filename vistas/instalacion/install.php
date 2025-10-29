@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formemail = trim($_POST['email'] ?? '');
     $formpassword = $_POST['password'] ?? '';
     $formconfirm_password = $_POST['confirm_password'] ?? '';
-    
+
     // Variable para almacenar errores
     $error = null;
-    
+
     // Validaciones
     if (empty($formusername) || empty($formemail) || empty($formpassword) || empty($formconfirm_password)) {
         $error = 'No puede haber campos vacíos';
@@ -37,23 +37,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($formpassword !== $formconfirm_password) {
         $error = 'Las contraseñas no coinciden';
     }
-    
+
     // Si no hay errores, proceder con la instalación
     if ($error === null) {
         try {
             // 1. Crear la base de datos
             $controller->createDatabase();
-            
+
             // 2. Obtener las variables de configuración del config.php original
             global $host, $dbname, $username, $password;
-            
+
             // 3. Reconectar a la base de datos recién creada usando las variables de config.php
             $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // 4. Recrear el controlador con la nueva conexión
             $controller = new InstallController();
-            
+
             // 5. Crear todas las tablas en orden
             $controller->createTableUsers();
             $controller->createTableQualities();
@@ -63,12 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->createTableUsersMovies();
             $controller->createTableUsersSeries();
             $controller->createTableMovements();
-            
+
             // 6. Crear el usuario propietario
             $salt = rand(-1000000, 1000000);
             $hashedPassword = hash('sha256', $formpassword . $salt);
             $profile = 'img/avatares_usuarios/default.jpg'; // Imagen por defecto
-            
+
             $result = $controller->createOwner(
                 $formusername,
                 $formemail,
@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 0, // two_factor desactivado
                 'propietario' // rol
             );
-            
+
             if ($result) {
                 // 7. Registrar el movimiento de instalación
                 require_once '../../php/movimientos/MovementController.php';
@@ -89,20 +89,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     date('Y-m-d H:i:s'),
                     "correcto"
                 );
-                
+
+                $success = "Sistema instalado correctamente, redirigiendo al login.";
+
                 // 8. Redirigir al login
-                header('Location: ../../vistas/usuarios/login.php');
-                exit();
+                // header('Location: ../../vistas/usuarios/login.php');
+                // exit();
             } else {
                 throw new Exception("No se pudo crear el usuario propietario");
             }
-            
+
         } catch (Exception $e) {
             error_log("Error en la instalación: " . $e->getMessage());
             $error = 'error_instalacion';
         }
     }
-    
+
     // Si hubo error, redirigir con el error en la URL
     if ($error !== null) {
         header("Location: install.php?error=" . urlencode($error) . "&username=" . urlencode($formusername) . "&email=" . urlencode($formemail));
@@ -155,6 +157,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo 'Error desconocido.';
                 }
                 ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success" role="alert" data-redirect="../../vistas/usuarios/login.php">
+                <i class="fas fa-check-circle me-2"></i><?php echo htmlspecialchars($success); ?>
             </div>
         <?php endif; ?>
 
@@ -228,6 +236,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Enlace al archivo JS que permite mostrar la contraseña -->
     <script src="../../js/usuarios/show_password.js"></script>
+
+    <!-- Enlace al Javascript de instalación -->
+    <script src="../../js/instalacion/install.js"></script>
 </body>
 
 </html>
