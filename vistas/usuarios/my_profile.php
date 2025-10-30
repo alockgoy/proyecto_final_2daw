@@ -382,6 +382,18 @@ if (isset($_POST['ask_for_admin'])) {
                 </div>
             </div>
 
+            <!-- Sección de Backup -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <a href="./export_backup.php" class="btn btn-success" style="text-decoration: none;">
+                        <i class="fas fa-download"></i> Exportar Copia de Seguridad
+                    </a>
+                    <a href="./import_backup.php" class="btn btn-info" style="text-decoration: none;">
+                        <i class="fas fa-upload"></i> Importar Copia de Seguridad
+                    </a>
+                </div>
+            </div>
+
             <!-- Enlaces y botones de acción -->
             <div class="row mt-4">
                 <div class="col-12">
@@ -398,7 +410,7 @@ if (isset($_POST['ask_for_admin'])) {
                         <i class="fas fa-trash-alt"></i> Borrar cuenta
                     </a>';
                     }
-                    
+
                     ?>
                     <a class="btn btn-warning" href="./logout.php" style="text-decoration: none;">
                         <i class="fas fa-sign-out-alt"></i> Cerrar sesión
