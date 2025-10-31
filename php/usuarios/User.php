@@ -104,9 +104,9 @@ class User
             }
 
             // Verificar la contraseña usando la salt almacenada
-            $hashedPassword = hash('sha256', $password . $user['salt']);
+            $hashedPassword = hash_pbkdf2('sha256', $password, $user['salt'], 100000, 64);
 
-            if ($hashedPassword === $user['password']) {
+            if (hash_equals($user['password'], $hashedPassword)) {
                 // Si la contraseña es correcta, vaciar los datos
                 unset($user['password']);
                 unset($user['salt']);
@@ -135,9 +135,9 @@ class User
             }
 
             // Verificar la contraseña usando la salt almacenada
-            $hashedPassword = hash('sha256', $password . $user['salt']);
+            $hashedPassword = hash_pbkdf2('sha256', $password, $user['salt'], 100000, 64);
 
-            if ($hashedPassword === $user['password']) {
+            if (hash_equals($user['password'], $hashedPassword)) {
                 // Si la contraseña es correcta, vaciar los datos
                 unset($user['password']);
                 unset($user['salt']);
@@ -197,14 +197,14 @@ class User
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Verificar la contraseña actual
-        $hashedCurrentPassword = hash('sha256', $currentPassword . $userData['salt']);
-        if ($hashedCurrentPassword !== $userData['password']) {
+        $hashedCurrentPassword = hash_pbkdf2('sha256', $currentPassword, $userData['salt'], 100000, 64);
+        if (!hash_equals($userData['password'], $hashedCurrentPassword)) {
             return false; // Contraseña actual incorrecta
         }
 
         // Generar un nueva salt y hash para la nueva contraseña
-        $newSalt = rand(-1000000, 1000000);
-        $hashedNewPassword = hash('sha256', $newPassword . $newSalt);
+        $newSalt = bin2hex(random_bytes(32));
+        $hashedNewPassword = hash_pbkdf2('sha256', $newPassword, $newSalt, 100000, 64);
 
         // Actualizar la contraseña
         $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE id_user = ?");
@@ -306,8 +306,8 @@ class User
     public function updatePasswordAsAdmin($userId, $newPassword)
     {
         // Generar un nueva salt y hash para la nueva contraseña
-        $newSalt = rand(-1000000, 1000000);
-        $hashedNewPassword = hash('sha256', $newPassword . $newSalt);
+        $newSalt = bin2hex(random_bytes(32));
+        $hashedNewPassword = hash_pbkdf2('sha256', $newPassword, $newSalt, 100000, 64);
 
         // Actualizar la contraseña
         $stmt = $this->pdo->prepare("UPDATE Users SET password = ?, salt = ? WHERE id_user = ?");

@@ -37,10 +37,10 @@ class UserController
             }
 
             // Generar salt aleatoria
-            $salt = rand(-1000000, 1000000);
+            $salt = bin2hex(random_bytes(32));
 
             // Hashear la contraseña con la salt
-            $hashedPassword = hash('sha256', $_POST['password'] . $salt);
+            $hashedPassword = hash_pbkdf2('sha256', $_POST['password'], $salt, 100000, 64);
 
             // Procesar la imagen de perfil si existe
             $profilePath = null;
@@ -338,10 +338,10 @@ class UserController
     public function resetUserPassword($email, $newPassword)
     {
         // Generar nuevo salt
-        $newSalt = rand(-1000000, 1000000);
+        $newSalt = bin2hex(random_bytes(32));
 
         // Hashear la nueva contraseña
-        $hashedPassword = hash('sha256', $newPassword . $newSalt);
+        $hashedPassword = hash_pbkdf2('sha256', $newPassword, $newSalt, 100000, 64);
 
         // Llamar al modelo para actualizar la contraseña
         return $this->userModel->resetUserPassword($email, $newSalt, $hashedPassword);

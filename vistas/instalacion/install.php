@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->createTableMovements();
 
             // 6. Crear el usuario propietario
-            $salt = rand(-1000000, 1000000);
-            $hashedPassword = hash('sha256', $formpassword . $salt);
-            $profile = 'img/avatares_usuarios/default.jpg'; // Imagen por defecto
+            $salt = bin2hex(random_bytes(32));
+            $hashedPassword = hash_pbkdf2('sha256', $formpassword, $salt, 100000, 64);
+            $profile = null; // Imagen por defecto
 
             $result = $controller->createOwner(
                 $formusername,
