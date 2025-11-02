@@ -2,6 +2,7 @@
 require_once '../../php/backup/BackupController.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/movimientos/MovementController.php';
+require_once '../../php/seguridad.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -28,6 +29,16 @@ $message = '';
 $messageType = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['backup_file'])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: import_backup.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $backupController = new BackupController();
     $movementController = new MovementController();
 
@@ -89,6 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['backup_file'])) {
                             <div class="alert alert-<?php echo $messageType; ?>" role="alert">
                                 <?php echo $message; ?>
                             </div>
+                        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Error de seguridad:</strong> Token CSRF inválido. Por favor, recarga la página e
+                                intenta de nuevo.
+                            </div>
                         <?php endif; ?>
 
                         <?php if ($messageType === 'success'): ?>
@@ -132,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['backup_file'])) {
                         </div>
 
                         <form method="POST" enctype="multipart/form-data" id="importForm">
+                            <?php echo campoTokenCSRF(); ?>
                             <div class="mb-3">
                                 <label for="backup_file" class="form-label">
                                     <i class="fas fa-file-import me-2"></i>Seleccionar archivo de backup (.json)

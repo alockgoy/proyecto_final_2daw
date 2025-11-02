@@ -19,6 +19,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Crear instancia del controlador
 $controller = new UserController();
@@ -105,6 +106,15 @@ if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_dig
     // Comprobar que se ha pulsado el botón de envío
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
+        // Validar CSRF
+        if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+            header('Location: two_factor.php?error=csrf');
+            exit();
+        }
+
+        // Regenerar token
+        regenerarTokenCSRF();
+
         // Obtener los valores introducidos en el formulario
         $input_code = implode('', array_map('trim', $_POST['2fa'] ?? []));
 
@@ -170,8 +180,15 @@ if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_dig
                             <div class="alert alert-danger" role="alert">
                                 <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
                             </div>
+                        <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Error de seguridad: Token CSRF inválido.
+                                Recarga la
+                                página e intenta de nuevo.
+                            </div>
                         <?php endif; ?>
                         <form method="POST">
+                            <?php echo campoTokenCSRF(); ?>
                             <div class="row mb-4">
                                 <div class="col-lg-2 col-md-2 col-2 ps-0 ps-md-2">
                                     <input type="text" name="2fa[]" class="form-control text-lg text-center"

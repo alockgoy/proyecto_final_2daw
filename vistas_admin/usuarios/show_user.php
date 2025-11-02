@@ -19,6 +19,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Crear instancia del controlador
 $userController = new UserController();
@@ -53,6 +54,16 @@ if (!$userData) {
 
 // Procesar cambio de nombre de usuario
 if (isset($_POST['update_username'])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $newUsername = trim($_POST['new_username']);
 
     if (empty($newUsername)) {
@@ -80,6 +91,16 @@ if (isset($_POST['update_username'])) {
 
 // Procesar cambio de correo electrónico
 if (isset($_POST['update_email'])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $newEmail = trim($_POST['new_email']);
     $passwordForEmail = trim($_POST['password_for_email']);
 
@@ -105,6 +126,16 @@ if (isset($_POST['update_email'])) {
 
 // Procesar cambio de contraseña
 if (isset($_POST['update_password'])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $newPassword = $_POST['new_password'];
     $confirmPassword = $_POST['confirm_password'];
 
@@ -129,6 +160,16 @@ if (isset($_POST['update_password'])) {
 
 // Procesar cambio de verificación en 2 pasos
 if (isset($_POST['update_2fa'])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $new2FAStatus = isset($_POST['two_factor']) ? 1 : 0;
 
     if ($new2FAStatus != $userData['two_factor']) {
@@ -148,6 +189,16 @@ if (isset($_POST['update_2fa'])) {
 
 // Procesar cambio de foto de perfil
 if (isset($_POST["update_pic"])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $result = $userController->updateProfileImage($userData['id_user'], $_FILES['profile_pic'] ?? null);
 
     if ($result['success']) {
@@ -166,6 +217,16 @@ if (isset($_POST["update_pic"])) {
 
 // Procesar el promover a admin
 if (isset($_POST["turn_to_admin"])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $result = $userController->turnToAdmin($userData['username']);
 
     if ($result) {
@@ -179,6 +240,16 @@ if (isset($_POST["turn_to_admin"])) {
 
 // Procesar el dejar de ser admin
 if (isset($_POST["remove_admin"])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: show_user.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     $result = $userController->turnToNormal($userData['username']);
 
     if ($result) {
@@ -219,6 +290,12 @@ if (isset($_POST["remove_admin"])) {
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
                     </div>
+                <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Error de seguridad: Token CSRF inválido.
+                        Recarga la
+                        página e intenta de nuevo.
+                    </div>
                 <?php endif; ?>
 
                 <?php if (!empty($success)): ?>
@@ -235,6 +312,7 @@ if (isset($_POST["remove_admin"])) {
                             alt="Foto de perfil" class="profile-pic rounded-circle mt-5" />
 
                         <form method="POST" enctype="multipart/form-data" class="mt-3">
+                            <?php echo campoTokenCSRF(); ?>
                             <div class="form-group">
                                 <label for="profile_pic" class="labels">Cambiar foto de perfil:</label>
                                 <input type="file" id="profile_pic" name="profile_pic" accept="image/*"
@@ -260,6 +338,7 @@ if (isset($_POST["remove_admin"])) {
                             </p>
 
                             <form method="POST">
+                                <?php echo campoTokenCSRF(); ?>
                                 <div class="form-group">
                                     <label for="new_username" class="labels">Nuevo nombre de usuario:</label>
                                     <input type="text" id="new_username" name="new_username" class="form-control"
@@ -276,6 +355,7 @@ if (isset($_POST["remove_admin"])) {
                             <p>Correo actual: <strong><?php echo htmlspecialchars($userData['email']); ?></strong></p>
 
                             <form method="POST">
+                                <?php echo campoTokenCSRF(); ?>
                                 <div class="form-group">
                                     <label for="new_email" class="labels">Nuevo correo electrónico:</label>
                                     <input type="email" id="new_email" name="new_email" class="form-control" required />
@@ -299,6 +379,7 @@ if (isset($_POST["remove_admin"])) {
                             <h5>Cambiar contraseña</h5>
 
                             <form method="POST">
+                                <?php echo campoTokenCSRF(); ?>
                                 <div class="form-group">
                                     <label for="new_password" class="labels">Nueva contraseña:</label>
                                     <div class="input-group">
@@ -336,6 +417,7 @@ if (isset($_POST["remove_admin"])) {
                             </p>
 
                             <form method="POST" class="two-factor-form">
+                                <?php echo campoTokenCSRF(); ?>
                                 <div
                                     class="form-group d-flex flex-column flex-sm-row  align-items-start align-items-sm-center gap-2">
                                     <label class="switch">
@@ -376,12 +458,14 @@ if (isset($_POST["remove_admin"])) {
                     // Comprobar el rol del usuario y mostrar la opción de darle el admin
                     if ($userData['rol'] == "solicita"): ?>
                         <form method="POST" class="d-inline">
+                            <?php echo campoTokenCSRF(); ?>
                             <button type="submit" name="turn_to_admin" class="btn btn-info" style="text-decoration: none;">
                                 <i class="fas fa-user-shield"></i> Promover a admin
                             </button>
                         </form>
                     <?php elseif ($userData['rol'] == "root"): ?>
                         <form method="POST" class="d-inline">
+                            <?php echo campoTokenCSRF(); ?>
                             <button type="submit" name="remove_admin" class="btn btn-warning"
                                 style="text-decoration: none;">
                                 <i class="fas fa-user-minus"></i> Quitar rol de admin

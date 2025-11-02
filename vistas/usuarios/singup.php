@@ -11,12 +11,23 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Variable para almacenar los errores
 $error = "";
 
 // Comprobar que se ha pulsado el botón de enviar
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: singup.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     try {
         // Validación básica
         if (
@@ -88,12 +99,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                     <!-- Mensaje de error -->
                                     <?php if (!empty($error)): ?>
-                                        <div class="alert alert-danger text-center mb-4" role="alert">
-                                            <?php echo htmlspecialchars($error); ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <i
+                                                class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                                        </div>
+                                    <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>Error de seguridad: Token CSRF
+                                            inválido. Recarga la
+                                            página e intenta de nuevo.
                                         </div>
                                     <?php endif; ?>
 
                                     <form method="POST" enctype="multipart/form-data">
+                                        <?php echo campoTokenCSRF(); ?>
 
                                         <!-- Campo del nombre de usuario -->
                                         <div class="input-group mb-4">

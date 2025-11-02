@@ -7,6 +7,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Iniciar sesión
 session_start();
@@ -21,6 +22,15 @@ $error = "";
 
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: login.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     try {
         // Validación básica
         if (empty($_POST['username']) || empty($_POST['password'])) {
@@ -102,12 +112,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <!-- Mensaje de error -->
                             <?php if (!empty($error)): ?>
-                                <div class="alert alert-danger text-center mb-4" role="alert">
-                                    <?php echo htmlspecialchars($error); ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
+                                </div>
+                            <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Error de seguridad: Token CSRF inválido.
+                                    Recarga la
+                                    página e intenta de nuevo.
                                 </div>
                             <?php endif; ?>
 
                             <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                                <?php echo campoTokenCSRF(); ?>
                                 <!-- Campo del nombre de usuario -->
                                 <div class="input-group mb-4">
                                     <span class="input-group-text">
@@ -155,7 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </p>
 
                                 <p class="mb-3">
-                                    <a href="./recover_username.php" class="text-danger">He olvidado mi nombre de usuario</a>
+                                    <a href="./recover_username.php" class="text-danger">He olvidado mi nombre de
+                                        usuario</a>
                                     &nbsp;
                                     <i class="fas fa-user"></i>
                                 </p>
@@ -173,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         crossorigin="anonymous"></script>
 
     <!-- Enlace al archivo JS que permite mostrar la contraseña -->
-     <script src="../../js/usuarios/show_password.js"></script>
+    <script src="../../js/usuarios/show_password.js"></script>
 </body>
 
 </html>

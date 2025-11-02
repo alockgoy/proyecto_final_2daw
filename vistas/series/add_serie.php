@@ -23,6 +23,7 @@ require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Crear instancia del controlador
 $controller = new SerieController();
@@ -34,6 +35,16 @@ $movementController = new MovementController();
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: add_serie.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     try {
         // Añadir la serie con la validación incorporada
         if ($controller->addSerie()) {
@@ -93,6 +104,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
                     </div>
+                <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Error de seguridad: Token CSRF inválido.
+                        Recarga la
+                        página e intenta de nuevo.
+                    </div>
                 <?php endif; ?>
 
                 <?php if (!empty($success)): ?>
@@ -102,6 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
 
                 <form method="POST" enctype="multipart/form-data">
+                    <?php echo campoTokenCSRF(); ?>
                     <div class="row g-3">
                         <!-- Nombre de la serie -->
                         <div class="col-md-6 form-group">
@@ -132,7 +150,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-theater-masks"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <input type="text" class="form-control" id="gender" name="gender" placeholder="Género" required />
+                                    <input type="text" class="form-control" id="gender" name="gender"
+                                        placeholder="Género" required />
                                     <label for="gender">Género</label>
                                 </div>
                             </div>
@@ -185,11 +204,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <select class="form-select" id="id_quality" name="id_quality" required>
                                         <option value="" selected disabled>Selecciona la calidad</option>
                                         <?php
-                                            // Obtener todas las calidades disponibles desde el controlador
-                                            $qualities = $qualityController->index();
-                                            foreach ($qualities as $quality) {
-                                                echo '<option value="' . htmlspecialchars($quality['id_quality']) . '">' . htmlspecialchars($quality['name']) . '</option>';
-                                            }
+                                        // Obtener todas las calidades disponibles desde el controlador
+                                        $qualities = $qualityController->index();
+                                        foreach ($qualities as $quality) {
+                                            echo '<option value="' . htmlspecialchars($quality['id_quality']) . '">' . htmlspecialchars($quality['name']) . '</option>';
+                                        }
                                         ?>
                                     </select>
                                     <label for="quality">Calidad *</label>

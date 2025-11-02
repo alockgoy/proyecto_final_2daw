@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 // Traer los archivos necesarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
+require_once '../../php/seguridad.php';
 
 // Traer el archivo autoload del php mailer
 require '../../vendor/autoload.php';
@@ -19,6 +20,15 @@ $userController = new UserController();
 
 // Obtener el correo introducido en el formulario
 if (isset($_POST['email'])) {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: recover_password.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
 
     // Validar que el correo cumple con el formato
     if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
@@ -138,6 +148,12 @@ if (isset($_POST['email'])) {
                                                             <i
                                                                 class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
                                                         </div>
+                                                    <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <i class="fas fa-exclamation-triangle me-2"></i>Error de
+                                                            seguridad: Token CSRF inválido. Recarga la
+                                                            página e intenta de nuevo.
+                                                        </div>
                                                     <?php endif; ?>
 
                                                     <!-- Mostrar mensaje de aprobación -->
@@ -156,6 +172,7 @@ if (isset($_POST['email'])) {
                                             </div>
                                         </div>
                                         <form method="POST">
+                                            <?php echo campoTokenCSRF(); ?>
                                             <div class="row gy-3 overflow-hidden">
                                                 <div class="col-12">
                                                     <div class="form-floating mb-3">

@@ -5,6 +5,7 @@ session_start();
 require_once '../../php/instalacion/InstallController.php';
 require_once '../../php/instalacion/Install.php';
 require_once '../../php/config.php';
+require_once '../../php/seguridad.php';
 
 // Inicializar el controlador
 $controller = new InstallController();
@@ -20,6 +21,16 @@ try {
 
 // Procesar el formulario si se envió
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: install.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     // Obtener datos del formulario
     $formusername = trim($_POST['username'] ?? '');
     $formemail = trim($_POST['email'] ?? '');
@@ -153,6 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     case 'error_instalacion':
                         echo 'Error durante la instalación. Revisa los logs.';
                         break;
+                    case 'csrf':
+                        echo 'Error de seguridad: Token CSRF inválido. Por favor, recarga la página e intenta de nuevo.';
+                        break;
                     default:
                         echo 'Error desconocido.';
                 }
@@ -167,6 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <form action="" method="POST">
+            <?php echo campoTokenCSRF(); ?>
             <!-- Campo del nombre de usuario -->
             <div class="input-group mb-4">
                 <span class="input-group-text">

@@ -11,6 +11,7 @@ require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -60,6 +61,16 @@ if (!$serie) {
 
 // Procesar el formulario cuando se envía
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Validar CSRF
+    if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+        header('Location: edit_serie.php?error=csrf');
+        exit();
+    }
+
+    // Regenerar token
+    regenerarTokenCSRF();
+
     try {
 
         if ($controller->updateSerie($id)) {
@@ -107,6 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle me-2"></i><?php echo htmlspecialchars($error); ?>
                     </div>
+                <?php elseif (isset($_GET['error']) && $_GET['error'] === 'csrf'): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Error de seguridad: Token CSRF inválido.
+                        Recarga la
+                        página e intenta de nuevo.
+                    </div>
                 <?php endif; ?>
 
                 <?php if (!empty($success)): ?>
@@ -116,6 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
 
                 <form method="POST" enctype="multipart/form-data">
+                    <?php echo campoTokenCSRF(); ?>
                     <div class="row g-3">
                         <!-- Nombre de la serie -->
                         <div class="col-md-6 form-group">

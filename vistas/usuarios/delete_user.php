@@ -4,6 +4,8 @@
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
 
+require_once '../../php/seguridad.php';
+
 // Traer los archivos de usuarios
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
@@ -31,12 +33,24 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
+// Validar CSRF
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('Error: Método no permitido');
+}
+
+// VALIDAR TOKEN CSRF
+if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+    header('Location: my_profile.php?error=csrf');
+    exit();
+}
+regenerarTokenCSRF();
+
 // Verificar que se ha proporcionado un ID
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+if (!isset($_POST['id']) || empty($_POST['id'])) {
     die('Error: No se ha especificado un usuario para eliminar.');
 }
 
-$userId = $_GET['id'];
+$userId = $_POST['id'];
 
 // Obtener datos del usuario actual
 $username = $_SESSION['username'];
@@ -49,17 +63,17 @@ $movementController = new MovementController();
 
 try {
     // Obtener el ID del usuario actual
-    $userId = $_GET['id'];
-    
+    $userId = $_POST['id'];
+
     // Verificar que el ID del usuario coincide con el usuario que ha iniciado sesión
     $isUser = $userController->getUserIdByUsername($username);
-    
+
     // Si se intenta borrar un usuario que no ha iniciado sesión, redirigir
     if ($userId != $isUser) {
         header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
         exit();
     }
-    
+
     // Eliminar el usuario si todas las verificaciones son correctas
     $userController->deleteUser($userId);
 
@@ -72,7 +86,7 @@ try {
 
     // Cerrar la sesión
     session_destroy();
-    
+
     // Redirigir a la lista de películas
     header('Location: ../../index.html');
     exit;

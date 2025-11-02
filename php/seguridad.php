@@ -19,6 +19,47 @@ if (!isset($_SESSION['ip_address'])) {
     }
 }
 
+// ============ PROTECCIÓN CSRF ============
+
+/**
+ * Generar token CSRF y almacenarlo en la sesión
+ */
+function generarTokenCSRF()
+{
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+/**
+ * Validar token CSRF del formulario
+ */
+function validarTokenCSRF($token)
+{
+    if (!isset($_SESSION['csrf_token'])) {
+        return false;
+    }
+    return hash_equals($_SESSION['csrf_token'], $token);
+}
+
+/**
+ * Regenerar token CSRF (llamar después de validar)
+ */
+function regenerarTokenCSRF()
+{
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+/**
+ * Obtener input hidden con token CSRF para formularios
+ */
+function campoTokenCSRF()
+{
+    $token = generarTokenCSRF();
+    return '<input type="hidden" name="csrf_token" value="' . htmlspecialchars($token) . '">';
+}
+
 // Opcional: imprimir un mensaje de seguridad para pruebas
 // echo "<p>IP actual: $ipActual</p>";
 ?>
