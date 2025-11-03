@@ -9,6 +9,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/seguridad.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -156,12 +157,41 @@ $qualityName = $qualityController->getQualityById($movie['id_quality']);
     <!-- Botones de borrar película y volver atrás -->
     <footer class="bg-dark text-white text-center py-3 fixed-bottom">
         <div class="container footer-container d-flex justify-content-center align-items-center">
-            <a href="#" data-confirm="¿Estás seguro de que deseas eliminar esta película?"
-                data-url="delete_movie.php?id=<?php echo $movie['id_movie']; ?>" data-confirm-text="Borrar Película"
-                class="btn btn-danger me-2">Borrar Película</a>
+            <form method="POST" action="delete_movie.php" style="display:inline;" id="deleteMovieForm">
+                <?php echo campoTokenCSRF(); ?>
+                <input type="hidden" name="id" value="<?php echo $movie['id_movie']; ?>">
+                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal"
+                    data-bs-target="#deleteMovieModal">
+                    Borrar Película
+                </button>
+            </form>
             <a href="movies.php" class="btn btn-secondary">Volver Atrás</a>
         </div>
     </footer>
+
+    <!-- Modal de confirmación para eliminar película -->
+    <div class="modal fade" id="deleteMovieModal" tabindex="-1" aria-labelledby="deleteMovieModalLabel"
+        aria-hidden="true" data-bs-theme="dark">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light" id="deleteMovieModalLabel">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-light">
+                    ¿Estás seguro de que deseas eliminar la película
+                    "<?php echo htmlspecialchars($movie['name']); ?>"?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger"
+                        onclick="document.getElementById('deleteMovieForm').submit();">
+                        Borrar Película
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Enlace al archivo JavaScript de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -9,6 +9,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/seguridad.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -165,12 +166,41 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
     <!-- Botones de borrar serie y volver atrás -->
     <footer class="bg-dark text-white text-center py-3 fixed-bottom">
         <div class="container footer-container d-flex justify-content-center align-items-center">
-            <a href="#" data-confirm="¿Estás seguro de que deseas eliminar esta serie?"
-                data-url="delete_serie.php?id=<?php echo $serie['id_serie']; ?>" data-confirm-text="Borrar Serie"
-                class="btn btn-danger me-2">Borrar Serie</a>
+            <form method="POST" action="delete_serie.php" style="display:inline;" id="deleteSerieForm">
+                <?php echo campoTokenCSRF(); ?>
+                <input type="hidden" name="id" value="<?php echo $serie['id_serie']; ?>">
+                <button type="button" class="btn btn-danger me-2" data-bs-toggle="modal"
+                    data-bs-target="#deleteSerieModal">
+                    Borrar Serie
+                </button>
+            </form>
             <a href="series.php" class="btn btn-secondary">Volver Atrás</a>
         </div>
     </footer>
+
+    <!-- Modal de confirmación para eliminar serie -->
+    <div class="modal fade" id="deleteSerieModal" tabindex="-1" aria-labelledby="deleteSerieModalLabel"
+        aria-hidden="true" data-bs-theme="dark">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light" id="deleteSerieModalLabel">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-light">
+                    ¿Estás seguro de que deseas eliminar la serie
+                    "<?php echo htmlspecialchars($serie['name']); ?>"?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger"
+                        onclick="document.getElementById('deleteSerieForm').submit();">
+                        Borrar Serie
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Enlace al archivo JavaScript de Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -19,6 +19,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/calidades/QualityController.php';
 require_once '../../php/calidades/Quality.php';
+require_once '../../php/seguridad.php';
 
 // Crear instancia del controlador
 $userController = new UserController();
@@ -114,20 +115,22 @@ $calidades = $qualityController->index();
 
                                 <td>
                                     <?php
-                                        $enUsoPelicula = $qualityController->checkMovieQuality($calidad['id_quality']);
-                                        $enUsoSerie = $qualityController->checkSerieQuality($calidad['id_quality']);
-                                        $enUso = $enUsoPelicula || $enUsoSerie;
+                                    $enUsoPelicula = $qualityController->checkMovieQuality($calidad['id_quality']);
+                                    $enUsoSerie = $qualityController->checkSerieQuality($calidad['id_quality']);
+                                    $enUso = $enUsoPelicula || $enUsoSerie;
                                     ?>
                                     <?php if ($enUso): ?>
                                         <button class="btn btn-info" disabled>En uso</button>
                                     <?php else: ?>
-                                        <a class="btn btn-danger"
-                                            href="delete_quality.php?id=<?php echo urlencode($calidad['id_quality']); ?>"
-                                            style="text-decoration: none;"
-                                            data-confirm="¿Estás seguro de que quieres eliminar esta calidad?"
-                                            data-confirm-text="Eliminar" data-cancel-text="Cancelar">
-                                            Borrar
-                                        </a>
+                                        <form method="POST" action="delete_quality.php" style="display:inline;"
+                                            id="deleteQualityForm<?php echo $calidad['id_quality']; ?>">
+                                            <?php echo campoTokenCSRF(); ?>
+                                            <input type="hidden" name="id" value="<?php echo $calidad['id_quality']; ?>">
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                data-bs-target="#deleteQualityModal<?php echo $calidad['id_quality']; ?>">
+                                                Borrar
+                                            </button>
+                                        </form>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -135,6 +138,42 @@ $calidades = $qualityController->index();
                     </tbody>
                 </table>
             </div>
+
+            <?php foreach ($calidades as $calidad): ?>
+                <?php
+                $enUsoPelicula = $qualityController->checkMovieQuality($calidad['id_quality']);
+                $enUsoSerie = $qualityController->checkSerieQuality($calidad['id_quality']);
+                $enUso = $enUsoPelicula || $enUsoSerie;
+                ?>
+                <?php if (!$enUso): ?>
+                    <div class="modal fade" id="deleteQualityModal<?php echo $calidad['id_quality']; ?>" tabindex="-1"
+                        aria-labelledby="deleteQualityModalLabel<?php echo $calidad['id_quality']; ?>" aria-hidden="true"
+                        data-bs-theme="dark">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-light"
+                                        id="deleteQualityModalLabel<?php echo $calidad['id_quality']; ?>">
+                                        Confirmación
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-light">
+                                    ¿Estás seguro de que quieres eliminar la calidad
+                                    "<?php echo htmlspecialchars($calidad['name']); ?>"?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="document.getElementById('deleteQualityForm<?php echo $calidad['id_quality']; ?>').submit();">
+                                        Eliminar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </div>
     </main>
 

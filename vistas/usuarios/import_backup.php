@@ -145,6 +145,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['backup_file'])) {
                                             la copia de seguridad.</li>
                                     </ul>
                                 </li>
+                                <li>
+                                    Si tenías muchos registros guardados, tanto la exportación como la importación
+                                    pueden ser lentas,
+                                    incluso parecer que la aplicación se ha quedado colgada.
+                                    <ul>
+                                        <li>Mientras no veas un mensaje de error, no hagas nada durante el proceso.</li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
 

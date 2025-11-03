@@ -5,6 +5,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -17,13 +18,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Verificar que se ha proporcionado un ID
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die('Error: No se ha especificado una calidad para eliminar.');
-}
-
-$qualityId = $_GET['id'];
-
 // Crear instancias de los controladores
 $controller = new QualityController();
 $userController = new UserController();
@@ -35,6 +29,23 @@ if ($userRol != "root" && $userRol != "propietario") {
     header('Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ');
     exit();
 }
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('Error: Método no permitido');
+}
+
+if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+    header('Location: qualities.php?error=csrf');
+    exit();
+}
+regenerarTokenCSRF();
+
+// Verificar que se ha proporcionado un ID
+if (!isset($_POST['id']) || empty($_POST['id'])) {
+    die('Error: No se ha especificado una calidad para eliminar.');
+}
+
+$qualityId = $_POST['id'];
 
 try {
     if ($controller->checkMovieQuality($qualityId)) {

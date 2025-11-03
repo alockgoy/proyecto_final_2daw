@@ -15,6 +15,8 @@ require_once '../../php/series/Serie.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
 
+require_once '../../php/seguridad.php';
+
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -24,11 +26,6 @@ if (session_status() == PHP_SESSION_NONE) {
 if (!isset($_SESSION['username'])) {
     header("Location: ../../index.html");
     exit();
-}
-
-// Verificar que se ha proporcionado un ID
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die('Error: No se ha especificado un usuario para eliminar.');
 }
 
 // Crear instancias de los controladores
@@ -46,9 +43,24 @@ if ($userRol != "root" && $userRol != "propietario") {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('Error: Método no permitido');
+}
+
+if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+    header('Location: users.php?error=csrf');
+    exit();
+}
+regenerarTokenCSRF();
+
+// Verificar que se ha proporcionado un ID
+if (!isset($_POST['id']) || empty($_POST['id'])) {
+    die('Error: No se ha especificado un usuario para eliminar.');
+}
+
 try {
     // Obtener el ID del usuario actual
-    $userId = $_GET['id'];
+    $userId = $_POST['id'];
     
     // Eliminar el usuario si todas las verificaciones son correctas
     $user = $userController->getUserById($userId);

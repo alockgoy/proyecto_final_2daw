@@ -9,6 +9,7 @@ require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
+require_once '../../php/seguridad.php';
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -21,10 +22,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Verificar que se ha proporcionado un ID
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die('Error: No se ha especificado una serie para eliminar.');
-}
 
 // Crear instancias de los controladores
 $controller = new SerieController();
@@ -40,7 +37,22 @@ if ($userRol != "root" && $userRol != "propietario") {
     exit();
 }
 
-$id = $_GET['id'];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die('Error: Método no permitido');
+}
+
+if (!isset($_POST['csrf_token']) || !validarTokenCSRF($_POST['csrf_token'])) {
+    header('Location: series.php?error=csrf');
+    exit();
+}
+regenerarTokenCSRF();
+
+// Verificar que se ha proporcionado un ID
+if (!isset($_POST['id']) || empty($_POST['id'])) {
+    die('Error: No se ha especificado una serie para eliminar.');
+}
+
+$id = $_POST['id'];
 
 try {
     // Eliminar la serie si todas las verificaciones son correctas
@@ -48,7 +60,7 @@ try {
     $serieName = $serieData ? $serieData['name'] : 'serie desconocida';
     $movementController->addMovement($_SESSION['username'], "ha eliminado la serie $serieName", date('Y-m-d H:i:s'), "correcto");
     $controller->deleteSerie($id);
-    
+
     // Redirigir a la lista de series
     header('Location: series.php?deleted=true');
     exit;
