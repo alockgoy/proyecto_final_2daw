@@ -53,6 +53,34 @@ En resumen, hay que **generar una clave de autenticación** que permita a la apl
 
 ---
 
+### 🎬 Funciones que requieren el uso de claves API
+Recientemente se ha implementado, tanto como para añadir películas como para añadir series, la posibilidad de usar una clave API
+de "The movie database": https://api.themoviedb.org/3
+
+Esta opción permite buscar una película en el propio formulario y rellenar de forma automática los campos:
+- Nombre
+- Dirección
+- Sinopsis
+- Géneros
+- Año
+- Puntuación
+- Póster
+
+En el caso de las series, los campos:
+
+
+Si estás desplegando esta aplicación de manera local, en el caso de las películas, verás un archivo llamado `omdb_search_clean.js`, con el siguiente código:
+
+```javascript
+const TMDB_API_KEY = 'apikey'; // Cambiar este campo por tu clave api
+```
+
+Dicho contenido de la variable deberá ser sustituido por **tu clave API** de la plataforma.
+
+En el caso de las series,
+
+---
+
 ### 🛠️ Resto de la configuración
 
 Una vez configurados los apartados anteriores, se puede abrir la aplicación.  

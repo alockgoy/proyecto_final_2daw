@@ -118,6 +118,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 <?php endif; ?>
 
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-search me-2"></i>Buscar película en OMDb</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-film"></i></span>
+                                    <input type="text" class="form-control" id="omdb_search"
+                                        placeholder="Escribe el nombre de la película..." />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary w-100" onclick="searchOMDb()">
+                                    <i class="fas fa-search me-1"></i>Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Resultados de búsqueda -->
+                        <div id="omdb_results" class="mt-3"></div>
+
+                        <!-- Mensaje de carga -->
+                        <div id="omdb_loading" class="text-center mt-3 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Buscando...</span>
+                            </div>
+                            <p class="mt-2">Buscando en OMDb...</p>
+                        </div>
+
+                        <!-- Mensaje de error -->
+                        <div id="omdb_error" class="alert alert-warning mt-3 d-none">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="omdb_error_message"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <form method="POST" enctype="multipart/form-data">
                     <?php echo campoTokenCSRF(); ?>
                     <div class="row g-3">
@@ -300,6 +339,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
     <script src="../../js/peliculas/delete_input_file.js"></script>
+
+    <!-- Enlace al archivo JS que permite la búsqueda con la API -->
+    <script src="../../js/peliculas/omdb_search.js"></script>
 </body>
 
 </html>
