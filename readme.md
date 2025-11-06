@@ -52,32 +52,66 @@ Dependiendo del proveedor, el proceso puede variar.
 En resumen, hay que **generar una clave de autenticación** que permita a la aplicación usar tu cuenta de correo electrónico para enviar mensajes.
 
 ---
-
 ### 🎬 Funciones que requieren el uso de claves API
-Recientemente se ha implementado, tanto como para añadir películas como para añadir series, la posibilidad de usar una clave API
-de "The movie database": https://api.themoviedb.org/3
+
+Recientemente se ha implementado, tanto para añadir **películas** como **series**, la posibilidad de usar una clave API de [The Movie Database](https://api.themoviedb.org/3).
 
 Esta opción permite buscar una película en el propio formulario y rellenar de forma automática los campos:
-- Nombre
-- Dirección
-- Sinopsis
-- Géneros
-- Año
-- Puntuación
-- Póster
 
-En el caso de las series, los campos:
+- Nombre  
+- Dirección  
+- Sinopsis  
+- Géneros  
+- Año  
+- Puntuación  
+- Póster  
 
+#### 📽️ Configuración para películas
 
-Si estás desplegando esta aplicación de manera local, en el caso de las películas, verás un archivo llamado `omdb_search_clean.js`, con el siguiente código:
+Si estás desplegando esta aplicación de manera local, verás un archivo llamado `omdb_search_clean.js` con el siguiente código:
 
 ```javascript
 const TMDB_API_KEY = 'apikey'; // Cambiar este campo por tu clave api
 ```
 
-Dicho contenido de la variable deberá ser sustituido por **tu clave API** de la plataforma.
+Dicho contenido de la variable deberá ser sustituido por **tu clave API** de la plataforma "The Movie Database", y el archivo deberá ser **renombrado** a `omdb_search.js` o bien hacer una **copia** con este nombre.
 
-En el caso de las series,
+#### 📺 Configuración para series
+
+Encontrarás un archivo llamado `tmdb_search_clean.js` con el siguiente contenido:
+
+```javascript
+const TMDB_API_KEY = 'apikey'; // Cambiar este campo por tu clave api
+```
+
+Dicho contenido de la variable deberá ser sustituido por **tu clave API** de la plataforma "The Movie Database", y el archivo deberá ser **renombrado** a `tmdb_search.js` o bien hacer una **copia** con este nombre.
+
+---
+
+#### ❓ Preguntas frecuentes
+
+**¿Por qué tengo que renombrar los archivos?**  
+Porque los enlaces que apuntan a ellos tienen esos nombres. El código subido a GitHub **NO** dispone de mi clave API por motivos evidentes.
+
+**¿Por qué en el caso de series el nombre del archivo es distinto?**  
+Porque cuando empecé a implementar el uso de API, lo hice con la plataforma "Open Movie Database", pero autorellenaba los campos en inglés y yo quería que se rellenen en español. Por eso cambié a "The Movie Database", pero a los archivos de películas no les cambié los nombres.
+
+**¿Esa API que mencionas es gratuita?**  
+Sí, pero tiene un uso limitado a **40 peticiones por segundo**.  
+Más información: https://developer.themoviedb.org/docs/rate-limiting
+
+**¿Por qué no se autorrellenan todos los campos?**  
+No me extenderé mucho porque el propósito de esta aplicación se puede leer en `[raíz-proyecto]/html/manual.html`.  
+
+En España no es ilegal hacer una copia de seguridad **personal** de un DVD comprado legalmente. Dicha copia, dependiendo del formato y calidad con que se haga, tendrá diferentes parámetros según el usuario que <u>no</u> se pueden autorellenar con el uso de la API.
+
+**¿Cómo solicito una API si despliego esta app de manera local?**  
+1. Entra en este enlace: https://www.themoviedb.org/settings/api  
+2. Créate una cuenta.  
+3. En tu perfil, busca la sección de **API**.  
+4. Selecciona el plan **gratuito** para uso <u>no comercial</u>.  
+5. Rellena un formulario con algunos datos personales y de la aplicación.  
+6. Una vez hecho todo lo anterior, al volver al enlace del paso 1, deberías ver algo llamado **"Clave de la API"**.
 
 ---
 

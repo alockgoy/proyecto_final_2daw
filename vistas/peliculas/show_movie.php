@@ -92,7 +92,7 @@ $qualityName = $qualityController->getQualityById($movie['id_quality']);
                 <ul class="list-group mb-4">
 
                     <!-- Director -->
-                    <li class="list-group-item"><strong>Director:</strong>
+                    <li class="list-group-item"><strong>Dirección:</strong>
                         <?php echo htmlspecialchars($movie['director']); ?></li>
 
                     <!-- Género -->

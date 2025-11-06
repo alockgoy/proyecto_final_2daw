@@ -12,7 +12,7 @@
 .go-top-button{
     width: 0rem;
     height: 0rem;
-    background: #2071b2;
+    background:  rgba(32, 113, 178, 0.7); /* Translúcido */
     border-radius: 50%;
     cursor: pointer;
     transition: .2s;

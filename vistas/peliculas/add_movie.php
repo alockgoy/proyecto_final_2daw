@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-floating flex-grow-1">
                                     <input type="text" class="form-control" id="director" name="director"
                                         placeholder="Director" required />
-                                    <label for="director">Director *</label>
+                                    <label for="director">Dirección *</label>
                                 </div>
                             </div>
                         </div>

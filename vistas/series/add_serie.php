@@ -118,6 +118,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 <?php endif; ?>
 
+                <!-- Buscador de series con TMDb API -->
+                <div class="card mb-3">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-search me-2"></i>Buscar serie en TMDb</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-10">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-tv"></i></span>
+                                    <input type="text" class="form-control" id="tmdb_search"
+                                        placeholder="Escribe el nombre de la serie..." />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary w-100" onclick="searchTMDb()">
+                                    <i class="fas fa-search me-1"></i>Buscar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Resultados de búsqueda -->
+                        <div id="tmdb_results" class="mt-3"></div>
+
+                        <!-- Mensaje de carga -->
+                        <div id="tmdb_loading" class="text-center mt-3 d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Buscando...</span>
+                            </div>
+                            <p class="mt-2">Buscando en TMDb...</p>
+                        </div>
+
+                        <!-- Mensaje de error -->
+                        <div id="tmdb_error" class="alert alert-warning mt-3 d-none">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="tmdb_error_message"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <form method="POST" enctype="multipart/form-data">
                     <?php echo campoTokenCSRF(); ?>
                     <div class="row g-3">
@@ -307,6 +347,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
     <script src="../../js/series/delete_input_file.js"></script>
+
+    <!-- Enlace al archivo JS que permite autorellenar varios campos -->
+    <script src="../../js/series/tmdb_search.js"></script> 
 
 </body>
 

@@ -228,8 +228,8 @@ $usuarios = $userController->index();
     <!-- Enlace al JS de buscar usuarios -->
     <script src="../../js/usuarios/search_users.js"></script>
 
-    <!-- Enlace al archivo JavaScript de botón para volver al inicio -->
-    <script src="../../js/go_top.js"></script>
+    <!-- Enlace al archivo JavaScript de botón para volver al inicio 
+    <script src="../../js/go_top.js"></script> -->
 </body>
 
 </html>
