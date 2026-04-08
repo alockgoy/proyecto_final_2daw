@@ -15,76 +15,58 @@ En la ruta:
 Existe un archivo llamado `config.empty.php`.  
 Ese archivo hay que **renombrarlo** a `config.php` o crear una **copia** del archivo y llamarlo `config.php`.
 
-Una vez hecho, se encuentra el siguiente trozo de código:
+Una vez hecho, rellena todas las credenciales en ese único archivo:
 
 ```php
-$host = "";
-$dbname = "";
-$username = "";
-$password = "";
+// ── Base de datos ──────────────────────────────────────────────
+$host     = "";       // Ej: "localhost"
+$dbname   = "";       // Siempre debe ser "BibliotecaMultimedia"
+$username = "";       // Usuario de la base de datos
+$password = "";       // Contraseña de la base de datos
+
+// ── Correo (PHPMailer) ─────────────────────────────────────────
+define('MAIL_USERNAME', '');   // Tu correo de Gmail
+define('MAIL_PASSWORD', '');   // Contraseña de aplicación generada
+
+// ── The Movie Database API ─────────────────────────────────────
+define('TMDB_API_KEY', '');    // Tu clave API de themoviedb.org
 ```
 
-- `$host` → Es la dirección de la base de datos. Por ejemplo, puede ser `"localhost"`.  
-- `$dbname` → Es el nombre de la base de datos, **siempre** debe ser `"BibliotecaMultimedia"`.  
-- `$username` → Es el nombre del usuario que se conecta a la base de datos.  
-  Dependiendo del entorno, puede ser un usuario específico o el usuario administrador (a elección).  
-- `$password` → Es la contraseña del usuario que se conecta a la base de datos.
+> ⚠️ `config.php` está en `.gitignore`. **Nunca** lo subas al repositorio.
 
 ---
 
-### 📧 Funciones que envían correos electrónicos
+### 📧 Correo electrónico (PHPMailer)
 
-Esta aplicación usa la librería **PHPMailer** para enviar correos electrónicos según el caso.  
-Los archivos que hacen uso de esto son:
+Esta aplicación usa **PHPMailer** para enviar correos en los siguientes casos:
 
-- `[raíz-proyecto]/vistas/usuarios/two_factor.php`  
-- `[raíz-proyecto]/vistas/usuarios/recover_password.php`  
-- `[raíz-proyecto]/php/reportar.php`
+- Autenticación de dos factores
+- Recuperación de contraseña
+- Formulario de reporte de errores
 
-Estos archivos comparten el siguiente bloque de código:
+Las credenciales se configuran **únicamente** en `config.php` (ver arriba). No hay que tocar ningún otro archivo.
 
-```php
-$mail->Username = 'correo'; // TU correo de Gmail
-$mail->Password = 'clave'; // Contraseña de la aplicación generada
-```
-
-Dependiendo del proveedor, el proceso puede variar.  
-En resumen, hay que **generar una clave de autenticación** que permita a la aplicación usar tu cuenta de correo electrónico para enviar mensajes.
+Para obtener una contraseña de aplicación de Gmail:
+1. Activa la verificación en dos pasos en tu cuenta de Google.
+2. Ve a **Gestionar tu cuenta de Google → Seguridad → Contraseñas de aplicaciones**.
+3. Genera una contraseña para "Correo" y cópiala en `MAIL_PASSWORD`.
 
 ---
-### 🎬 Funciones que requieren el uso de claves API
 
-Recientemente se ha implementado, tanto para añadir **películas** como **series**, la posibilidad de usar una clave API de [The Movie Database](https://api.themoviedb.org/3).
+### 🎬 API de The Movie Database (TMDB)
 
-Esta opción permite buscar una película en el propio formulario y rellenar de forma automática los campos:
+Al añadir películas o series, el formulario permite buscar el título y autorellenar campos como nombre, sinopsis, géneros, año, puntuación y póster.
 
-- Nombre  
-- Dirección  
-- Sinopsis  
-- Géneros  
-- Año  
-- Puntuación  
-- Póster  
+La clave API se configura **únicamente** en `config.php` (ver arriba). No hay que tocar ningún otro archivo.
 
-#### 📽️ Configuración para películas
+**¿Cómo obtener la clave?**
+1. Entra en: https://www.themoviedb.org/settings/api
+2. Créate una cuenta.
+3. En tu perfil, busca la sección **API**.
+4. Selecciona el plan **gratuito** para uso no comercial.
+5. Rellena el formulario. La clave aparecerá como **"Clave de la API"**.
 
-Si estás desplegando esta aplicación de manera local, verás un archivo llamado `omdb_search_clean.js` con el siguiente código:
-
-```javascript
-const TMDB_API_KEY = 'apikey'; // Cambiar este campo por tu clave api
-```
-
-Dicho contenido de la variable deberá ser sustituido por **tu clave API** de la plataforma "The Movie Database", y el archivo deberá ser **renombrado** a `omdb_search.js` o bien hacer una **copia** con este nombre.
-
-#### 📺 Configuración para series
-
-Encontrarás un archivo llamado `tmdb_search_clean.js` con el siguiente contenido:
-
-```javascript
-const TMDB_API_KEY = 'apikey'; // Cambiar este campo por tu clave api
-```
-
-Dicho contenido de la variable deberá ser sustituido por **tu clave API** de la plataforma "The Movie Database", y el archivo deberá ser **renombrado** a `tmdb_search.js` o bien hacer una **copia** con este nombre.
+> La API tiene un límite de **40 peticiones por segundo**. Más info: https://developer.themoviedb.org/docs/rate-limiting
 
 ---
 
@@ -104,16 +86,6 @@ Más información: https://developer.themoviedb.org/docs/rate-limiting
 No me extenderé mucho porque el propósito de esta aplicación se puede leer en `[raíz-proyecto]/html/manual.html`.  
 
 En España no es ilegal hacer una copia de seguridad **personal** de un DVD comprado legalmente. Dicha copia, dependiendo del formato y calidad con que se haga, tendrá diferentes parámetros según el usuario que <u>no</u> se pueden autorellenar con el uso de la API.
-
-**¿Cómo solicito una API si despliego esta app de manera local?**  
-1. Entra en este enlace: https://www.themoviedb.org/settings/api  
-2. Créate una cuenta.  
-3. En tu perfil, busca la sección de **API**.  
-4. Selecciona el plan **gratuito** para uso <u>no comercial</u>.  
-5. Rellena un formulario con algunos datos personales y de la aplicación.  
-6. Una vez hecho todo lo anterior, al volver al enlace del paso 1, deberías ver algo llamado **"Clave de la API"**.
-
----
 
 ### 🛠️ Resto de la configuración
 

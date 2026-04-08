@@ -348,6 +348,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
     <script src="../../js/series/delete_input_file.js"></script>
 
+    <!-- Clave API inyectada desde config.php -->
+    <script>const TMDB_API_KEY = '<?= defined("TMDB_API_KEY") ? TMDB_API_KEY : "" ?>';</script>
+
     <!-- Enlace al archivo JS que permite autorellenar varios campos -->
     <script src="../../js/series/tmdb_search.js"></script> 
 

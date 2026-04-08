@@ -1,7 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 
 // Comprobar que existe una sesión
 if (session_status() == PHP_SESSION_NONE) {
@@ -66,18 +66,18 @@ if (isset($_SESSION['six_digit_code_expiration']) && time() > $_SESSION['six_dig
             // Configurar SMTP
             $mail = new PHPMailer(true);
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+            $mail->Host = MAIL_HOST;
             $mail->SMTPAuth = true;
-            $mail->Username = 'correo'; // TU correo de Gmail
-            $mail->Password = 'clave'; // Contraseña de la aplicación generada
+            $mail->Username = MAIL_USERNAME;
+            $mail->Password = MAIL_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Port = MAIL_PORT;
 
             // Configurar el charset
             $mail->CharSet = 'UTF-8';
 
             // Configuración del correo
-            $mail->setFrom('correo', 'usuario'); // De: el correo del usuario que genera la contraseña
+            $mail->setFrom(MAIL_USERNAME, 'BibliotecaMultimedia'); // De: el correo del usuario que genera la contraseña
             $mail->addAddress($email); // A: el correo de destino
             //$mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
 

@@ -16,8 +16,9 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-    //traer el archivo autoload del phpmailer
+    //traer los archivos necesarios
     require '../vendor/autoload.php';
+    require 'config.php';
 
     //usar el php mailer
     use PHPMailer\PHPMailer\PHPMailer;
@@ -77,16 +78,16 @@
         try {
             // Configurar SMTP
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';  // Servidor SMTP de Gmail
+            $mail->Host = MAIL_HOST;
             $mail->SMTPAuth = true;
-            $mail->Username = 'correo'; // TU correo de Gmail
-            $mail->Password = 'clave'; // Contraseña de la aplicación generada
+            $mail->Username = MAIL_USERNAME;
+            $mail->Password = MAIL_PASSWORD;
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Port = MAIL_PORT;
 
             // Configuración del correo
             $mail->setFrom($correoUsuario, 'Usuario'); // De: el correo del usuario que reporta
-            $mail->addAddress('correo'); // A: el correo de destino
+            $mail->addAddress(MAIL_USERNAME); // A: el correo de destino
             $mail->addReplyTo($correoUsuario); // Opción de responder al correo del usuario
     
             // Contenido del correo

@@ -340,6 +340,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Enlace al archivo JS que permite limpiar el archivo del formulario -->
     <script src="../../js/peliculas/delete_input_file.js"></script>
 
+    <!-- Clave API inyectada desde config.php -->
+    <script>const TMDB_API_KEY = '<?= defined("TMDB_API_KEY") ? TMDB_API_KEY : "" ?>';</script>
+
     <!-- Enlace al archivo JS que permite la búsqueda con la API -->
     <script src="../../js/peliculas/omdb_search.js"></script>
 </body>
