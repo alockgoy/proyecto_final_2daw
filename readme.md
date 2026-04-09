@@ -1,3 +1,8 @@
+# 📚 Biblioteca Multimedia
+
+Aplicación web para gestionar una colección personal de películas y series. Permite catalogar, organizar y buscar contenido audiovisual con autocompletado mediante la API de The Movie Database (TMDB). Incluye autenticación de usuarios, recuperación de contraseña con verificación por correo, y sistema de reportes de errores.
+
+
 # 🧩 Cómo instalar el sistema
 
 Hay algunas cosas que hay que hacer manualmente.

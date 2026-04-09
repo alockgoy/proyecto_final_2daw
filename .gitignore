@@ -7,5 +7,3 @@ img/portadas_series/*
 img/avatares_usuarios/*
 !img/avatares_usuarios/*.txt
 !img/avatares_usuarios/default.jpg
-omdb_search.js
-tmdb_search.js
