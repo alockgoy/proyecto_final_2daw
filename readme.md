@@ -110,5 +110,20 @@ A partir de ahí ya se debería poder usar con normalidad, y no se podrá volver
 
 📝 *(Si se me ha olvidado algún paso, actualizaré este archivo).*
 
+---
+
+### 📄 Licencia
+
+Este proyecto es **software libre y de código abierto**, distribuido bajo los términos de la licencia **GNU General Public License v3.0** (GPL-3.0).
+
+Esto significa que eres libre de:
+- **Usar** el software para cualquier propósito.
+- **Estudiar** cómo funciona y adaptarlo a tus necesidades.
+- **Redistribuir** copias.
+- **Mejorar** el programa y publicar tus mejoras, de modo que toda la comunidad se beneficie.
+
+Cualquier trabajo derivado de este proyecto deberá distribuirse bajo la misma licencia GPL-3.0.
+
+Consulta el archivo [`LICENSE`](LICENSE) en la raíz del repositorio para leer el texto completo de la licencia, o visita https://www.gnu.org/licenses/gpl-3.0.html.
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/alockgoy/proyecto_final_2daw)
