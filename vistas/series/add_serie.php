@@ -19,8 +19,6 @@ require_once '../../php/series/SerieController.php';
 require_once '../../php/series/Serie.php';
 require_once '../../php/usuarios/UserController.php';
 require_once '../../php/usuarios/User.php';
-require_once '../../php/calidades/QualityController.php';
-require_once '../../php/calidades/Quality.php';
 require_once '../../php/movimientos/MovementController.php';
 require_once '../../php/movimientos/Movement.php';
 require_once '../../php/seguridad.php';
@@ -28,7 +26,6 @@ require_once '../../php/seguridad.php';
 // Crear instancia del controlador
 $controller = new SerieController();
 $userController = new UserController();
-$qualityController = new QualityController();
 $movementController = new MovementController();
 
 // Variable del mensaje de error si algo salió mal
@@ -160,6 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <form method="POST" enctype="multipart/form-data">
                     <?php echo campoTokenCSRF(); ?>
+                    <input type="hidden" id="tmdb_id" name="tmdb_id" value="">
                     <div class="row g-3">
                         <!-- Nombre de la serie -->
                         <div class="col-md-6 form-group">
@@ -236,38 +234,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
-                        <!-- Calidad -->
-                        <div class="col-md-6 form-group">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-photo-video"></i></span>
-                                <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="id_quality" name="id_quality" required>
-                                        <option value="" selected disabled>Selecciona la calidad</option>
-                                        <?php
-                                        // Obtener todas las calidades disponibles desde el controlador
-                                        $qualities = $qualityController->index();
-                                        foreach ($qualities as $quality) {
-                                            echo '<option value="' . htmlspecialchars($quality['id_quality']) . '">' . htmlspecialchars($quality['name']) . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                    <label for="quality">Calidad *</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tamaño -->
-                        <div class="col-md-6 form-group">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-hdd"></i></span>
-                                <div class="form-floating flex-grow-1">
-                                    <input type="number" class="form-control" id="size" name="size" placeholder="Tamaño"
-                                        step="0.1" required />
-                                    <label for="size">Tamaño * (GB)</label>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Calificación -->
                         <div class="col-md-6 form-group">
                             <div class="input-group">
@@ -280,29 +246,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
-                        <!-- En servidor -->
-                        <div class="col-md-6 form-group">
+                        <!-- Sinopsis -->
+                        <div class="col-12 form-group">
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-server"></i></span>
+                                <span class="input-group-text"><i class="fas fa-align-left"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="server" name="server" required>
-                                        <option value="" selected disabled>¿En servidor? *</option>
-                                        <option value="si">Sí</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                    <label for="server">¿En servidor?</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Backup URL -->
-                        <div class="col-md-6 form-group">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-link"></i></span>
-                                <div class="form-floating flex-grow-1">
-                                    <input type="text" class="form-control" id="backup" name="backup"
-                                        placeholder="¿Dónde está la copia de seguridad?" />
-                                    <label for="backup">Backup (URL) *</label>
+                                    <textarea class="form-control" id="synopsis" name="synopsis"
+                                        placeholder="Sinopsis" style="height: 100px"></textarea>
+                                    <label for="synopsis">Sinopsis</label>
                                 </div>
                             </div>
                         </div>

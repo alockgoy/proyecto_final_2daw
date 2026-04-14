@@ -68,23 +68,20 @@ class SerieController
             }
 
             // Convertir los valores a los tipos correctos
-            $size = (isset($_POST["size"]) && is_numeric($_POST["size"])) ? (float) $_POST["size"] : 0;
             $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (float) $_POST["rating"] : null;
 
-            // Crear la serie con la ruta de la imagen - ajustado a la estructura real de la tabla
+            // Crear la serie con la ruta de la imagen
             $result = $this->serieModel->createSerie(
                 $_POST["name"],
                 $posterPath,
+                $_POST["synopsis"] ?? null,
+                isset($_POST["tmdb_id"]) && is_numeric($_POST["tmdb_id"]) ? (int)$_POST["tmdb_id"] : null,
                 $_POST["gender"],
                 $_POST["languages"],
                 $_POST["seasons"],
                 $_POST["complete"] ?? "no",
                 $_POST["year"],
-                $_POST["id_quality"],
-                $_POST["backup"] ?? null,
-                $rating,
-                $_POST["server"],
-                $size
+                $rating
             );
 
             // En caso de error, borrar el póster
@@ -169,7 +166,6 @@ class SerieController
             }
 
             // Convertir los valores a los tipos correctos
-            $size = (isset($_POST["size"]) && is_numeric($_POST["size"])) ? (float) $_POST["size"] : 0;
             $rating = (isset($_POST["rating"]) && is_numeric($_POST["rating"])) ? (float) $_POST["rating"] : null;
 
             // Actualizar la serie en la base de datos
@@ -177,16 +173,14 @@ class SerieController
                 $id,
                 $_POST["name"],
                 $posterPath,
+                $_POST["synopsis"] ?? null,
+                isset($_POST["tmdb_id"]) && is_numeric($_POST["tmdb_id"]) ? (int)$_POST["tmdb_id"] : null,
                 $_POST["gender"],
                 $_POST["languages"],
                 $_POST["seasons"],
                 $_POST["complete"],
                 $_POST["year"],
-                $_POST["id_quality"],
-                $_POST["backup"] ?? null,
-                $rating,
-                $_POST["server"],
-                $size
+                $rating
             );
 
             // Lo mismo que en añadir serie
@@ -289,7 +283,7 @@ class SerieController
         $result = ['valid' => true, 'message' => ''];
 
         // Campos obligatorios
-        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'id_quality', 'size', 'server'];
+        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages'];
 
         // Comprobar campos obligatorios
         foreach ($requiredFields as $field) {
@@ -350,28 +344,6 @@ class SerieController
             }
         }
 
-        // Comprobar opciones de las calidades
-        $stmt = $GLOBALS['pdo']->query("SELECT id_quality FROM Qualities");
-        $validQualities = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
-
-        // Verificar que no se ha cambiado el valor de una calidad
-        if (!in_array($data['id_quality'], $validQualities)) {
-            return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
-        }
-
-        // Comprobar que el tamaño es un número
-        if (isset($data['size']) && !is_numeric($data['size'])) {
-            return ['valid' => false, 'message' => 'El tamaño debe ser un número'];
-        }
-
-        // Comprobar opciones de servidor
-        $validServerOptions = ['si', 'no'];
-
-        // Verificar que no se ha cambiado el valor
-        if (!in_array($data['server'], $validServerOptions)) {
-            return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
-        }
-
         return $result;
     }
 
@@ -381,7 +353,7 @@ class SerieController
         $result = ['valid' => true, 'message' => ''];
 
         // Campos obligatorios
-        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages', 'id_quality', 'size', 'server'];
+        $requiredFields = ['name', 'year', 'gender', 'seasons', 'complete', 'languages'];
 
         // Comprobar campos obligatorios
         foreach ($requiredFields as $field) {
@@ -409,28 +381,6 @@ class SerieController
             if ($rating < 1.0 || $rating > 10.0) {
                 return ['valid' => false, 'message' => 'La calificación debe estar entre 1 y 10'];
             }
-        }
-
-        // Comprobar opciones de las calidades
-        $stmt = $GLOBALS['pdo']->query("SELECT id_quality FROM Qualities");
-        $validQualities = $stmt ? $stmt->fetchAll(PDO::FETCH_COLUMN) : [];
-
-        // Verificar que no se ha cambiado el valor de una calidad
-        if (!in_array($data['id_quality'], $validQualities)) {
-            return ['valid' => false, 'message' => 'La calidad seleccionada no es válida'];
-        }
-
-        // Comprobar que el tamaño es un número
-        if (isset($data['size']) && !is_numeric($data['size'])) {
-            return ['valid' => false, 'message' => 'El tamaño debe ser un número'];
-        }
-
-        // Comprobar opciones de servidor
-        $validServerOptions = ['si', 'no'];
-
-        // Verificar que no se ha cambiado el valor
-        if (!in_array($data['server'], $validServerOptions)) {
-            return ['valid' => false, 'message' => 'El valor para "En servidor" no es válido'];
         }
 
         // Validación de la imagen (opcional en edición)

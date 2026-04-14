@@ -12,3 +12,8 @@ body {
     color: #ffc107;
     font-size: 1.2rem;
 }
+
+/* Labels visibles dentro de modales con tema oscuro */
+.modal[data-bs-theme="dark"] label {
+    color: #dee2e6;
+}

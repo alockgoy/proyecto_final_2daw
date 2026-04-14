@@ -119,6 +119,11 @@ function selectTMDbSerie(serieId) {
  * Rellenar el formulario con datos de TMDb
  */
 function fillSerieForm(serie) {
+    // ID de TMDB: guardar en campo oculto del formulario y en window para importar episodios
+    window.SERIE_TMDB_ID = serie.id || null;
+    const tmdbInput = document.getElementById('tmdb_id');
+    if (tmdbInput) tmdbInput.value = serie.id || '';
+
     // Nombre (en español)
     document.getElementById('name').value = serie.name || '';
 
@@ -129,6 +134,10 @@ function fillSerieForm(serie) {
     // Género (en español)
     const genres = serie.genres ? serie.genres.map(g => g.name).join(', ') : '';
     document.getElementById('gender').value = genres;
+
+    // Sinopsis (en español)
+    const synopsisField = document.getElementById('synopsis');
+    if (synopsisField) synopsisField.value = serie.overview || '';
 
     // Calificación (de TMDb, sobre 10)
     if (serie.vote_average) {

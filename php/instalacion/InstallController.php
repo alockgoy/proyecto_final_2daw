@@ -120,6 +120,18 @@ class InstallController{
         }
     }
 
+    // Crear la tabla de episodios
+    public function createTableEpisodios()
+    {
+        try {
+            $this->installModel->createTableEpisodios();
+            return true;
+        } catch (Exception $e) {
+            error_log("Error creando la tabla Episodios: " . $e->getMessage());
+            return false;
+        }
+    }
+
     // Crear usuario propietario
     public function createOwner($username, $email, $salt, $password, $profile, $two_factor, $rol)
     {

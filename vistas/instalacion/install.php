@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $controller->createTableUsersMovies();
             $controller->createTableUsersSeries();
             $controller->createTableMovements();
+            $controller->createTableEpisodios();
 
             // 6. Crear el usuario propietario
             $salt = bin2hex(random_bytes(32));

@@ -79,23 +79,39 @@ class Install
     }
 
     // Función para crear la tabla series
+    // Función para crear la tabla series (sin campos de episodio)
     public function createTableSeries()
     {
         $stmt = "CREATE TABLE IF NOT EXISTS Series(
     id_serie INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(300) NOT NULL,
     poster VARCHAR(255) NOT NULL,
+    synopsis VARCHAR(600),
+    tmdb_id INT,
     gender VARCHAR(100) NOT NULL,
     languages VARCHAR(100) NOT NULL,
     seasons INT NOT NULL,
     complete VARCHAR(2) NOT NULL CHECK (complete IN ('si', 'no')),
     year INT NOT NULL,
-    id_quality INT NOT NULL,
-    FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality),
-    backup VARCHAR(200),
-    size FLOAT NOT NULL,
-    server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
     rating FLOAT
+)";
+        $this->pdo->exec($stmt);
+    }
+
+    // Función para crear la tabla de episodios
+    public function createTableEpisodios()
+    {
+        $stmt = "CREATE TABLE IF NOT EXISTS Episodios(
+    id_episodio INT AUTO_INCREMENT PRIMARY KEY,
+    id_serie INT NOT NULL,
+    temporada INT NOT NULL,
+    episodio VARCHAR(20) NOT NULL,
+    id_quality INT NOT NULL,
+    size FLOAT NOT NULL,
+    backup VARCHAR(200),
+    server VARCHAR(2) NOT NULL CHECK (server IN ('si', 'no')),
+    FOREIGN KEY (id_serie) REFERENCES Series(id_serie) ON DELETE CASCADE,
+    FOREIGN KEY (id_quality) REFERENCES Qualities(id_quality)
 )";
         $this->pdo->exec($stmt);
     }
@@ -140,7 +156,8 @@ class Install
     }
 
     // Crear un usuario propietario
-    public function createOwner($username, $email, $salt, $password, $profile, $two_factor, $rol){
+    public function createOwner($username, $email, $salt, $password, $profile, $two_factor, $rol)
+    {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO Users (username, email, salt, password, profile, two_factor, rol) 
                                             VALUES (?, ?, ?, ?, ?, ?, ?)");

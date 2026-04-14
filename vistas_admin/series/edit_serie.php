@@ -42,9 +42,6 @@ $serie = $controller->getSerie($id);
 // Llamar al controlador de usuarios
 $userController = new UserController();
 
-// Llamar al controlador de calidades
-$qualityController = new QualityController();
-
 $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
 
@@ -218,39 +215,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
-                        <!-- Calidad -->
-                        <div class="col-md-6 form-group">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-photo-video"></i></span>
-                                <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="id_quality" name="id_quality" required>
-                                        <?php
-                                        $qualities = $qualityController->index();
-                                        foreach ($qualities as $quality) {
-                                            $selected = ($serie['id_quality'] == $quality['id_quality']) ? 'selected' : '';
-                                            echo '<option value="' . htmlspecialchars($quality['id_quality']) . '" ' . $selected . '>' .
-                                                htmlspecialchars($quality['name']) . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                    <label for="quality">Calidad</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tamaño -->
-                        <div class="col-md-6 form-group">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-hdd"></i></span>
-                                <div class="form-floating flex-grow-1">
-                                    <input type="number" class="form-control" id="size" name="size"
-                                        value="<?php echo htmlspecialchars($serie['size']); ?>" placeholder="Tamaño"
-                                        step="0.1" required />
-                                    <label for="size">Tamaño (GB)</label>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Calificación -->
                         <div class="col-md-6 form-group">
                             <div class="input-group">
@@ -264,31 +228,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
-                        <!-- En servidor -->
-                        <div class="col-md-6 form-group">
+                        <!-- Sinopsis -->
+                        <div class="col-12 form-group">
                             <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-server"></i></span>
+                                <span class="input-group-text"><i class="fas fa-align-left"></i></span>
                                 <div class="form-floating flex-grow-1">
-                                    <select class="form-select" id="server" name="server" required>
-                                        <option value="si" <?php echo ($serie['server'] == 'si') ? 'selected' : ''; ?>>Sí
-                                        </option>
-                                        <option value="no" <?php echo ($serie['server'] == 'no') ? 'selected' : ''; ?>>No
-                                        </option>
-                                    </select>
-                                    <label for="server">¿En servidor?</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Backup -->
-                        <div class="col-md-6 form-group">
-                            <div class="input-group">
-                                <span class="input-group-text"><i class="fas fa-link"></i></span>
-                                <div class="form-floating flex-grow-1">
-                                    <input type="text" class="form-control" id="backup" name="backup"
-                                        value="<?php echo htmlspecialchars($serie['backup'] ?? ''); ?>"
-                                        placeholder="¿Dónde está la copia de seguridad?" />
-                                    <label for="backup">Backup</label>
+                                    <textarea class="form-control" id="synopsis" name="synopsis"
+                                        placeholder="Sinopsis" style="height: 100px"><?php echo htmlspecialchars($serie['synopsis'] ?? ''); ?></textarea>
+                                    <label for="synopsis">Sinopsis</label>
                                 </div>
                             </div>
                         </div>

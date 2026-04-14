@@ -22,3 +22,39 @@ document.addEventListener('DOMContentLoaded', function() {
         redirect(redirectUrl);
     }
 });
+
+// Validación de longitud de sinopsis antes de enviar el formulario
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    const synopsis = document.getElementById('synopsis');
+    const MAX_LENGTH = 600;
+
+    // Crear el div de error una sola vez y añadirlo tras el textarea
+    const errorDiv = document.createElement('div');
+    errorDiv.id = 'synopsis-error';
+    errorDiv.className = 'invalid-feedback';
+    errorDiv.style.display = 'none';
+    errorDiv.textContent = `La sinopsis no puede superar los ${MAX_LENGTH} caracteres.`;
+    synopsis.parentElement.appendChild(errorDiv);
+
+    // Marcar error en tiempo real mientras se escribe
+    synopsis.addEventListener('input', function () {
+        if (synopsis.value.length > MAX_LENGTH) {
+            synopsis.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+        } else {
+            synopsis.classList.remove('is-invalid');
+            errorDiv.style.display = 'none';
+        }
+    });
+
+    // Bloquear el envío si la sinopsis es demasiado larga
+    form.addEventListener('submit', function (e) {
+        if (synopsis.value.length > MAX_LENGTH) {
+            e.preventDefault();
+            synopsis.classList.add('is-invalid');
+            errorDiv.style.display = 'block';
+            synopsis.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+});

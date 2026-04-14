@@ -28,9 +28,6 @@ $controller = new SerieController();
 // Llamar al controlador de usuarios
 $userController = new UserController();
 
-// Llamar al controlador de calidades
-$qualityController = new QualityController();
-
 $username = $_SESSION['username'];
 $userRol = $userController->getUserRol($username);
 
@@ -53,8 +50,6 @@ if (!$serie) {
     die('Error: La serie solicitada no existe.');
 }
 
-// Obtener la calidad de la serie
-$qualityName = $qualityController->getQualityById($serie['id_quality']);
 ?>
 
 <!DOCTYPE html>
@@ -110,14 +105,6 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
                     <li class="list-group-item"><strong>Completa:</strong>
                         <?php echo $serie['complete'] == 'si' ? 'Sí' : 'No'; ?></li>
 
-                    <!-- Calidad -->
-                    <li class="list-group-item"><strong>Calidad:</strong>
-                        <?php echo htmlspecialchars($qualityName['name']); ?></li>
-
-                    <!-- Tamaño en GB -->
-                    <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($serie['size']); ?>
-                        GB</li>
-
                     <!-- Puntuación -->
                     <?php if (!empty($serie['rating'])): ?>
                         <li class="list-group-item">
@@ -127,17 +114,6 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
                             </span>
                         </li>
                     <?php endif; ?>
-
-
-                    <!-- ¿Copia de seguridad? -->
-                    <?php if (!empty($serie['backup'])): ?>
-                        <li class="list-group-item"><strong>Backup:</strong>
-                            <?php echo htmlspecialchars($serie['backup']); ?></li>
-                    <?php endif; ?>
-
-                    <!-- ¿Está en un servidor multimedia? -->
-                    <li class="list-group-item"><strong>En servidor:</strong>
-                        <?php echo $serie['server'] == 'si' ? 'Sí' : 'No'; ?></li>
                 </ul>
 
                 <!-- Sinopsis -->
