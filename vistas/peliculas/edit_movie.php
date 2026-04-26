@@ -208,6 +208,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>
 
+                        <!-- Subtítulos -->
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-closed-captioning"></i></span>
+                                <div class="form-floating flex-grow-1">
+                                    <input type="text" class="form-control" id="subtitles" name="subtitles"
+                                        value="<?php echo htmlspecialchars($movie['subtitles'] ?? ''); ?>"
+                                        placeholder="Subtítulos" />
+                                    <label for="subtitles">Subtítulos (ej: Español, Inglés)</label>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Calidad -->
                         <div class="col-md-6 form-group">
                             <div class="input-group">

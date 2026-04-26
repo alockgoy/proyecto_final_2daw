@@ -169,6 +169,7 @@ class BackupController
                         $movieData['director'],
                         $movieData['gender'],
                         $movieData['languages'],
+                        $movieData['subtitles'] ?? null,
                         $movieData['size'],
                         $movieData['year'],
                         $movieData['id_quality'],

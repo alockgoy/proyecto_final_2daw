@@ -27,18 +27,18 @@ class Movie
     }
 
     // Crear una película
-    public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating)
+    public function createMovie($name, $synopsis, $poster, $director, $gender, $languages, $subtitles, $size, $year, $id_quality, $backup, $server, $rating)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO Movies (name, synopsis, poster, director, gender, languages, size, year, id_quality, backup, server, rating) 
-                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating]);
+        $stmt = $this->pdo->prepare("INSERT INTO Movies (name, synopsis, poster, director, gender, languages, subtitles, size, year, id_quality, backup, server, rating) 
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $subtitles, $size, $year, $id_quality, $backup, $server, $rating]);
     }
 
     // Actualizar una película
-    public function updateMovie($id, $name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating)
+    public function updateMovie($id, $name, $synopsis, $poster, $director, $gender, $languages, $subtitles, $size, $year, $id_quality, $backup, $server, $rating)
     {
-        $stmt = $this->pdo->prepare("UPDATE Movies SET name=?, synopsis=?, poster=?, director=?, gender=?, languages=?, size=?, year=?, id_quality=?, backup=?, server=?, rating=? WHERE id_movie=?");
-        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $size, $year, $id_quality, $backup, $server, $rating, $id]);
+        $stmt = $this->pdo->prepare("UPDATE Movies SET name=?, synopsis=?, poster=?, director=?, gender=?, languages=?, subtitles=?, size=?, year=?, id_quality=?, backup=?, server=?, rating=? WHERE id_movie=?");
+        return $stmt->execute([$name, $synopsis, $poster, $director, $gender, $languages, $subtitles, $size, $year, $id_quality, $backup, $server, $rating, $id]);
     }
 
     // Eliminar una película

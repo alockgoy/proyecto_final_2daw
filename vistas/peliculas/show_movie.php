@@ -107,6 +107,12 @@ $qualityName = $qualityController->getQualityById($movie['id_quality']);
                     <li class="list-group-item"><strong>Idioma(s):</strong>
                         <?php echo htmlspecialchars($movie['languages']); ?></li>
 
+                    <!-- Subtítulos -->
+                    <?php if (!empty($movie['subtitles'])): ?>
+                        <li class="list-group-item"><strong>Subtítulos:</strong>
+                            <?php echo htmlspecialchars($movie['subtitles']); ?></li>
+                    <?php endif; ?>
+
                     <!-- Calidad -->
                     <li class="list-group-item"><strong>Calidad:</strong>
                         <?php echo htmlspecialchars($qualityName['name']); ?></li>
