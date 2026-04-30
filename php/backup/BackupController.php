@@ -223,6 +223,7 @@ class BackupController
                         $posterPath ?? '',
                         $serieData['gender'],
                         $serieData['languages'],
+                        $serieData['subtitles'] ?? null,
                         $serieData['seasons'],
                         $serieData['complete'] ?? 'no',
                         $serieData['year'],

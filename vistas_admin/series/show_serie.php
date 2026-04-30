@@ -102,6 +102,12 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
                     <li class="list-group-item"><strong>Idioma(s):</strong>
                         <?php echo htmlspecialchars($serie['languages']); ?></li>
 
+                    <!-- Subtítulos -->
+                    <?php if (!empty($serie['subtitles'])): ?>
+                        <li class="list-group-item"><strong>Subtítulos:</strong>
+                            <?php echo htmlspecialchars($serie['subtitles']); ?></li>
+                    <?php endif; ?>
+
                     <!-- Temporadas -->
                     <li class="list-group-item"><strong>Temporadas:</strong>
                         <?php echo htmlspecialchars($serie['seasons']); ?></li>

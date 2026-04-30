@@ -88,6 +88,7 @@ class Install
     poster VARCHAR(255) NOT NULL,
     gender VARCHAR(100) NOT NULL,
     languages VARCHAR(100) NOT NULL,
+    subtitles VARCHAR(200),
     seasons INT NOT NULL,
     complete VARCHAR(2) NOT NULL CHECK (complete IN ('si', 'no')),
     year INT NOT NULL,
