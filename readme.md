@@ -117,6 +117,75 @@ A partir de ahí ya se debería poder usar con normalidad, y no se podrá volver
 
 ---
 
+## ✨🤝 Agradecimientos 
+  
+Gracias a todos los que habéis dedicado tiempo a ayudar durante el desarrollo de este proyecto.
+
+(Algunos de los contribuyentes no tienen Github).
+
+### 💡 Sugerencias y apoyo
+
+- **Nicolás García**  
+  🛠️ Sugerencias y comprobación de funcionamiento  
+  🔗 https://github.com/nicolarus05
+
+- **Lucía Martín**  
+  🛠️ Sugerencias y comprobación de funcionamiento
+
+- **Manolo Zurita**  
+  🛠️ Sugerencias y comprobación de funcionamiento
+
+- **Clara Molina**  
+  🛠️ Sugerencias y comprobación de funcionamiento
+
+---
+
+### 🧪 Testing y comprobaciones
+
+- **Ignacio Sánchez**  
+  ✅ Comprobación de funcionamiento  
+  🔗 https://github.com/Afirot
+
+- **Adrián Bertos**  
+  ✅ Comprobación de funcionamiento  
+  🔗 https://github.com/PumukyDev
+
+- **Rubén Martín**  
+  ✅ Comprobación de funcionamiento  
+  🔗 https://github.com/romilgildo
+
+- **Nuria Díez**  
+  ✅ Comprobación de funcionamiento
+
+- **Jorge Ruano**  
+  ✅ Comprobación de funcionamiento *(GitHub no encontrado)*
+
+- **Mabel Montoro**  
+  ✅ Comprobación de funcionamiento
+
+---
+
+### 🎓 Profesores y soporte académico
+
+- **Manuel Varón**  
+  📚 Profesor — Entorno servidor en DAW  
+  🔗 https://github.com/mvaronc
+
+- **Borja Molina**  
+  🚀 Profesor — Despliegue en DAW y comprobación pre-exposición  
+  🔗 https://github.com/bmolzea
+
+---
+
+<div align="center">
+
+⭐ *Si me he olvidado de alguien, las reclamaciones son más que bienvenidas 😄*
+
+</div>
+
+---
+
+
 ### 📄 Licencia
 
 Este proyecto es **software libre y de código abierto**, distribuido bajo los términos de la licencia **GNU General Public License v3.0** (GPL-3.0).
