@@ -89,38 +89,61 @@ $qualityName = $qualityController->getQualityById($movie['id_quality']);
                 <ul class="list-group mb-4">
 
                     <!-- Director -->
-                    <li class="list-group-item"><strong>Dirección:</strong>
-                        <?php echo htmlspecialchars($movie['director']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-camera-video"></i>
+                        <strong>Dirección:</strong>
+                        <?php echo htmlspecialchars($movie['director']); ?>
+                    </li>
 
                     <!-- Género -->
-                    <li class="list-group-item"><strong>Género(s):</strong>
-                        <?php echo htmlspecialchars($movie['gender']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-tag"></i>
+                        <strong>Género(s):</strong>
+                        <?php echo htmlspecialchars($movie['gender']); ?>
+                    </li>
 
                     <!-- Año -->
-                    <li class="list-group-item"><strong>Año:</strong> <?php echo htmlspecialchars($movie['year']); ?>
+                    <li class="list-group-item">
+                        <i class="bi bi-calendar"></i>
+                        <strong>Año:</strong> 
+                        <?php echo htmlspecialchars($movie['year']); ?>
                     </li>
 
                     <!-- Idioma(s) -->
-                    <li class="list-group-item"><strong>Idioma(s):</strong>
-                        <?php echo htmlspecialchars($movie['languages']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-translate"></i>
+                        <strong>Idioma(s):</strong>
+                        <?php echo htmlspecialchars($movie['languages']); ?>
+                    </li>
 
                     <!-- Subtítulos -->
                     <?php if (!empty($movie['subtitles'])): ?>
-                        <li class="list-group-item"><strong>Subtítulos:</strong>
-                            <?php echo htmlspecialchars($movie['subtitles']); ?></li>
+                        <li class="list-group-item">
+                            <i class="bi bi-chat-left-text"></i>
+                            <strong>Subtítulos:</strong>
+                            <?php echo htmlspecialchars($movie['subtitles']); ?>
+                        </li>
                     <?php endif; ?>
 
                     <!-- Calidad -->
-                    <li class="list-group-item"><strong>Calidad:</strong>
-                        <?php echo htmlspecialchars($qualityName['name']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-badge-hd"></i>
+                        <strong>Calidad:</strong>
+                        <?php echo htmlspecialchars($qualityName['name']); ?>
+                    </li>
 
                     <!-- Tamaño en GB -->
-                    <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($movie['size']); ?>
-                        GB</li>
+                    <li class="list-group-item">
+                        <i class="bi bi-hdd"></i>
+                        <strong>Tamaño:</strong> 
+                        <?php echo htmlspecialchars($movie['size']); ?>
+                        GB
+                    </li>
 
                     <!-- Puntuación -->
                     <?php if (!empty($movie['rating'])): ?>
                         <li class="list-group-item">
+                            <i class="bi bi-star"></i>
                             <strong>Valoración:</strong>
                             <span>
                                 <?php echo htmlspecialchars($movie['rating']); ?>/10
@@ -131,13 +154,19 @@ $qualityName = $qualityController->getQualityById($movie['id_quality']);
 
                     <!-- ¿Copia de seguridad? -->
                     <?php if (!empty($movie['backup'])): ?>
-                        <li class="list-group-item"><strong>Backup:</strong>
-                            <?php echo htmlspecialchars($movie['backup']); ?></li>
+                        <li class="list-group-item">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                            <strong>Backup:</strong>
+                            <?php echo htmlspecialchars($movie['backup']); ?>
+                        </li>
                     <?php endif; ?>
 
                     <!-- ¿Está en un servidor multimedia? -->
-                    <li class="list-group-item"><strong>En servidor:</strong>
-                        <?php echo $movie['server'] == 'si' ? 'Sí' : 'No'; ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-server"></i>
+                        <strong>En servidor:</strong>
+                        <?php echo $movie['server'] == 'si' ? 'Sí' : 'No'; ?>
+                    </li>
                 </ul>
 
                 <!-- Sinopsis -->

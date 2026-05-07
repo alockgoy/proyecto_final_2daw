@@ -91,42 +91,68 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
                 <ul class="list-group mb-4">
 
                     <!-- Género -->
-                    <li class="list-group-item"><strong>Género(s):</strong>
-                        <?php echo htmlspecialchars($serie['gender']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-tag"></i>
+                        <strong>Género(s):</strong>
+                        <?php echo htmlspecialchars($serie['gender']); ?>
+                    </li>
 
                     <!-- Año -->
-                    <li class="list-group-item"><strong>Año:</strong> <?php echo htmlspecialchars($serie['year']); ?>
+                    <li class="list-group-item">
+                        <i class="bi bi-calendar"></i>
+                        <strong>Año:</strong> 
+                        <?php echo htmlspecialchars($serie['year']); ?>
                     </li>
 
                     <!-- Idioma(s) -->
-                    <li class="list-group-item"><strong>Idioma(s):</strong>
-                        <?php echo htmlspecialchars($serie['languages']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-translate"></i>
+                        <strong>Idioma(s):</strong>
+                        <?php echo htmlspecialchars($serie['languages']); ?>
+                    </li>
 
                     <!-- Subtítulos -->
                     <?php if (!empty($serie['subtitles'])): ?>
-                        <li class="list-group-item"><strong>Subtítulos:</strong>
-                            <?php echo htmlspecialchars($serie['subtitles']); ?></li>
+                        <li class="list-group-item">
+                            <i class="bi bi-chat-left-text"></i>
+                            <strong>Subtítulos:</strong>
+                            <?php echo htmlspecialchars($serie['subtitles']); ?>
+                        </li>
                     <?php endif; ?>
 
                     <!-- Temporadas -->
-                    <li class="list-group-item"><strong>Temporadas:</strong>
-                        <?php echo htmlspecialchars($serie['seasons']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-collection-play"></i>
+                        <strong>Temporadas:</strong>
+                        <?php echo htmlspecialchars($serie['seasons']); ?>
+                    </li>
 
                     <!-- ¿Completa? -->
-                    <li class="list-group-item"><strong>Completa:</strong>
-                        <?php echo $serie['complete'] == 'si' ? 'Sí' : 'No'; ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-check-circle"></i>
+                        <strong>Completa:</strong>
+                        <?php echo $serie['complete'] == 'si' ? 'Sí' : 'No'; ?>
+                    </li>
 
                     <!-- Calidad -->
-                    <li class="list-group-item"><strong>Calidad:</strong>
-                        <?php echo htmlspecialchars($qualityName['name']); ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-badge-hd"></i>
+                        <strong>Calidad:</strong>
+                        <?php echo htmlspecialchars($qualityName['name']); ?>
+                    </li>
 
                     <!-- Tamaño en GB -->
-                    <li class="list-group-item"><strong>Tamaño:</strong> <?php echo htmlspecialchars($serie['size']); ?>
-                        GB</li>
+                    <li class="list-group-item">
+                        <i class="bi bi-hdd"></i>
+                        <strong>Tamaño:</strong> 
+                        <?php echo htmlspecialchars($serie['size']); ?>
+                        GB
+                    </li>
 
                     <!-- Puntuación -->
                     <?php if (!empty($serie['rating'])): ?>
                         <li class="list-group-item">
+                            <i class="bi bi-star"></i>
                             <strong>Valoración:</strong>
                             <span>
                                 <?php echo htmlspecialchars($serie['rating']); ?>/10
@@ -137,13 +163,19 @@ $qualityName = $qualityController->getQualityById($serie['id_quality']);
 
                     <!-- ¿Copia de seguridad? -->
                     <?php if (!empty($serie['backup'])): ?>
-                        <li class="list-group-item"><strong>Backup:</strong>
-                            <?php echo htmlspecialchars($serie['backup']); ?></li>
+                        <li class="list-group-item">
+                            <i class="bi bi-cloud-arrow-up"></i>
+                            <strong>Backup:</strong>
+                            <?php echo htmlspecialchars($serie['backup']); ?>
+                        </li>
                     <?php endif; ?>
 
                     <!-- ¿Está en un servidor multimedia? -->
-                    <li class="list-group-item"><strong>En servidor:</strong>
-                        <?php echo $serie['server'] == 'si' ? 'Sí' : 'No'; ?></li>
+                    <li class="list-group-item">
+                        <i class="bi bi-server"></i>
+                        <strong>En servidor:</strong>
+                        <?php echo $serie['server'] == 'si' ? 'Sí' : 'No'; ?>
+                    </li>
                 </ul>
 
                 <!-- Sinopsis -->
